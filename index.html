@@ -73,8 +73,9 @@
       
     jQuery("#logInButton").click(function()
       {
-          var username = $("#usernameSignUp").val();
-          var password = $("#passwordSignUp").val();
+          var username = $("#username").val();
+          var password = $("#passwd").val();
+          //alert(username);
           Parse.User.logIn(username, password, {
           success: function(user) {
             // Do stuff after successful login.
