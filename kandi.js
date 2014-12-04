@@ -50,6 +50,26 @@ function bound(num, low, high) {
  */
 var assetLoader = (function() {
   // images dictionary
+      this.imgs        = {
+    'bg'            : 'imgs/Blank.png',
+    'sky'           : 'imgs/Blank.png',
+    'backdrop'      : 'imgs/Blank.png',
+    'backdrop2'     : 'imgs/Blank.png',
+    'grass'         : 'imgs/grass.png',
+    'avatar_normal' : 'imgs/normal_walk.png',
+    'water'         : 'imgs/water.png',
+    'grass1'        : 'imgs/grassMid1.png',
+    'grass2'        : 'imgs/grassMid2.png',
+    'bridge'        : 'imgs/bridge.png',
+    'plant'         : 'imgs/plant.png',
+    'bush1'         : 'imgs/bush1.png',
+    'bush2'         : 'imgs/bush2.png',
+    'cliff'         : 'imgs/grassCliffRight.png',
+    'spikes'        : 'imgs/spikes.png',
+    'box'           : 'imgs/boxCoin.png',
+    'slime'         : 'imgs/slime.png'
+  };
+/*
   this.imgs        = {
     'bg'            : 'imgs/bg3.png',
     'sky'           : 'imgs/sky.png',
@@ -68,7 +88,7 @@ var assetLoader = (function() {
     'spikes'        : 'imgs/spikes.png',
     'box'           : 'imgs/boxCoin.png',
     'slime'         : 'imgs/slime.png'
-  };
+  };*/
 
   // sounds dictionary
   this.sounds      = {
