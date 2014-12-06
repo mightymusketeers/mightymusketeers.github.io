@@ -60,6 +60,10 @@ a {
 #menu.credits {
   background-image: url('imgs/credits-bg.png');
 }
+#menu.inGame {
+   background-color: #fff;
+   background-color: rgba(255,255,255,0.5);
+}
 
 #progress {
   height: 12%;

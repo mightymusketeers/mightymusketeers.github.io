@@ -16,7 +16,7 @@ var playSound;
 
 // set the sound preference
 if (canUseLocalStorage) {
-  playSound = (localStorage.getItem('kandi.playSound') === "true")
+  playSound = (localStorage.getItem('mighty.playSound') === "true")
 
   if (playSound) {
     $('.sound').addClass('sound-on').removeClass('sound-off');
@@ -433,7 +433,12 @@ var player = (function(player) {
 
     // jump higher if the space bar is continually pressed
     if (KEY_STATUS.space && jumpCounter) {
-      player.dy = player.jumpDy;
+      	player.dy = player.jumpDy;
+    }
+    
+	// pause/menu check
+    if (KEY_STATUS.pause) {
+    	$('#main').show();
     }
 
     jumpCounter = Math.max(jumpCounter-1, 0);
@@ -770,7 +775,8 @@ function animate() {
  * Keep track of the spacebar events
  */
 var KEY_CODES = {
-  32: 'space'
+  32: 'space',
+  80: 'pause',
 };
 var KEY_STATUS = {};
 for (var code in KEY_CODES) {
@@ -780,6 +786,7 @@ for (var code in KEY_CODES) {
 }
 document.onkeydown = function(e) {
   var keyCode = (e.keyCode) ? e.keyCode : e.charCode;
+  console.log(keyCode);
   if (KEY_CODES[keyCode]) {
     e.preventDefault();
     KEY_STATUS[KEY_CODES[keyCode]] = true;
@@ -899,7 +906,7 @@ $('.sound').click(function() {
   }
 
   if (canUseLocalStorage) {
-    localStorage.setItem('kandi.playSound', playSound);
+    localStorage.setItem('mighty.playSound', playSound);
   }
 
   // mute or unmute all sounds
@@ -909,6 +916,7 @@ $('.sound').click(function() {
     }
   }
 });
+
 $('.play').click(function() {
   $('#menu').hide();
   startGame();
