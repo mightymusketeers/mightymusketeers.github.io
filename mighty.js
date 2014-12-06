@@ -916,6 +916,31 @@ $('.sound').click(function() {
     }
   }
 });
+//Adding touch capabilities for sound button    
+$('.sound').on("tap",function() {
+  var $this = $(this);
+  // sound off
+  if ($this.hasClass('sound-on')) {
+    $this.removeClass('sound-on').addClass('sound-off');
+    playSound = false;
+  }
+  // sound on
+  else {
+    $this.removeClass('sound-off').addClass('sound-on');
+    playSound = true;
+  }
+
+  if (canUseLocalStorage) {
+    localStorage.setItem('mighty.playSound', playSound);
+  }
+
+  // mute or unmute all sounds
+  for (var sound in assetLoader.sounds) {
+    if (assetLoader.sounds.hasOwnProperty(sound)) {
+      assetLoader.sounds[sound].muted = !playSound;
+    }
+  }
+});
 
 $('.play').click(function() {
   $('#menu').hide();
