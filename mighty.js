@@ -886,6 +886,7 @@ $('.back').click(function() {
   $('#main').show();
   $('#menu').removeClass('credits');
 });
+    
 $('.sound').click(function() {
   var $this = $(this);
   // sound off
@@ -911,7 +912,7 @@ $('.sound').click(function() {
   }
 });
 //Adding touch capabilities for sound button    
-$('.sound').on("tap",function() {
+/*$('.sound').on("tap",function() {
   var $this = $(this);
   // sound off
   if ($this.hasClass('sound-on')) {
@@ -934,13 +935,14 @@ $('.sound').on("tap",function() {
       assetLoader.sounds[sound].muted = !playSound;
     }
   }
-});
+});*/
 
 $('.play').click(function() {
   $('#menu').hide();
   startGame();
 });
 $('.restart').click(function() {
+  console.log("Restart Clicked");
   $('#game-over').hide();
   startGame();
 });
