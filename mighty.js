@@ -433,12 +433,7 @@ var player = (function(player) {
 
     // jump higher if the space bar is continually pressed
     if (KEY_STATUS.space && jumpCounter) {
-      	player.dy = player.jumpDy;
-    }
-    
-	// pause/menu check
-    if (KEY_STATUS.pause) {
-    	$('#main').show();
+      player.dy = player.jumpDy;
     }
 
     jumpCounter = Math.max(jumpCounter-1, 0);
@@ -775,8 +770,8 @@ function animate() {
  * Keep track of the spacebar events
  */
 var KEY_CODES = {
-  32: 'space',
-  80: 'pause',
+  32:  'space',
+  112: 'pause',
 };
 var KEY_STATUS = {};
 for (var code in KEY_CODES) {
@@ -786,7 +781,6 @@ for (var code in KEY_CODES) {
 }
 document.onkeydown = function(e) {
   var keyCode = (e.keyCode) ? e.keyCode : e.charCode;
-  console.log(keyCode);
   if (KEY_CODES[keyCode]) {
     e.preventDefault();
     KEY_STATUS[KEY_CODES[keyCode]] = true;
