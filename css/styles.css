@@ -4,6 +4,10 @@ body {
     padding: 0 0px;
 }
 
+#username, #passwd, #email
+{
+ margin-bottom: 10px;   
+}
 #logIn , .loginScreen {
     width: 500px;
     margin: auto;
