@@ -4,7 +4,7 @@ body {
     padding: 0 0px;
 }
 
-#main , .loginScreen {
+#logIn , .loginScreen {
     width: 500px;
     margin: auto;
     text-align: left;
@@ -14,26 +14,26 @@ body {
     border-width: 0 1px 1px 1px;
 }
 
-#main h1 {
+#logIn h1 {
     margin-top: 0;
     font-size: 35px;
 }
 
-#main ul {
+#logIn ul {
     padding-left: 20px;
 }
 
-#main .error {
+#logIn .error {
     border: 1px solid red;
     background: #FDEFF0;
     padding: 20px;
 }
 
-#main .success {
+#logIn .success {
     margin-top: 25px;
 }
 
-#main .success code {
+#logIn .success code {
     font-size: 12px;
     color: green;
     line-height: 13px;
