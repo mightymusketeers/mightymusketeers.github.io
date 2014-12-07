@@ -93,7 +93,7 @@ var assetLoader = (function() {
 
   // sounds dictionary
   this.sounds      = {
-    'bg'            : 'sounds/bg.mp3',
+    'bg'            : 'sounds/stolaf.mp3',
     'jump'          : 'sounds/jump.mp3',
     'gameOver'      : 'sounds/gameOver.mp3'
   };
@@ -397,22 +397,22 @@ Vector.prototype.minDist = function(vec) {
  */
 var player = (function(player) {
   // add properties directly to the player imported object
-  player.width     = 80;
+  player.width     = 100;
   player.height    = 80;
   player.speed     = 6;
 
   // jumping
-  player.gravity   = 1;
+  player.gravity   = 1.0;
   player.dy        = 0;
   player.jumpDy    = -10;
   player.isFalling = false;
   player.isJumping = false;
 
   // spritesheets
-  player.sheet     = new SpriteSheet('imgs/normal_walk.png', player.width, player.height);
-  player.walkAnim  = new Animation(player.sheet, 4, 0, 5);
-  player.jumpAnim  = new Animation(player.sheet, 4, 0, 5);
-  player.fallAnim  = new Animation(player.sheet, 4, 0, 5);
+  player.sheet     = new SpriteSheet('imgs/LionSpriteFinal.png', player.width, player.height);
+  player.walkAnim  = new Animation(player.sheet, 5, 0, 9);
+  player.jumpAnim  = new Animation(player.sheet, 7, 2, 4);
+  player.fallAnim  = new Animation(player.sheet, 6, 0, 9);
   player.anim      = player.walkAnim;
 
   Vector.call(player, 0, 0, 0, player.dy);
@@ -558,7 +558,7 @@ function updateGround() {
         angle < -50) {
       player.isJumping = false;
       player.isFalling = false;
-      player.y = ground[i].y - player.height + 5;
+      player.y = ground[i].y - player.height + 7;
       player.dy = 0;
     }
   }
@@ -736,7 +736,10 @@ function animate() {
     updateEnemies();
 
     // draw the score
-    ctx.fillText('Score: ' + score + 'm', canvas.width - 140, 30);
+    ctx.font      = "bold 28px futura";
+    ctx.fillStyle = "#000000";
+    ctx.fillText('Time: ' + score + 's', canvas.width - 200, 50);
+
 
     // spawn a new Sprite
     if (ticker % Math.floor(platformWidth / player.speed) === 0) {

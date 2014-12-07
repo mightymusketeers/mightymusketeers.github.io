@@ -24,6 +24,13 @@
 		});
     }
       
+    //This makes it so that we can login by pressing enter instead of clicking submit
+        $('#passwd').keypress(function(e){
+          if(e.keyCode==13)
+          {
+              $('#submit1').click();
+          }});
+
        $("#submit1").click(function()
       {
           var username = $("#username").val();
