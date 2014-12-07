@@ -1,17 +1,18 @@
 <!doctype html>
 <head>
-  <meta charset="utf-8">
   <title>Mighty Ole</title>
-  <meta name="description" content="My Parse App">
+  <meta charset="utf-8">
+  <meta name="description" content="Mighty Ole 2D Platformer">
   <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/loginRegister.css" media="screen" />
   <link rel="stylesheet" href="mighty.css" type="text/css" media="screen">
+  
   <script type="text/javascript" src="jquery.2.1.1.min.js"></script> 
   <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.3.2.min.js"></script>
-  <!--<script type="text/javascript" src="parseFunctions.js"></script>-->
-
 </head>
 
 <body>
@@ -57,45 +58,52 @@
     </div>
     <script type="text/javascript" src="mighty.js"></script>
   </div>
-  <div id="logIn" class="loginScreen">
-    <h1>Login to Mighty Ole</h1>
-    <table>
-    <tr colspan="2">
-    </tr>
-     <td>Username</td>
-     <td><input id="username" /></td>
-    <tr>
-     <td>Password</td>
-     <td><input type="password" id="passwd" /></td>
-    </tr>
-    <tr>
-    <td><button id="logInButton">Login</button></td>
-    <td><button onclick="signUpView();">Sign Up</button></td>
-    </tr>
-    </table>
-  </div>
-   <div id="signUp" class="loginScreen" style="display:none">
-    <h1>Sign Up for Mighty Ole</h1>
-    <table>
-    <tr colspan="2">
-    </tr>
-     <td>Username</td>
-     <td><input id="usernameSignUp" /></td>
-    <tr>
-     <td>Password</td>
-     <td><input type="password" id="passwordSignUp" /></td>
-    </tr>
-    <tr>
-     <td>Email</td>
-     <td><input type="text" id="emailId" /></td>
-    </tr>
-    <tr>
-    <td><button id="signUpButton">Sign Up</button></td>
-    <td><button onclick="loginView();">Login Here</button></td>
-    </tr>
-    </table>
-  </div>
-  </div>
+  
+  
+  	<h1 id="mainTitle">Mighty Ole</h1>
+  	<div id="wrapper2">
+		<div id="wrappertop"></div>
+		<div id="wrappermiddle">
+			<h2 id="loginTitle">Login</h2>			
+			<h2 id="registerTitle">Register</h2>
+			<div id="emailDiv">
+				<div id="username_inputleft"></div>
+				<div id="username_inputmiddle">
+					<label id="emailLabel">Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					<input name="link" class="email" id="email">
+				</div>
+				<div id="username_inputright"></div>
+			</div>
+			<div id="username_input">
+				<div id="username_inputleft"></div>
+				<div id="username_inputmiddle">
+					<label>User&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					<input name="link" class="credentials" id="username" autofocus>
+				</div>
+				<div id="username_inputright"></div>
+			</div>
+			<div id="password_input">
+				<div id="password_inputleft"></div>
+				<div id="password_inputmiddle">
+				<label>Password</label>
+					<input type="password" class="credentials" id="passwd">
+				</div>
+				<div id="password_inputright"></div>
+			</div>
+			<br />
+			<div id="submit">
+				<input type="button" id="submit1" value="Submit">
+				&nbsp;			
+				<a href="#" onclick="toggleView();" class="helpful" id="signUpText">Need an account?</a>
+				<a href="#" onclick="toggleView();" class="helpful" id="loginText">Have an account?</a>
+			</div>
+			<br />
+
+			</div>
+		</div>
+		<div id="wrapperbottom"></div>
+	</div>
+  
    <script type="text/javascript" src="parseFunctions.js"></script>
 </body>
 

@@ -1,0 +1,47 @@
+/* unvisited link */
+a.helpful:link {
+    color: black;
+}
+
+/* visited link */
+a.helpful:visited {
+    color: black;
+}
+
+/* mouse over link */
+a.helpful:hover {
+    color: gray;
+}
+
+/* selected link */
+a.helpful:active {
+    color: gray;
+}
+
+#wrappermiddle {
+	width: 420px;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 20px;
+	padding-bottom: 40px;
+	border: 2px solid grey;
+	border-radius: 20px;
+	background-color: white;
+}	
+
+#emailDiv {
+	display: none;
+}
+
+#loginText {
+	display: none;
+}
+
+#submit1 {
+	margin-left: 110px;
+}
+
+#registerTitle {
+	display: none;
+}

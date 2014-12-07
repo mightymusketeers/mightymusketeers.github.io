@@ -1,4 +1,5 @@
 (function ($) {
+          
 // define variables
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
@@ -911,6 +912,7 @@ $('.sound').click(function() {
     }
   }
 });
+
 //Adding touch capabilities for sound button    
 /*$('.sound').on("tap",function() {
   var $this = $(this);
@@ -936,6 +938,19 @@ $('.sound').click(function() {
     }
   }
 });*/
+
+
+/* FINISH ME
+// Allow the enter key to submit the form
+$( document ).ready(function() {
+	document.querySelector('#passwd').addEventListener('keypress', function (e) {
+		var key = e.which || e.keyCode;
+		if (key == 13) { // 13 is enter
+		    
+		}
+	});
+});
+*/
 
 $('.play').click(function() {
   $('#menu').hide();

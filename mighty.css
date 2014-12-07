@@ -22,6 +22,11 @@ canvas {
   height: 360px;
 }
 
+#mainTitle{
+  font-size: 40px;
+  margin-top: 50px;
+}
+
 ul {
   list-style: none;
   padding: 0;
@@ -34,13 +39,10 @@ li {
 a {
   text-decoration: none;
   color: inherit;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 .wrapper {
-  width: 600px;
-  height: 360px;
-  position: absolute;
+  width: 100%;
   top: 5px;
   left: 5px;
 }
