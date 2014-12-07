@@ -952,6 +952,13 @@ $( document ).ready(function() {
 });
 */
 
+// If we are on a mobile device, hide the site title
+if(window.innerWidth <= 800 && window.innerHeight <= 600) {
+	window.scrollTo(0, 160);
+} else {
+
+}
+
 $('.play').click(function() {
   $('#menu').hide();
   startGame();
