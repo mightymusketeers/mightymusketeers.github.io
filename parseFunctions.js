@@ -17,7 +17,9 @@
 		  },
 		  error: function(user, error) {
 			// Show the error message somewhere and let the user try again.
-			alert("Error: " + error.code + " " + error.message);
+			var warning = document.getElementById("warning");
+			warning.innerHTML = "Error: " + error.code + " " + error.message;
+			warning.style.visibility = "visible";
 		  }
 		});
     }
@@ -31,7 +33,6 @@
     		Parse.User.logIn(username, password, {
 			  success: function(user) {
 				// Do stuff after successful login.
-				  alert("You were succesfully logged-in.");
 				  //window.location.href = "game.html"
 				  $("#wrapper2").hide();
 				  $("#mainTitle").hide();
@@ -39,7 +40,9 @@
 			  },
 			  error: function(user, error) {
 				// The login failed. Check error to see why.
-				alert("Sorry Invalid Credentials, Try Again");
+				var warning = document.getElementById("warning");
+				warning.innerHTML = "Error: " + error.code + " " + error.message;
+         		warning.style.visibility = "visible";
 			  }
 		});
     	} else {
@@ -51,7 +54,11 @@
 			{
 				//Call Parse Sign Up Function
 				createUser(username,password,emailId);
-			}  
+			} else {
+				var warning = document.getElementById("warning");
+				warning.innerHTML = "Error: all fields must be present";
+          		warning.style.visibility = "visible";
+			}
     	}
     });
 
@@ -70,7 +77,7 @@
     function signUpView()
       {
           var email = document.getElementById("emailDiv");
-          email.style.display = "block";
+          email.style.visibility = "visible";
           
 		  var loginTitle = document.getElementById("loginTitle");
 		  var registerTitle = document.getElementById("registerTitle");
@@ -81,11 +88,14 @@
           var signInLink = document.getElementById("loginText");
           registerLink.style.display = "none";
           signInLink.style.display = "inline-block";
+          
+          var warning = document.getElementById("warning");
+          warning.style.visibility = "hidden";
       }
     function loginView()
       {
           var email = document.getElementById("emailDiv");
-          email.style.display = "none";
+          email.style.visibility = "hidden";
           
           var loginTitle = document.getElementById("loginTitle");
 		  var registerTitle = document.getElementById("registerTitle");

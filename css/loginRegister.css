@@ -19,19 +19,19 @@ a.helpful:active {
 }
 
 #wrappermiddle {
-	width: 420px;
+	width: 390px;
 	text-align: center;
 	margin-left: auto;
 	margin-right: auto;
 	padding-top: 20px;
-	padding-bottom: 40px;
+	padding-bottom: 20px;
 	border: 2px solid grey;
 	border-radius: 20px;
 	background-color: white;
 }	
 
 #emailDiv {
-	display: none;
+  visibility: hidden;
 }
 
 #loginText {
@@ -44,4 +44,10 @@ a.helpful:active {
 
 #registerTitle {
 	display: none;
+}
+
+#warning {
+  color: red;
+  margin-top: 17px;
+  visibility: hidden;
 }
