@@ -44,6 +44,7 @@
 				  $("#wrapper2").hide();
 				  $("#mainTitle").hide();
 				  $("#gameContainer").show();
+                  $("#playerUsername").html(titlCase(Parse.User.current().getUsername()));
 			  },
 			  error: function(user, error) {
 				// The login failed. Check error to see why.
@@ -68,7 +69,11 @@
 			}
     	}
     });
-
+    
+    function titlCase(string)
+    {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
        
  	var count = 0;
     function toggleView() {

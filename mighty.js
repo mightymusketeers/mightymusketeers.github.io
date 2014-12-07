@@ -402,7 +402,7 @@ var player = (function(player) {
   player.speed     = 6;
 
   // jumping
-  player.gravity   = 1.0;
+  player.gravity   = 0.7;
   player.dy        = 0;
   player.jumpDy    = -10;
   player.isFalling = false;
@@ -424,6 +424,20 @@ var player = (function(player) {
    */
   player.update = function() {
 
+    $("body").on("tap",function(){
+          if (player.dy === 0 && !player.isJumping) {
+          player.isJumping = true;
+          player.dy = player.jumpDy;
+          jumpCounter = 12;
+          assetLoader.sounds.jump.play();
+        }
+
+    // jump higher if the space bar is continually pressed
+    
+        if (jumpCounter) {
+         player.dy = player.jumpDy;
+        }
+    });  
     // jump if not currently jumping or falling
     if (KEY_STATUS.space && player.dy === 0 && !player.isJumping) {
       player.isJumping = true;
@@ -614,7 +628,7 @@ function updateEnemies() {
     enemies[i].draw();
 
     // player ran into enemy
-    if (player.minDist(enemies[i]) <= player.width - platformWidth/2) {
+    if (player.minDist(enemies[i]) <= player.width - 20 - platformWidth/2) {
       gameOver();
     }
   }
@@ -775,7 +789,7 @@ function animate() {
  */
 var KEY_CODES = {
   32:  'space',
-  112: 'pause',
+  80: 'pause',
 };
 var KEY_STATUS = {};
 for (var code in KEY_CODES) {
