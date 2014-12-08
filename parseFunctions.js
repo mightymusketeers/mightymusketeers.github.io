@@ -1,8 +1,9 @@
     
-    Parse.initialize("PXtItYU56vgW8jbKgDhZQac0WMWvlE5uzhS6DtBB", "pI5dlkQ7teOaWlFyvc7i3RbW60ST0NkalJYPLtWr");
-
+Parse.initialize("PXtItYU56vgW8jbKgDhZQac0WMWvlE5uzhS6DtBB", "pI5dlkQ7teOaWlFyvc7i3RbW60ST0NkalJYPLtWr");
+highScore = 0;
 $(function() {
     FastClick.attach(document.body);
+    loadHighScore();
     document.ontouchmove = function(event){
     event.preventDefault();
 }
@@ -128,4 +129,93 @@ $(function() {
           registerLink.style.display = "inline-block";
           signInLink.style.display = "none";
       }
-      
+
+    function saveScore(userScore)
+    {
+     if(userScore <= highScore) {
+         return;
+     }
+     
+     var HighScore = Parse.Object.extend("HighScore");
+     var query = new Parse.Query(HighScore);
+     
+     query.equalTo("UserId", {
+    __type: "Pointer",
+    className: "_User",
+    objectId: Parse.User.current().id
+    });
+ 
+    query.find({
+    success: function(results) {
+    // Do something with the returned Parse.Object values
+    var object;
+    if(results.length > 0)
+    {for (var i = 0; i < results.length; i++) { 
+      object = results[i];
+    }
+    object.set("score",userScore);
+    object.save(); 
+    }
+    else{
+    var gameScore = new HighScore();
+    gameScore.set("score", userScore);
+    gameScore.set("UserId", Parse.User.current())
+    
+    gameScore.save(null, {
+      success: function(gameScore) {
+      },
+      error: function(gameScore, error) {
+      }
+    });
+    }
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});          
+    }
+
+/*
+var GameScore = Parse.Object.extend("GameScore");
+var query = new Parse.Query(GameScore);
+query.equalTo("playerName", "Dan Stemkoski");
+query.find({
+  success: function(results) {
+    alert("Successfully retrieved " + results.length + " scores.");
+    // Do something with the returned Parse.Object values
+    for (var i = 0; i < results.length; i++) { 
+      var object = results[i];
+      alert(object.id + ' - ' + object.get('playerName'));
+    }
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+*/
+    function loadHighScore()
+    {
+     var HighScore = Parse.Object.extend("HighScore");
+     var query = new Parse.Query(HighScore);
+     
+     query.equalTo("UserId", {
+    __type: "Pointer",
+    className: "_User",
+    objectId: Parse.User.current().id
+    });
+ 
+    query.find({
+    success: function(results) {
+    // Do something with the returned Parse.Object values
+    highScore = 0;
+    for (var i = 0; i < results.length; i++) { 
+      var object = results[i];
+      highScore = object.get('score');
+    }
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});  
+    }
+    

@@ -86,6 +86,10 @@ a {
   width: 200px;
 }
 
+#tapToRetry
+{
+    color:#e74c3c;
+}
 .sound {
   display: none;
   position: absolute;

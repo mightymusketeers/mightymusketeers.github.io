@@ -240,7 +240,7 @@ function Animation(spritesheet, frameSpeed, startFrame, endFrame) {
   var animationSequence = [];  // array holding the order of the animation
   var currentFrame = 0;        // the current frame to draw
   var counter = 0;             // keep track of frame rate
-
+  this.imageData = 0;
   // start and end range for frames
   for (var frameNumber = startFrame; frameNumber <= endFrame; frameNumber++)
     animationSequence.push(frameNumber);
@@ -274,7 +274,10 @@ function Animation(spritesheet, frameSpeed, startFrame, endFrame) {
       spritesheet.frameWidth, spritesheet.frameHeight,
       x, y,
       spritesheet.frameWidth, spritesheet.frameHeight);
+      this.imageData = ctx.getImageData(x, y,
+      spritesheet.frameWidth, spritesheet.frameHeight);
   };
+    
 }
 
 /**
@@ -397,9 +400,9 @@ Vector.prototype.minDist = function(vec) {
  */
 var player = (function(player) {
   // add properties directly to the player imported object
-  player.width     = 100;
-  player.height    = 80;
-  player.speed     = 6;
+  player.width     = 125;
+  player.height    = 100;
+  player.speed     = 7;
 
   // jumping
   player.gravity   = 0.7;
@@ -409,10 +412,11 @@ var player = (function(player) {
   player.isJumping = false;
 
   // spritesheets
-  player.sheet     = new SpriteSheet('imgs/LionSpriteFinal.png', player.width, player.height);
-  player.walkAnim  = new Animation(player.sheet, 5, 0, 9);
+  player.sheet     = new SpriteSheet('imgs/LionSpriteLarge.png', player.width, player.height);
+  player.walkAnim  = new Animation(player.sheet, 5, 0, 8);
   player.jumpAnim  = new Animation(player.sheet, 7, 2, 4);
-  player.fallAnim  = new Animation(player.sheet, 6, 0, 9);
+  player.fallAnim  = new Animation(player.sheet, 5, 3, 5);
+  player.glideAnim  = new Animation(player.sheet, 1, 8, 9);
   player.anim      = player.walkAnim;
 
   Vector.call(player, 0, 0, 0, player.dy);
@@ -426,6 +430,7 @@ var player = (function(player) {
 
     // jump if not currently jumping or falling
     if ((TOUCHING || KEY_STATUS.space) && player.dy === 0 && !player.isJumping) {
+      
       player.isJumping = true;
       player.dy = player.jumpDy;
       jumpCounter = 12;
@@ -435,6 +440,8 @@ var player = (function(player) {
     // jump higher if the space bar is continually pressed
     if ((TOUCHING || KEY_STATUS.space) && jumpCounter) {
       player.dy = player.jumpDy;
+      player.dy -= 3.0;
+      player.anim = player.glideAnim;
     }
 
     jumpCounter = Math.max(jumpCounter-1, 0);
@@ -491,6 +498,7 @@ function Sprite(x, y, type) {
   this.width  = platformWidth;
   this.height = platformWidth;
   this.type   = type;
+  this.imageData = 0;
   Vector.call(this, x, y, 0, 0);
 
   /**
@@ -508,6 +516,7 @@ function Sprite(x, y, type) {
     ctx.save();
     ctx.translate(0.5,0.5);
     ctx.drawImage(assetLoader.imgs[this.type], this.x, this.y);
+    this.imageData = ctx.getImageData(this.x, this.y,this.width,this.height);
     ctx.restore();
   };
 }
@@ -614,9 +623,15 @@ function updateEnemies() {
     enemies[i].draw();
 
     // player ran into enemy
-    if (player.minDist(enemies[i]) <= player.width - 20 - platformWidth/2) {
+    //console.log(enemies[i].imageData);
+    //console.log(player.anim.imageData);
+    /*if (player.minDist(enemies[i]) <= player.width - 20 - platformWidth/2) {
       gameOver();
-    }
+    }*/
+      if(isPixelCollision(player.anim.imageData,player.x,player.y,enemies[i].imageData,enemies[i].x,enemies[i].y,false))
+      {
+          gameOver();
+      }
   }
 
   // remove enemies that have gone off screen
@@ -704,7 +719,7 @@ function spawnEnvironmentSprites() {
 }
 
 /**
- * Spawn new enemy sprites off screen
+ * Spawn new  sprites off screen
  */
 function spawnEnemySprites() {
   if (score > 100 && Math.random() > 0.96 && enemies.length < 3 && platformLength > 5 &&
@@ -739,7 +754,7 @@ function animate() {
     ctx.font      = "bold 28px futura";
     ctx.fillStyle = "#000000";
     ctx.fillText('Time: ' + score + 's', canvas.width - 240, 120);
-
+    ctx.fillText('Best: '+ highScore + 's',canvas.width - 680,120);
 
     // spawn a new Sprite
     if (ticker % Math.floor(platformWidth / player.speed) === 0) {
@@ -805,6 +820,11 @@ var myBody = document.getElementsByTagName("body")[0];
   myBody.addEventListener("touchmove", funcTouchMove, false);
 
   function funcTouchStart(e) {
+      if(stop)
+      {
+        $('#game-over').hide();
+        startGame();
+      }
     //code to do what you want like set variables and check where on screen touch happened
      TOUCHING = true;
     var touches = e.changedTouches; //gets array of touch points, to get position
@@ -857,6 +877,7 @@ function mainMenu() {
  */
 function startGame() {
   document.getElementById('game-over').style.display = 'none';
+  loadHighScore();    
   ground = [];
   water = [];
   environment = [];
@@ -868,7 +889,7 @@ function startGame() {
   platformHeight = 2;
   platformLength = 15;
   gapLength = 0;
-
+  
   ctx.font = '16px arial, sans-serif';
 
   for (var i = 0; i < 30; i++) {
@@ -895,6 +916,7 @@ function startGame() {
 function gameOver() {
   stop = true;
   $('#score').html(score);
+  saveScore(score);
   $('#game-over').show();
   assetLoader.sounds.bg.pause();
   assetLoader.sounds.gameOver.currentTime = 0;
@@ -998,3 +1020,109 @@ $('.restart').click(function() {
 
 assetLoader.downloadAll();
 })(jQuery);
+
+/**
+ * @author Joseph Lenton - PlayMyCode.com
+ *
+ * @param first An ImageData object from the first image we are colliding with.
+ * @param x The x location of 'first'.
+ * @param y The y location of 'first'.
+ * @param other An ImageData object from the second image involved in the collision check.
+ * @param x2 The x location of 'other'.
+ * @param y2 The y location of 'other'.
+ * @param isCentred True if the locations refer to the centre of 'first' and 'other', false to specify the top left corner.
+ */
+function isPixelCollision( first, x, y, other, x2, y2, isCentred )
+{
+    // we need to avoid using floats, as were doing array lookups
+    x  = Math.round( x );
+    y  = Math.round( y );
+    x2 = Math.round( x2 );
+    y2 = Math.round( y2 );
+
+    var w  = first.width,
+        h  = first.height,
+        w2 = other.width,
+        h2 = other.height ;
+
+    // deal with the image being centred
+    if ( isCentred ) {
+        // fast rounding, but positive only
+        x  -= ( w/2 + 0.5) << 0
+        y  -= ( h/2 + 0.5) << 0
+        x2 -= (w2/2 + 0.5) << 0
+        y2 -= (h2/2 + 0.5) << 0
+    }
+
+    // find the top left and bottom right corners of overlapping area
+    var xMin = Math.max( x, x2 ),
+        yMin = Math.max( y, y2 ),
+        xMax = Math.min( x+w, x2+w2 ),
+        yMax = Math.min( y+h, y2+h2 );
+
+    // Sanity collision check, we ensure that the top-left corner is both
+    // above and to the left of the bottom-right corner.
+    if ( xMin >= xMax || yMin >= yMax ) {
+        return false;
+    }
+
+    var xDiff = xMax - xMin,
+        yDiff = yMax - yMin;
+
+    // get the pixels out from the images
+    var pixels  = first.data,
+        pixels2 = other.data;
+
+    // if the area is really small,
+    // then just perform a normal image collision check
+    if ( xDiff < 4 && yDiff < 4 ) {
+        for ( var pixelX = xMin; pixelX < xMax; pixelX++ ) {
+            for ( var pixelY = yMin; pixelY < yMax; pixelY++ ) {
+                if (
+                        ( pixels [ ((pixelX-x ) + (pixelY-y )*w )*4 + 3 ] !== 0 ) &&
+                        ( pixels2[ ((pixelX-x2) + (pixelY-y2)*w2)*4 + 3 ] !== 0 )
+                ) {
+                    return true;
+                }
+            }
+        }
+    } else {
+        /* What is this doing?
+         * It is iterating over the overlapping area,
+         * across the x then y the,
+         * checking if the pixels are on top of this.
+         *
+         * What is special is that it increments by incX or incY,
+         * allowing it to quickly jump across the image in large increments
+         * rather then slowly going pixel by pixel.
+         *
+         * This makes it more likely to find a colliding pixel early.
+         */
+
+        // Work out the increments,
+        // it's a third, but ensure we don't get a tiny
+        // slither of an area for the last iteration (using fast ceil).
+        var incX = xDiff / 3.0,
+            incY = yDiff / 3.0;
+        incX = (~~incX === incX) ? incX : (incX+1 | 0);
+        incY = (~~incY === incY) ? incY : (incY+1 | 0);
+
+        for ( var offsetY = 0; offsetY < incY; offsetY++ ) {
+            for ( var offsetX = 0; offsetX < incX; offsetX++ ) {
+                for ( var pixelY = yMin+offsetY; pixelY < yMax; pixelY += incY ) {
+                    for ( var pixelX = xMin+offsetX; pixelX < xMax; pixelX += incX ) {
+                        if (
+                                ( pixels [ ((pixelX-x ) + (pixelY-y )*w )*4 + 3 ] !== 0 ) &&
+                                ( pixels2[ ((pixelX-x2) + (pixelY-y2)*w2)*4 + 3 ] !== 0 )
+                        ) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
+}
+ 
