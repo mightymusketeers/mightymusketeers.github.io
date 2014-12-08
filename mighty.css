@@ -22,6 +22,10 @@ canvas {
   height: 360px;
 }
 
+#gameContainer
+{
+    zoom:75%;
+}
 #mainTitle{
   font-size: 40px;
   margin-top: 50px;
