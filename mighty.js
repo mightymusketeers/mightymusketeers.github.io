@@ -738,7 +738,7 @@ function animate() {
     // draw the score
     ctx.font      = "bold 28px futura";
     ctx.fillStyle = "#000000";
-    ctx.fillText('Time: ' + score + 's', canvas.width - 200, 50);
+    ctx.fillText('Time: ' + score + 's', canvas.width - 240, 120);
 
 
     // spawn a new Sprite
