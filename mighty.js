@@ -424,22 +424,8 @@ var player = (function(player) {
    */
   player.update = function() {
 
-    $("body").on("tap",function(){
-          if (player.dy === 0 && !player.isJumping) {
-          player.isJumping = true;
-          player.dy = player.jumpDy;
-          jumpCounter = 12;
-          assetLoader.sounds.jump.play();
-        }
-
-    // jump higher if the space bar is continually pressed
-    
-        if (jumpCounter) {
-         player.dy = player.jumpDy;
-        }
-    });  
     // jump if not currently jumping or falling
-    if (KEY_STATUS.space && player.dy === 0 && !player.isJumping) {
+    if ((TOUCHING || KEY_STATUS.space) && player.dy === 0 && !player.isJumping) {
       player.isJumping = true;
       player.dy = player.jumpDy;
       jumpCounter = 12;
@@ -447,7 +433,7 @@ var player = (function(player) {
     }
 
     // jump higher if the space bar is continually pressed
-    if (KEY_STATUS.space && jumpCounter) {
+    if ((TOUCHING || KEY_STATUS.space) && jumpCounter) {
       player.dy = player.jumpDy;
     }
 
@@ -789,7 +775,7 @@ function animate() {
  */
 var KEY_CODES = {
   32:  'space',
-  80: 'pause',
+  /*80: 'pause',*/
 };
 var KEY_STATUS = {};
 for (var code in KEY_CODES) {
@@ -811,7 +797,31 @@ document.onkeyup = function(e) {
     KEY_STATUS[KEY_CODES[keyCode]] = false;
   }
 };
+/* Keep Track of Touch Events*/
+var TOUCHING = false;
+var myBody = document.getElementsByTagName("body")[0];
+  myBody.addEventListener("touchstart", funcTouchStart, false);
+  myBody.addEventListener("touchend", funcTouchEnd, false);
+  myBody.addEventListener("touchmove", funcTouchMove, false);
 
+  function funcTouchStart(e) {
+    //code to do what you want like set variables and check where on screen touch happened
+     TOUCHING = true;
+    var touches = e.changedTouches; //gets array of touch points, to get position
+  }
+
+  function funcTouchEnd(e) {
+    //code
+    TOUCHING = false;
+  }
+
+  function funcTouchMove(e) {
+    //code
+  }
+
+
+    
+    
 /**
  * Request Animation Polyfill
  */

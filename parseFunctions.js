@@ -30,6 +30,7 @@
           {
               $('#submit1').click();
           }});
+       
 
        $("#submit1").click(function()
       {
