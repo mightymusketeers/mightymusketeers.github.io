@@ -1,5 +1,6 @@
     
 Parse.initialize("PXtItYU56vgW8jbKgDhZQac0WMWvlE5uzhS6DtBB", "pI5dlkQ7teOaWlFyvc7i3RbW60ST0NkalJYPLtWr");
+//Global Variable that keeps track of current user's highscore
 highScore = 0;
 $(function() {
     FastClick.attach(document.body);

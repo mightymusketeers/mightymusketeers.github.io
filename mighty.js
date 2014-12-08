@@ -871,7 +871,7 @@ function animate() {
     ctx.font      = "bold 28px futura";
     ctx.fillStyle = "#000000";
     ctx.fillText('Time: ' + score + 's', canvas.width - 240, 120);
-    ctx.fillText('Best Score: '+ highScore + 's',canvas.width - 740,120);
+    ctx.fillText('Score: '+ highScore + 's',canvas.width - 740,120);
 
     // spawn a new Sprite
     if (ticker % Math.floor(platformWidth / player.speed) === 0) {
