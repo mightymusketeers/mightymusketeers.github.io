@@ -1,5 +1,10 @@
     
     Parse.initialize("PXtItYU56vgW8jbKgDhZQac0WMWvlE5uzhS6DtBB", "pI5dlkQ7teOaWlFyvc7i3RbW60ST0NkalJYPLtWr");
+
+$(function() {
+    FastClick.attach(document.body);
+});
+
     function createUser(username,password,email)
     {
 		var user = new Parse.User();
