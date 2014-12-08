@@ -3,6 +3,9 @@
 
 $(function() {
     FastClick.attach(document.body);
+    document.ontouchmove = function(event){
+    event.preventDefault();
+}
 });
 
     function createUser(username,password,email)
