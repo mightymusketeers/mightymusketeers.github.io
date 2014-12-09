@@ -1,5 +1,5 @@
-(function ($) {
-          
+isPaused = false;   
+(function ($) {       
 // define variables
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
@@ -179,7 +179,9 @@ var assetLoader = (function() {
     'cliff'         : 'imgs/grassCliffRight.png',
     'spikes'        : 'imgs/spikes.png',
     'box'           : 'imgs/boxCoin.png',
-    'slime'         : 'imgs/slime.png'
+    'slime'         : 'imgs/slime.png',
+    'pause'         : 'imgs/pause.png',
+    'play'          : 'imgs/play.png'
   };
 /*
   this.imgs        = {
@@ -339,6 +341,16 @@ function SpriteSheet(path, frameWidth, frameHeight) {
   this.image.src = path;
 }
 
+function drawPlayPause(type)
+{
+    ctx.save();
+    ctx.translate(1.5,1.5);
+    ctx.drawImage(assetLoader.imgs[type],120, 80,50,50);
+    ctx.restore();   
+}
+    
+    
+    
 /**
  * Creates an animation from a spritesheet.
  * @param {SpriteSheet} - The spritesheet used to create the animation.
@@ -556,7 +568,7 @@ var player = (function(player) {
     // jump higher if the space bar is continually pressed
     if ((TOUCHING || KEY_STATUS.space) && jumpCounter) {
       player.dy = player.jumpDy;
-      player.dy -= 4.0;
+      player.dy -= 2.0;
       player.anim = player.glideAnim;
     }
 
@@ -862,7 +874,7 @@ function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     background.draw();
-
+    if(!isPaused){drawPlayPause("play");}
     // update entities
     updateWater();
     updateEnvironment();
@@ -875,7 +887,10 @@ function animate() {
     ctx.fillStyle = "#000000";
     ctx.fillText('Time: ' + score + 's', canvas.width - 240, 120);
     ctx.fillText('Score: '+ highScore + 's',canvas.width - 740,120);
-
+      
+    //Draw Play
+      
+    
     // spawn a new Sprite
     if (ticker % Math.floor(platformWidth / player.speed) === 0) {
       spawnSprites();
@@ -939,7 +954,7 @@ var myBody = document.getElementsByTagName("body")[0];
   myBody.addEventListener("touchmove", funcTouchMove, false);
 
   function funcTouchStart(e) {
-      if(stop)
+      if(gameIsOver)
       {
         $('#game-over').hide();
         startGame();
@@ -1022,6 +1037,8 @@ function startGame() {
     water.push(new Sprite(i * platformWidth, platformBase, 'water'));
   }
 
+  
+    
   background.reset();
 
   animate();
@@ -1065,16 +1082,22 @@ $('.back').click(function() {
 $( window ).keydown( function ( e ){
 	// Pause: command pressed and we are not currently paused
     if ( e.keyCode == 91 && stop == false ) {
-  		$( ".gameStatus" ).removeClass('playGame').addClass('pauseGame');
+  		//$( ".gameStatus" ).removeClass('playGame').addClass('pauseGame');
+        isPaused = true;
+        animate();
+        drawPlayPause("pause");
     	stop = true;
     } 
 	// Play: command pressed and we are currently paused
     else if ( e.keyCode == 91 && stop == true && gameIsOver == false ) {
- 		$( ".gameStatus" ).removeClass('pauseGame').addClass('playGame');
+ 		//$( ".gameStatus" ).removeClass('pauseGame').addClass('playGame');
+        isPaused = false;
     	stop = false;
     	animate();    	
     }
 });
+    
+
     
 $('.sound').click(function() {
   var $this = $(this);
