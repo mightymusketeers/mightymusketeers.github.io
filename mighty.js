@@ -1031,11 +1031,47 @@ function mainMenu() {
 
 function showInGameMenu() {
 	$('#inGameMenu').show();
+	$('#inGameButton1').css("background","orange");
+	$('#inGameButton2').css("background","#E0E0E0");
+	$('#inGameButton3').css("background","#E0E0E0");
 }
 
 function hideInGameMenu() {
 	$('#inGameMenu').hide();
 }
+
+// Stats
+$('#inGameButton1').click(function() {
+	$('#inGameButton1').css("background","orange");
+	$('#inGameButton2').css("background","#E0E0E0");
+	$('#inGameButton3').css("background","#E0E0E0");
+	
+	$('#statistics').show();
+	$('#achievements').hide();
+	$('#store').hide();
+
+});
+// Achievos
+$('#inGameButton2').click(function() {
+	$('#inGameButton1').css("background","#E0E0E0");
+	$('#inGameButton2').css("background","orange");
+	$('#inGameButton3').css("background","#E0E0E0");
+	
+	$('#statistics').hide();
+	$('#achievements').show();
+	$('#store').hide();
+});
+// Store
+$('#inGameButton3').click(function() {
+	$('#inGameButton1').css("background","#E0E0E0");
+	$('#inGameButton2').css("background","#E0E0E0");
+	$('#inGameButton3').css("background","orange");
+	
+	$('#statistics').hide();
+	$('#achievements').hide();
+	$('#store').show();
+});
+
 
 
 /**
