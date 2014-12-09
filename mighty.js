@@ -285,9 +285,9 @@ var assetLoader = (function() {
           _this.sounds[sound] = new Audio();
           _this.sounds[sound].status = 'loading';
           _this.sounds[sound].name = sound;
-          _this.sounds[sound].addEventListener('canplay', function() {
+          /*_this.sounds[sound].addEventListener('canplay', function() {
             _checkAudioState.call(_this, sound);
-          });
+          });*/
           _this.sounds[sound].src = src;
           _this.sounds[sound].preload = 'auto';
           _this.sounds[sound].load();
@@ -887,7 +887,7 @@ function animate() {
     ctx.font      = "bold 28px futura";
     ctx.fillStyle = "#000000";
     ctx.fillText('Time: ' + score + 's', canvas.width - 240, 120);
-    ctx.fillText('Score: '+ highScore + 's',canvas.width - 740,120);
+    ctx.fillText('Best: '+ highScore + 's',canvas.width - 680,120);
       
     //Draw Play
       
