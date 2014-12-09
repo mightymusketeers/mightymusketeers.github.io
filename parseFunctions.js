@@ -99,16 +99,17 @@ $(function() {
  
     function signUpView()
       {
-          var email = document.getElementById("emailDiv");
+          var email = document.getElementById("email");
           email.style.visibility = "visible";
-          
+          email.style.display = "inline-block";
+
 		  var loginTitle = document.getElementById("loginTitle");
 		  var registerTitle = document.getElementById("registerTitle");
           registerTitle.style.display = "block";
           loginTitle.style.display = "none";
           
-          var registerLink = document.getElementById("signUpText");
-          var signInLink = document.getElementById("loginText");
+          var registerLink = document.getElementById("goSignUp");
+          var signInLink = document.getElementById("goLogIn");
           registerLink.style.display = "none";
           signInLink.style.display = "inline-block";
           
@@ -117,16 +118,17 @@ $(function() {
       }
     function loginView()
       {
-          var email = document.getElementById("emailDiv");
+          var email = document.getElementById("email");
           email.style.visibility = "hidden";
+          email.style.display = "none";    
           
           var loginTitle = document.getElementById("loginTitle");
 		  var registerTitle = document.getElementById("registerTitle");
           registerTitle.style.display = "none";
           loginTitle.style.display = "block";
-          
-          var registerLink = document.getElementById("signUpText");
-          var signInLink = document.getElementById("loginText");
+                
+          var registerLink = document.getElementById("goSignUp");
+          var signInLink = document.getElementById("goLogIn");
           registerLink.style.display = "inline-block";
           signInLink.style.display = "none";
       }

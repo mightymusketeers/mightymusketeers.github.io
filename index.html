@@ -70,33 +70,31 @@
   </div>
   
   
-  	<h1 id="mainTitle">Mighty Ole</h1>
+  	<div id="mainTitle">
+  		<span id="loginTitle">Login</span>
+  	    <span id="registerTitle">Register</span>
+  	</div>
   	<div id="wrapper2">
 		<div id="wrappertop"></div>
-		<div id="wrappermiddle">
-			<h2 id="loginTitle">Login</h2>			
-			<h2 id="registerTitle">Register</h2>
-			<div id="emailDiv">
-				<div id="username_inputleft"></div>
-				<div id="username_inputmiddle">
-					<label id="emailLabel">Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-					<input name="link" class="email" id="email">
-				</div>
-				<div id="username_inputright"></div>
-			</div>
+		<div id="wrappermiddle">			
 			<div id="username_input">
 				<div id="username_inputleft"></div>
 				<div id="username_inputmiddle">
-					<label>User&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-					<input name="link" class="credentials" id="username" autofocus>
+					<input name="link" placeholder="Username" class="credentials" id="username" autofocus>
+				</div>
+				<div id="username_inputright"></div>
+			</div>
+			<div id="emailDiv">
+				<div id="username_inputleft"></div>
+				<div id="username_inputmiddle">
+					<input name="link" placeholder="Email" class="email" id="email">
 				</div>
 				<div id="username_inputright"></div>
 			</div>
 			<div id="password_input">
 				<div id="password_inputleft"></div>
 				<div id="password_inputmiddle">
-				<label>Password</label>
-					<input type="password" class="credentials" id="passwd">
+					<input type="password" placeholder="Password" class="credentials" id="passwd">
 				</div>
 				<div id="password_inputright"></div>
 			</div>
@@ -104,8 +102,8 @@
 			<div id="submit">
 				<input type="button" id="submit1" value="Submit">
 				&nbsp;			
-				<a href="#" onclick="toggleView();" class="helpful" id="signUpText">Need an account?</a>
-				<a href="#" onclick="toggleView();" class="helpful" id="loginText">Have an account?</a>
+				<button type="button" id="goSignUp" onclick="toggleView();" class="helpful">Need an account?</a></button>
+				<button type="button" id="goLogIn" onclick="toggleView();" class="helpful">Have an account?</button>
 				<h5 id="warning">Incorrect username/password</h5>
 			</div>
 			</div>
