@@ -1,4 +1,5 @@
 isPaused = false;   
+
 (function ($) {       
 // define variables
 var canvas = document.getElementById('canvas');
@@ -1007,6 +1008,15 @@ function mainMenu() {
   $('.gameStatus').show();
 }
 
+function showInGameMenu() {
+	$('#inGameMenu').show();
+}
+
+function hideInGameMenu() {
+	$('#inGameMenu').hide();
+}
+
+
 /**
  * Start the game - reset all variables and entities, spawn ground and water.
  */
@@ -1086,6 +1096,7 @@ $( window ).keydown( function ( e ){
         isPaused = true;
         animate();
         drawPlayPause("pause");
+        showInGameMenu();
     	stop = true;
     } 
 	// Play: command pressed and we are currently paused
@@ -1093,6 +1104,7 @@ $( window ).keydown( function ( e ){
  		//$( ".gameStatus" ).removeClass('pauseGame').addClass('playGame');
         isPaused = false;
     	stop = false;
+    	hideInGameMenu();
     	animate();    	
     }
 });
