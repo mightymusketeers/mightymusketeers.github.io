@@ -948,12 +948,27 @@ document.onkeyup = function(e) {
 };
 /* Keep Track of Touch Events*/
 var TOUCHING = false;
-var myBody = document.getElementsByTagName("body")[0];
+var myBody = document.body;
   myBody.addEventListener("touchstart", funcTouchStart, false);
   myBody.addEventListener("touchend", funcTouchEnd, false);
   myBody.addEventListener("touchmove", funcTouchMove, false);
 
   function funcTouchStart(e) {
+      
+    var touchlist = e.touches
+    for (var i=0; i<touchlist.length; i++){ 
+        var touchPoint = touchlist[i];
+        console.log(touchPoint.clientY);
+        if(touchPoint.clientX >=65.0 && touchPoint.clientX <=100.0)
+        {
+            if(touchPoint.clientY >=5.0 && touchPoint.clientY <=41.0)
+            { 
+               
+            }
+        }
+     }
+
+      
       if(gameIsOver)
       {
         $('#game-over').hide();
