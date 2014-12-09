@@ -875,7 +875,7 @@ function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     background.draw();
-    if(!isPaused){drawPlayPause("play");}
+    if(!isPaused){drawPlayPause("pause");}
     // update entities
     updateWater();
     updateEnvironment();
@@ -959,12 +959,18 @@ var myBody = document.body;
     var touchlist = e.touches
     for (var i=0; i<touchlist.length; i++){ 
         var touchPoint = touchlist[i];
-        console.log(touchPoint.clientY);
+        //console.log(touchPoint.clientY);
         if(touchPoint.clientX >=65.0 && touchPoint.clientX <=100.0)
         {
             if(touchPoint.clientY >=5.0 && touchPoint.clientY <=41.0)
             { 
-               
+                if (stop == false ) {
+                pauseActions();
+                } 
+                // Play: command pressed and we are currently paused
+                else if (stop == true && gameIsOver == false ) {
+                unpauseActions();
+                }
             }
         }
      }
@@ -1107,24 +1113,30 @@ $('.back').click(function() {
 $( window ).keydown( function ( e ){
 	// Pause: command pressed and we are not currently paused
     if ( e.keyCode == 91 && stop == false ) {
-  		//$( ".gameStatus" ).removeClass('playGame').addClass('pauseGame');
-        isPaused = true;
-        animate();
-        drawPlayPause("pause");
-        showInGameMenu();
-    	stop = true;
+        pauseActions();
     } 
 	// Play: command pressed and we are currently paused
     else if ( e.keyCode == 91 && stop == true && gameIsOver == false ) {
- 		//$( ".gameStatus" ).removeClass('pauseGame').addClass('playGame');
-        isPaused = false;
-    	stop = false;
-    	hideInGameMenu();
-    	animate();    	
+        unpauseActions();
     }
 });
     
-
+function pauseActions()
+{
+        isPaused = true;
+        animate();
+        drawPlayPause("play");
+        //showInGameMenu();
+    	stop = true;
+}
+    
+function unpauseActions()
+{
+        isPaused = false;
+    	stop = false;
+    	//hideInGameMenu();
+    	animate();    
+}
     
 $('.sound').click(function() {
   var $this = $(this);
