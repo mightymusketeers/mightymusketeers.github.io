@@ -1079,6 +1079,10 @@ $('#inGameButton3').click(function() {
  */
 function startGame() {
   document.getElementById('game-over').style.display = 'none';
+  var backgroundMusic;
+  backgroundMusic = new WebAudioAPISound("sounds/stolaf.mp3", {loop: true});
+  backgroundMusic.play();
+
   loadHighScore();    
   ground = [];
   water = [];
