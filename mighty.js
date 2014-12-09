@@ -1162,7 +1162,7 @@ function pauseActions()
         isPaused = true;
         animate();
         drawPlayPause("play");
-        //showInGameMenu();
+        showInGameMenu();
     	stop = true;
 }
     
@@ -1170,7 +1170,7 @@ function unpauseActions()
 {
         isPaused = false;
     	stop = false;
-    	//hideInGameMenu();
+    	hideInGameMenu();
     	animate();    
 }
     
