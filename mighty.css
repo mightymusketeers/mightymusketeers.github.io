@@ -263,9 +263,18 @@ a {
   float: left;
   width: 186.4px;
   height: 40px;
-  background: orange;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
   font-family: futura;
+}
+
+.inGameMenuDiv {
+  color: white;
+  height: 315px;
+  width: 560px;
+  margin-top: 45px;
+  margin-left: 20px
+  font-family: futura;
+  z-index: 999;
 }
