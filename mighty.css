@@ -2,8 +2,6 @@
   box-sizing: border-box;
 }
 
-body[orient="landscape"]
-
 body {
   font-family: arial, sans-serif;
   font-size: 16px;
