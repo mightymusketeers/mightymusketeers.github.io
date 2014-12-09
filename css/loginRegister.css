@@ -1,33 +1,68 @@
+#username {
+	width: 100%;
+	height: 50px;
+	padding-left: 40px;
+}
+
+#passwd {
+	width: 100%;
+	height: 50px;
+	padding-left: 40px;
+}
+
+#email {
+	width: 100%;
+	height: 50px;
+	padding-left: 40px;
+	margin-top: -60px;
+}
+
+#submit1 {
+	width: 100%;
+	height: 50px;
+	color: white;
+	background: black;
+}
+
+#goSignUp {
+	width: 100%;
+	height: 50px;
+	margin-top: -25px;
+	color: white;
+	background: black;
+}
+
+#goLogIn {
+	width: 100%;
+	height: 50px;
+	margin-top: -25px;
+	color: white;
+	background: black;
+	display: none;
+}
+
+
+#loginTitle {
+	margin-bottom: 0px;
+}
+
+
 /* unvisited link */
 a.helpful:link {
-    color: black;
+    color: white;
 }
 
 /* visited link */
 a.helpful:visited {
-    color: black;
-}
-
-/* mouse over link */
-a.helpful:hover {
-    color: gray;
-}
-
-/* selected link */
-a.helpful:active {
-    color: gray;
+    color: white;
 }
 
 #wrappermiddle {
-	width: 390px;
+	width: 100%;
 	text-align: center;
 	margin-left: auto;
 	margin-right: auto;
-	padding-top: 20px;
 	padding-bottom: 20px;
-	border: 2px solid grey;
-	border-radius: 20px;
-	background-color: white;
 }	
 
 #emailDiv {
@@ -36,10 +71,13 @@ a.helpful:active {
 
 #loginText {
 	display: none;
+	color: white;
 }
 
-#submit1 {
-	margin-left: 110px;
+#signUpText {
+	display: block;
+	color: white;
+	margin-top: 10px;
 }
 
 #registerTitle {
@@ -48,6 +86,7 @@ a.helpful:active {
 
 #warning {
   color: red;
+  font-size: 18px;
   margin-top: 17px;
   visibility: hidden;
 }

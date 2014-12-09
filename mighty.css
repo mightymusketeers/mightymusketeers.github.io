@@ -29,8 +29,12 @@ canvas {
     /*zoom:75%;*/
 }
 #mainTitle{
-  font-size: 40px;
-  margin-top: 50px;
+  font-size: 30px;
+  background: black;
+  color: white;
+  height: 40px;
+  width: 100%;
+  top: 0px;
 }
 
 ul {

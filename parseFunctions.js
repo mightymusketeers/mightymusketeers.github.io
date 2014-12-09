@@ -107,8 +107,8 @@ $(function() {
           registerTitle.style.display = "block";
           loginTitle.style.display = "none";
           
-          var registerLink = document.getElementById("signUpText");
-          var signInLink = document.getElementById("loginText");
+          var registerLink = document.getElementById("goSignUp");
+          var signInLink = document.getElementById("goLogIn");
           registerLink.style.display = "none";
           signInLink.style.display = "inline-block";
           
@@ -120,15 +120,10 @@ $(function() {
           var email = document.getElementById("emailDiv");
           email.style.visibility = "hidden";
           
-          var loginTitle = document.getElementById("loginTitle");
-		  var registerTitle = document.getElementById("registerTitle");
+          var registerLink = document.getElementById("goSignUp");
+          var signInLink = document.getElementById("goLogIn");
           registerTitle.style.display = "none";
-          loginTitle.style.display = "block";
-          
-          var registerLink = document.getElementById("signUpText");
-          var signInLink = document.getElementById("loginText");
-          registerLink.style.display = "inline-block";
-          signInLink.style.display = "none";
+          loginTitle.style.display = "inline-block";
       }
 
     function saveScore(userScore)
