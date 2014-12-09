@@ -14,6 +14,8 @@ var platformSpacer = 64;
 
 var canUseLocalStorage = 'localStorage' in window && window.localStorage !== null;
 var playSound;
+var showMenu;
+var gameIsOver;
 
 // set the sound preference
 if (canUseLocalStorage) {
@@ -550,6 +552,7 @@ var player = (function(player) {
       assetLoader.sounds.jump.play();
     }
 
+
     // jump higher if the space bar is continually pressed
     if ((TOUCHING || KEY_STATUS.space) && jumpCounter) {
       player.dy = player.jumpDy;
@@ -897,7 +900,6 @@ function animate() {
         platformLength--;
       }
     }
-
     ticker++;
   }
 }
@@ -907,7 +909,7 @@ function animate() {
  */
 var KEY_CODES = {
   32:  'space',
-  /*80: 'pause',*/
+  93:  'command',
 };
 var KEY_STATUS = {};
 for (var code in KEY_CODES) {
@@ -987,6 +989,7 @@ function mainMenu() {
   $('#main').show();
   $('#menu').addClass('main');
   $('.sound').show();
+  $('.gameStatus').show();
 }
 
 /**
@@ -1002,6 +1005,8 @@ function startGame() {
   player.reset();
   ticker = 0;
   stop = false;
+  gameIsOver = false;
+  showMenu = false;
   score = 0;
   platformHeight = 2;
   platformLength = 15;
@@ -1032,6 +1037,7 @@ function startGame() {
  */
 function gameOver() {
   stop = true;
+  gameIsOver = true;
   $('#score').html(score);
   saveScore(score);
   $('#game-over').show();
@@ -1043,15 +1049,31 @@ function gameOver() {
 /**
  * Click handlers for the different menu screens
  */
+ // credits
 $('.credits').click(function() {
   $('#main').hide();
   $('#credits').show();
   $('#menu').addClass('credits');
 });
+// back
 $('.back').click(function() {
   $('#credits').hide();
   $('#main').show();
   $('#menu').removeClass('credits');
+});
+// pause for menu
+$( window ).keydown( function ( e ){
+	// Pause: command pressed and we are not currently paused
+    if ( e.keyCode == 91 && stop == false ) {
+  		$( ".gameStatus" ).removeClass('playGame').addClass('pauseGame');
+    	stop = true;
+    } 
+	// Play: command pressed and we are currently paused
+    else if ( e.keyCode == 91 && stop == true && gameIsOver == false ) {
+ 		$( ".gameStatus" ).removeClass('pauseGame').addClass('playGame');
+    	stop = false;
+    	animate();    	
+    }
 });
     
 $('.sound').click(function() {
@@ -1106,29 +1128,11 @@ $('.sound').click(function() {
 });*/
 
 
-/* FINISH ME
-// Allow the enter key to submit the form
-$( document ).ready(function() {
-	document.querySelector('#passwd').addEventListener('keypress', function (e) {
-		var key = e.which || e.keyCode;
-		if (key == 13) { // 13 is enter
-		    
-		}
-	});
-});
-*/
-
-// If we are on a mobile device, hide the site title
-if(window.innerWidth <= 800 && window.innerHeight <= 600) {
-	window.scrollTo(0, 160);
-} else {}
-
 $('.play').click(function() {
   $('#menu').hide();
   startGame();
 });
 $('.restart').click(function() {
-  console.log("Restart Clicked");
   $('#game-over').hide();
   startGame();
 });

@@ -110,6 +110,24 @@ a {
   background-image: url('imgs/soundOff.png');
   background-repeat: no-repeat;
 }
+.gameStatus {
+  display: none;
+  position: absolute;
+  top: 48px;
+  left: 60px;
+  width: 30px;
+  height: 25px;
+  cursor: default;
+  z-index: 3;
+}
+.playGame {
+  background-image: url('imgs/play.png');
+  background-repeat: no-repeat;
+}
+.pauseGame {
+  background-image: url('imgs/pause.png');
+  background-repeat: no-repeat;
+}
 
 #main {
   display: none;
