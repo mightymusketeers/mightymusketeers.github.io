@@ -78,7 +78,11 @@ a {
   background-color: grey;
 }
 #menu.main {
-  background-image: url('imgs/b2.jpg');
+  background: url("imgs/b2.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 #menu.credits {
   background-image: url('imgs/credits-bg.png');
@@ -282,7 +286,8 @@ a {
 .inGameMenuButton {
   top: 0;
   float: left;
-  width: 186.4px;
+  width: 30%;
+  position: relative;
   height: 40px;
   text-align: center;
   margin-left: auto;
