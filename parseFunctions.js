@@ -2,46 +2,77 @@
 Parse.initialize("PXtItYU56vgW8jbKgDhZQac0WMWvlE5uzhS6DtBB", "pI5dlkQ7teOaWlFyvc7i3RbW60ST0NkalJYPLtWr");
 //Global Variable that keeps track of current user's highscore
 highScore = 0;
-$(function() {
-    FastClick.attach(document.body);
-    loadHighScore();
-    document.ontouchmove = function(event){
-    event.preventDefault();
+FastClick.attach(document.body);
+
+document.ontouchmove = function(event){
+event.preventDefault();
 }
+if(checkUserLogin()){prepareGameStage();}
+
+function createUser(username,password,email)
+{
+	var user = new Parse.User();
+	user.set("username", username);
+	user.set("password", password);
+	user.set("email", email);
+	user.signUp(null, {
+	  success: function(user) {
+		// Hooray! Let them use the app now.
+		  alert("Account created. Please Verify Your Email to login.");
+		  //window.location.href = "game.html"
+		  checkEmailVerified(Parse.User.current().id);
+	  },
+	  error: function(user, error) {
+		// Show the error message somewhere and let the user try again.
+		var warning = document.getElementById("warning");
+		warning.innerHTML = "Error: " + error.code + " " + error.message;
+		warning.style.visibility = "visible";
+	  }
+	});
+}
+
+function checkUserLogin()
+{
+	if(Parse.User.current() != undefined)
+	{
+		return true;
+	}
+	else return false;
+}      
+
+//This makes it so that we can login by pressing enter instead of clicking submit
+$('#passwd').keypress(function(e){
+  if(e.keyCode==13)
+  {
+      $('#submit1').click();
+  }});
+//Registering Event Listeners For SignUp Toggle
+$("#goSignUp").click(function(){ toggleView();});
+$("#goLogIn").click(function(){toggleView();});
+$("#goSignUp").on("touchstart",function(){ toggleView();});
+$("#goLogIn").on("touchstart",function(){toggleView();});
+
+function checkEmailVerified(userId){
+var User = Parse.Object.extend("User");
+var query = new Parse.Query(User);
+query.get(userId, {
+  success: function(User) {
+	var isVerified = User._serverData.emailVerified;
+	if(isVerified){ prepareGameStage();}
+	else { 
+		var warning = document.getElementById("warning");
+		warning.innerHTML = "Error: " + "Email Not Verfied, please check your email and verify.";
+ 		warning.style.visibility = "visible";
+	}
+  },
+  error: function(object, error) {
+	var warning = document.getElementById("warning");
+	warning.innerHTML = "Error: " + error.code + " " + error.message;
+	warning.style.visibility = "visible";
+  }
 });
-
-    function createUser(username,password,email)
-    {
-		var user = new Parse.User();
-		user.set("username", username);
-		user.set("password", password);
-		user.set("email", email);
-		user.signUp(null, {
-		  success: function(user) {
-			// Hooray! Let them use the app now.
-			  alert("Account created. Logging you in.");
-			  //window.location.href = "game.html"
-			  $("#wrapper2").hide();
-			  $("#mainTitle").hide();
-			  $("#gameContainer").show();
-		  },
-		  error: function(user, error) {
-			// Show the error message somewhere and let the user try again.
-			var warning = document.getElementById("warning");
-			warning.innerHTML = "Error: " + error.code + " " + error.message;
-			warning.style.visibility = "visible";
-		  }
-		});
-    }
-      
-    //This makes it so that we can login by pressing enter instead of clicking submit
-        $('#passwd').keypress(function(e){
-          if(e.keyCode==13)
-          {
-              $('#submit1').click();
-          }});
-       
-
+}
+		
        $("#submit1").click(function()
       {
           var username = $("#username").val();
@@ -52,10 +83,7 @@ $(function() {
 			  success: function(user) {
 				// Do stuff after successful login.
 				  //window.location.href = "game.html"
-				  $("#wrapper2").hide();
-				  $("#mainTitle").hide();
-				  $("#gameContainer").show();
-                  $("#playerUsername").html(titlCase(Parse.User.current().getUsername()));
+				  checkEmailVerified(Parse.User.current().id);
 			  },
 			  error: function(user, error) {
 				// The login failed. Check error to see why.
@@ -81,11 +109,20 @@ $(function() {
     	}
     });
     
-    function titlCase(string)
+    function titleCase(string)
     {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
        
+	function prepareGameStage()
+	{
+	  loadHighScore();
+	  $("#wrapper2").hide();
+	  $("#mainTitle").hide();
+	  $("#gameContainer").show();
+        $("#playerUsername").html(titleCase(Parse.User.current().getUsername()));
+	}
+	   
  	var count = 0;
     function toggleView() {
     	if (count % 2 == 0) {
@@ -177,6 +214,9 @@ $(function() {
   }
 });          
     }
+	
+
+	
 
 /*
 var GameScore = Parse.Object.extend("GameScore");

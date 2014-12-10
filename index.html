@@ -3,7 +3,7 @@
   <title>Mighty Ole</title>
   <meta charset="utf-8">
   <meta name="description" content="Mighty Ole 2D Platformer">
-  <meta name="viewport" content="width = device-width, minimum-scale=1, maximum-scale=1">
+  <meta name="viewport" content="user-scalable = no">
   <meta name="apple-mobile-web-app-capable" content="yes" />
   
   <link rel="apple-touch-icon" href="touch-icon-iphone.png">
@@ -21,7 +21,7 @@
   <script type="text/javascript" src="webAudio.js"></script>
   <!--<script type="text/javascript" src="https://code.jquery.com/mobile/git/jquery.mobile-git.min.js"></script>-->    
   <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.3.2.min.js"></script>
-  <script type='application/javascript' src='/javascripts/fastclick.js'></script>
+  <script type='application/javascript' src='javascripts/fastclick.js'></script>
 </head>
 
 <body>
@@ -58,7 +58,7 @@
         <a href="javascript:void(0)" class="button back">Back</a>
       </div>
     </div>
-    <canvas id="canvas" width="1067" height="640">
+    <canvas id="canvas">
       <p>Your browser does not support the required functionality to play this game.</p>
       <p>Please update to a modern browser such as <a href="www.google.com/chrome/‎">Google Chrome</a> to play.</p>
     </canvas>
@@ -73,6 +73,7 @@
     	<button class="inGameMenuButton" id="inGameButton1">Statistics</button>
     	<button class="inGameMenuButton" id="inGameButton2">Achievements</button>
     	<button class="inGameMenuButton" id="inGameButton3">Store</button>
+		<a id="inGameButton4"></a>
     	
     	<!-- Stats -->
     	<div class="inGameMenuDiv" id="statistics">
@@ -112,7 +113,7 @@
 			<div id="emailDiv">
 				<div id="username_inputleft"></div>
 				<div id="username_inputmiddle">
-					<input name="link" placeholder="Email" class="email" id="email">
+					<input name="link" placeholder="Email" autofocus class="email" id="email">
 				</div>
 				<div id="username_inputright"></div>
 			</div>
@@ -125,10 +126,9 @@
 			</div>
 			<br />
 			<div id="submit">
-				<input type="button" id="submit1" value="Submit">
-				&nbsp;			
-				<button type="button" id="goSignUp" onclick="toggleView();" class="helpful">Need an account?</a></button>
-				<button type="button" id="goLogIn" onclick="toggleView();" class="helpful">Have an account?</button>
+				<input type="button" id="submit1" value="Submit">		
+				<div id="goSignUp" class="helpful">Need an account?</div>
+				<div id="goLogIn"  class="helpful">Have an account?</div>
 				<h5 id="warning">Incorrect username/password</h5>
 			</div>
 			</div>

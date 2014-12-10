@@ -2,6 +2,12 @@
   box-sizing: border-box;
 }
 
+html, body {
+  width:  100%;
+  height: 100%;
+  margin: 0px;
+}
+
 body {
   font-family: arial, sans-serif;
   font-size: 16px;
@@ -12,27 +18,35 @@ body {
   cursor: default;
 }
 
+	
 canvas {
   position: absolute;
   top: 0;
   left: 0;
-  border: 1px solid black;
   z-index: -1;
-  width: 600px;
-  height: 360px;
+  /*width: 600px;
+  height: 360px;*/
 }
 
 #gameContainer
 {
     /*zoom:75%;*/
+    height: 320px;
+    overflow:hidden;
 }
 #mainTitle{
-  font-size: 30px;
+  font-size: 40px;
   background: black;
   color: white;
-  height: 40px;
+  padding:30px;
+  height: 17%;
   width: 100%;
   top: 0px;
+}
+
+#emailDiv
+{
+	height:15%;
 }
 
 ul {
@@ -57,9 +71,8 @@ a {
 
 #menu {
   position: absolute;
-  width: 600px;
-  height: 360px;
-  border: 1px solid black;
+  width: 100%;
+  height: 100%;
   z-index: 2;
   text-align: center;
   background-color: grey;
@@ -74,6 +87,11 @@ a {
    background-color: #fff;
    background-color: rgba(255,255,255,0.5);
 }
+#loginTitle, #registerTitle
+{
+	padding:30px;
+}
+
 
 #progress {
   height: 12%;
@@ -240,23 +258,26 @@ a {
 #game-over {
   display: none;
   text-align: center;
-  padding-top: 92px;
+  padding-top: 20%;
   z-index: 1;
-  width: 600px;
-  height: 360px;
+  width: 100%;
+  height: 100%;
   position: absolute;
 }
 
 #inGameMenu {
   display: none;
-  height: 305px;
-  width: 560px;
-  margin-top: 45px;
-  margin-left: 20px;
-  background-color: black;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin:auto;
   background-color: rgba(0,0,0,0.8);
   z-index: 999;
 }
+
+
 
 .inGameMenuButton {
   top: 0;
@@ -269,12 +290,37 @@ a {
   font-family: futura;
 }
 
+#inGameButton4{
+    float:right;
+    cursor:pointer;
+    color: #fff;
+    border: 1px solid #AEAEAE;
+    border-radius: 100px;
+    background: #605F61;
+    font-size: 31px;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 0px;
+    padding: 11px 3px;
+	zoom:200%;       
+}
+
+#inGameButton4:before {
+    content: "×";
+}
+
 .inGameMenuDiv {
   color: white;
   height: 315px;
   width: 560px;
   margin-top: 45px;
-  margin-left: 20px
+  margin-left: 20px;
   font-family: futura;
   z-index: 999;
+  display:none;
+}
+
+#statistics
+{
+	display:"";
 }

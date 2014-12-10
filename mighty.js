@@ -1,17 +1,33 @@
-isPaused = false;   
 
 (function ($) {       
 // define variables
-var canvas = document.getElementById('canvas');
-var ctx = canvas.getContext('2d');
-var player, score, stop, ticker;
-var ground = [], water = [], enemies = [], environment = [];
+isPaused = false;   
+soundPlaying = false;	
+detectPortrait();
 
-// platform variables
+
+var canvas, player, score, stop, ticker;
+var ground = [], water = [], enemies = [], environment = [];
 var platformHeight, platformLength, gapLength;
-var platformWidth = 32;
-var platformBase = canvas.height - platformWidth;  // bottom row of the game
-var platformSpacer = 64;
+var canvasCounter = 0;
+//setUpCanvas();
+
+		
+function setUpCanvas()
+{
+	canvasCounter++;
+	canvas = document.getElementById('canvas');
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+	ctx = canvas.getContext('2d');
+	
+	// platform variables
+	
+	platformWidth = 32;
+	platformBase = canvas.height - platformWidth;  // bottom row of the game
+	platformSpacer = 64;
+	
+}	
 
 var canUseLocalStorage = 'localStorage' in window && window.localStorage !== null;
 var playSound;
@@ -346,8 +362,8 @@ function drawPlayPause(type)
 {
     ctx.save();
     ctx.translate(1.5,1.5);
-    ctx.drawImage(assetLoader.imgs[type],120, 80,50,50);
-    ctx.restore();   
+    ctx.drawImage(assetLoader.imgs[type],120,(window.innerHeight/50),50,50);
+    ctx.restore();  
 }
     
     
@@ -530,10 +546,10 @@ var player = (function(player) {
   // add properties directly to the player imported object
   player.width     = 125;
   player.height    = 100;
-  player.speed     = 7;
+  player.speed     = window.innerWidth/10;
 
   // jumping
-  player.gravity   = 0.7;
+  player.gravity   = 1.0;
   player.dy        = 0;
   player.jumpDy    = -10;
   player.isFalling = false;
@@ -569,7 +585,7 @@ var player = (function(player) {
     // jump higher if the space bar is continually pressed
     if ((TOUCHING || KEY_STATUS.space) && jumpCounter) {
       player.dy = player.jumpDy;
-      player.dy -= 2.0;
+      player.dy -= 4.0;
       player.anim = player.glideAnim;
     }
 
@@ -886,8 +902,8 @@ function animate() {
     // draw the score
     ctx.font      = "bold 28px futura";
     ctx.fillStyle = "#000000";
-    ctx.fillText('Time: ' + score + 's', canvas.width - 240, 120);
-    ctx.fillText('Best: '+ highScore + 's',canvas.width - 680,120);
+    ctx.fillText('Time: ' + score + 's', canvas.width-(canvas.width/4.5), canvas.height/11);
+    ctx.fillText('Best: '+ highScore + 's',canvas.width/2.7,canvas.height/11);
       
     //Draw Play
       
@@ -939,6 +955,14 @@ document.onkeydown = function(e) {
     e.preventDefault();
     KEY_STATUS[KEY_CODES[keyCode]] = true;
   }
+  if(KEY_STATUS.space)
+  {
+      if(gameIsOver)
+      {
+        $('#game-over').hide();
+        startGame();
+      }
+  }
 };
 document.onkeyup = function(e) {
   var keyCode = (e.keyCode) ? e.keyCode : e.charCode;
@@ -960,9 +984,9 @@ var myBody = document.body;
     for (var i=0; i<touchlist.length; i++){ 
         var touchPoint = touchlist[i];
         //console.log(touchPoint.clientY);
-        if(touchPoint.clientX >=65.0 && touchPoint.clientX <=100.0)
+        if(touchPoint.clientX >=111.0 && touchPoint.clientX <=182.0)
         {
-            if(touchPoint.clientY >=5.0 && touchPoint.clientY <=41.0)
+            if(touchPoint.clientY >=9.0 && touchPoint.clientY <=66.0)
             { 
                 if (stop == false ) {
                 pauseActions();
@@ -1072,16 +1096,21 @@ $('#inGameButton3').click(function() {
 	$('#store').show();
 });
 
-
+$('#inGameButton4').click(function() {
+	unpauseActions();
+});
 
 /**
  * Start the game - reset all variables and entities, spawn ground and water.
  */
 function startGame() {
   document.getElementById('game-over').style.display = 'none';
+  if(!soundPlaying){
   var backgroundMusic;
-  backgroundMusic = new WebAudioAPISound("sounds/stolaf.mp3", {loop: true});
+  backgroundMusic = new WebAudioAPISound('sounds/stolaf', {loop: true});
   backgroundMusic.play();
+  soundPlaying = true;
+	}
 
   loadHighScore();    
   ground = [];
@@ -1149,6 +1178,15 @@ $('.back').click(function() {
   $('#main').show();
   $('#menu').removeClass('credits');
 });
+
+//Awesome Test Function to print mouse coordinates
+/*$( "body" ).mousemove(function( event ) {
+  var pageCoords = "( " + event.pageX + ", " + event.pageY + " )";
+  var clientCoords = "( " + event.clientX + ", " + event.clientY + " )";
+  console.log("( event.pageX, event.pageY ) : " + pageCoords );
+  console.log( "( event.clientX, event.clientY ) : " + clientCoords );
+});*/
+
 // pause for menu
 $( window ).keydown( function ( e ){
 	// Pause: command pressed and we are not currently paused
@@ -1203,36 +1241,24 @@ $('.sound').click(function() {
   }
 });
 
-//Adding touch capabilities for sound button    
-/*$('.sound').on("tap",function() {
-  var $this = $(this);
-  // sound off
-  if ($this.hasClass('sound-on')) {
-    $this.removeClass('sound-on').addClass('sound-off');
-    playSound = false;
-  }
-  // sound on
-  else {
-    $this.removeClass('sound-off').addClass('sound-on');
-    playSound = true;
-  }
 
-  if (canUseLocalStorage) {
-    localStorage.setItem('mighty.playSound', playSound);
-  }
-
-  // mute or unmute all sounds
-  for (var sound in assetLoader.sounds) {
-    if (assetLoader.sounds.hasOwnProperty(sound)) {
-      assetLoader.sounds[sound].muted = !playSound;
+function detectPortrait() {
+    if (window.innerWidth < window.innerHeight) {
+		return true;
     }
-  }
-});*/
-
+	return false;
+}
 
 $('.play').click(function() {
-  $('#menu').hide();
-  startGame();
+  if(!detectPortrait())
+  {
+	  setUpCanvas();
+	  $('#menu').hide();
+	  startGame();
+	  return;
+  }
+  alert("Please Rotate Screen to Landsape to play");
+  return;
 });
 $('.restart').click(function() {
   $('#game-over').hide();
