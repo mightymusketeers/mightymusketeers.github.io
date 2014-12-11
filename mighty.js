@@ -1324,7 +1324,7 @@ $('.play').click(function() {
 	  startGame();
 	  return;
   }
-  alert("Please Rotate Screen to Landsape to play");
+  alert("Please Rotate Screen to Landsape to Play");
   return;
 });
 $('.restart').click(function() {
