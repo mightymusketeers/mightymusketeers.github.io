@@ -78,7 +78,7 @@ a {
   background-color: grey;
 }
 #menu.main {
-  background-image: url('imgs/b2.jpg');
+  background-image: url('imgs/b2.png');
 }
 #menu.credits {
   background-image: url('imgs/credits-bg.png');
@@ -264,6 +264,12 @@ a {
   height: 100%;
   position: absolute;
 }
+
+#game-over h2
+{
+    font-size: 200%;
+}
+
 
 #inGameMenu {
   display: none;

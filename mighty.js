@@ -4,7 +4,7 @@
 isPaused = false;   
 soundPlaying = false;	
 detectPortrait();
-
+mugCounter = 0;
 
 var canvas, player, score, stop, ticker;
 var ground = [], water = [], enemies = [], environment = [];
@@ -181,9 +181,9 @@ var assetLoader = (function() {
   // images dictionary
       this.imgs        = {
     'bg'            : 'imgs/Blank.png',
-    'sky'           : 'imgs/Blank.png',
-    'backdrop'      : 'imgs/Blank.png',
-    'backdrop2'     : 'imgs/Blank.png',
+    'sky'           : 'imgs/sky.png',
+    'backdrop'      : 'imgs/backdrop.png',
+    'backdrop2'     : 'imgs/backdrop_ground.png',
     'grass'         : 'imgs/grass.png',
     'avatar_normal' : 'imgs/normal_walk.png',
     'water'         : 'imgs/water.png',
@@ -196,7 +196,8 @@ var assetLoader = (function() {
     'cliff'         : 'imgs/grassCliffRight.png',
     'spikes'        : 'imgs/spikes.png',
     'box'           : 'imgs/boxCoin.png',
-    'slime'         : 'imgs/slime.png',
+    'cafMug'        : 'imgs/CafMug.png',
+    'slime'         : 'imgs/squirrel.png',
     'pause'         : 'imgs/pause.png',
     'play'          : 'imgs/play.png'
   };
@@ -225,7 +226,8 @@ var assetLoader = (function() {
   this.sounds      = {
     'bg'            : 'sounds/stolaf.mp3',
     'jump'          : 'sounds/jump.mp3',
-    'gameOver'      : 'sounds/gameOver.mp3'
+    'gameOver'      : 'sounds/gameOver.mp3',
+    'cafMug'          : 'sounds/cafMugCollected.wav'
   };
 
   var assetsLoaded = 0;                                // how many assets have been loaded
@@ -301,9 +303,9 @@ var assetLoader = (function() {
           _this.sounds[sound] = new Audio();
           _this.sounds[sound].status = 'loading';
           _this.sounds[sound].name = sound;
-          /*_this.sounds[sound].addEventListener('canplay', function() {
+          _this.sounds[sound].addEventListener('canplay', function() {
             _checkAudioState.call(_this, sound);
-          });*/
+          });
           _this.sounds[sound].src = src;
           _this.sounds[sound].preload = 'auto';
           _this.sounds[sound].load();
@@ -431,36 +433,88 @@ var background = (function() {
   var sky   = {};
   var backdrop = {};
   var backdrop2 = {};
-
+  var particles = [];
+  var self =this;
+  var angle = 0;
+  var mp = 25; //max particles
+	for(var i = 0; i < mp; i++)
+	{
+		particles.push({
+			x: Math.random()*window.innerWidth, //x-coordinate
+			y: Math.random()*window.innerHeight, //y-coordinate
+			r: Math.random()*8+1, //radius
+			d: Math.random()*mp //density
+		})
+	}
   /**
    * Draw the backgrounds to the screen at different speeds
    */
+  //Creating Magical Snow
   this.draw = function() {
-    ctx.drawImage(assetLoader.imgs.bg, 0, 0);
-
+    //ctx.drawImage(assetLoader.imgs.bg, 0, 0);
+    ctx.fillStyle = "rgb(44, 62, 80)";
+    ctx.fillRect(0,0,window.innerWidth,window.innerHeight);
     // Pan background
     sky.x -= sky.speed;
     backdrop.x -= backdrop.speed;
     backdrop2.x -= backdrop2.speed;
 
     // draw images side by side to loop
-    ctx.drawImage(assetLoader.imgs.sky, sky.x, sky.y);
-    ctx.drawImage(assetLoader.imgs.sky, sky.x + canvas.width, sky.y);
+    //ctx.drawImage(assetLoader.imgs.sky, sky.x, sky.y);
+    //ctx.drawImage(assetLoader.imgs.sky, sky.x + canvas.width, sky.y);
+    
 
-    ctx.drawImage(assetLoader.imgs.backdrop, backdrop.x, backdrop.y);
-    ctx.drawImage(assetLoader.imgs.backdrop, backdrop.x + canvas.width, backdrop.y);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+		ctx.beginPath();
+		for(var i = 0; i < mp; i++)
+		{
+			var p = particles[i];
+			ctx.moveTo(p.x, p.y);
+			ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
+		}
+		ctx.fill();
+        self.update();
 
-    ctx.drawImage(assetLoader.imgs.backdrop2, backdrop2.x, backdrop2.y);
-    ctx.drawImage(assetLoader.imgs.backdrop2, backdrop2.x + canvas.width, backdrop2.y);
-
-    // If the image scrolled off the screen, reset
-    if (sky.x + assetLoader.imgs.sky.width <= 0)
-      sky.x = 0;
-    if (backdrop.x + assetLoader.imgs.backdrop.width <= 0)
-      backdrop.x = 0;
-    if (backdrop2.x + assetLoader.imgs.backdrop2.width <= 0)
-      backdrop2.x = 0;
   };
+    
+ this.update = function()
+	{
+		angle += 0.01;
+		for(var i = 0; i < mp; i++)
+		{
+			var p = particles[i];
+			//Updating X and Y coordinates
+			//We will add 1 to the cos function to prevent negative values which will lead flakes to move upwards
+			//Every particle has its own density which can be used to make the downward movement different for each flake
+			//Lets make it more random by adding in the radius
+			p.y += Math.cos(angle+p.d) + 1 + p.r/2;
+			p.x += Math.sin(angle) * 2;
+			
+			//Sending flakes back from the top when it exits
+			//Lets make it a bit more organic and let flakes enter from the left and right also.
+			if(p.x > window.innerWidth+5 || p.x < -5 || p.y > window.innerHeight)
+			{
+				if(i%3 > 0) //66.67% of the flakes
+				{
+					particles[i] = {x: Math.random()*window.innerWidth, y: -10, r: p.r, d: p.d};
+				}
+				else
+				{
+					//If the flake is exitting from the right
+					if(Math.sin(angle) > 0)
+					{
+						//Enter from the left
+						particles[i] = {x: -5, y: Math.random()* window.innerHeight, r: p.r, d: p.d};
+					}
+					else
+					{
+						//Enter from the right
+						particles[i] = {x: window.innerWidth+5, y: Math.random()*window.innerHeight, r: p.r, d: p.d};
+					}
+				}
+			}
+		}
+	}
 
   /**
    * Reset background to zero
@@ -753,6 +807,15 @@ function updateEnvironment() {
   for (var i = 0; i < environment.length; i++) {
     environment[i].update();
     environment[i].draw();
+   
+if(environment[i].type=="cafMug"){      if(isPixelCollision(player.anim.imageData,player.x,player.y,environment[i].imageData,environment[i].x,environment[i].y,false))
+      {
+          environment.splice(i, 1);
+          console.log("Mug Collected");
+          assetLoader.sounds.cafMug.play();
+          mugCounter++;
+      }
+  }
   }
 
   // remove environment that have gone off screen
@@ -852,6 +915,14 @@ function spawnEnvironmentSprites() {
         'plant'
       ));
     }
+    else if (Math.random() > 0.1)
+    {
+        environment.push(new Sprite(
+        canvas.width + platformWidth % player.speed,
+        platformBase - platformHeight * platformSpacer - platformWidth - rand(100,200),
+        'cafMug'
+      ));
+    }
     else if (platformLength > 2) {
       environment.push(new Sprite(
         canvas.width + platformWidth % player.speed,
@@ -876,7 +947,7 @@ function spawnEnemySprites() {
        canvas.width - enemies[enemies.length-1].x < platformWidth : true)) {
     enemies.push(new Sprite(
       canvas.width + platformWidth % player.speed,
-      platformBase - platformHeight * platformSpacer - platformWidth,
+      (platformBase - platformHeight * platformSpacer - platformWidth) - 40,
       Math.random() > 0.5 ? 'spikes' : 'slime'
     ));
   }
@@ -904,7 +975,7 @@ function animate() {
     ctx.fillStyle = "#000000";
     ctx.fillText('Time: ' + score + 's', canvas.width-(canvas.width/4.5), canvas.height/11);
     ctx.fillText('Best: '+ highScore + 's',canvas.width/2.7,canvas.height/11);
-      
+    ctx.fillText('Mugs: '+ mugCounter,canvas.width/1.5,canvas.height/11);  
     //Draw Play
       
     
@@ -1105,12 +1176,6 @@ $('#inGameButton4').click(function() {
  */
 function startGame() {
   document.getElementById('game-over').style.display = 'none';
-  if(!soundPlaying){
-  var backgroundMusic;
-  backgroundMusic = new WebAudioAPISound('sounds/stolaf', {loop: true});
-  backgroundMusic.play();
-  soundPlaying = true;
-	}
 
   loadHighScore();    
   ground = [];
@@ -1126,6 +1191,7 @@ function startGame() {
   platformHeight = 2;
   platformLength = 15;
   gapLength = 0;
+  mugCounter =0;
   
   ctx.font = '16px arial, sans-serif';
 
@@ -1153,6 +1219,7 @@ function startGame() {
  * End the game and restart
  */
 function gameOver() {
+  
   stop = true;
   gameIsOver = true;
   $('#score').html(score);
