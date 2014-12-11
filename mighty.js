@@ -56,9 +56,9 @@ masterImageData = {};
  * @param other An ImageData object from the second image involved in the collision check.
  * @param x2 The x location of 'other'.
  * @param y2 The y location of 'other'.
- * @param isCentred True if the locations refer to the centre of 'first' and 'other', false to specify the top left corner.
+ * @param isCentered True if the locations refer to the centre of 'first' and 'other', false to specify the top left corner.
  */
-function isPixelCollision( first, x, y, other, x2, y2, isCentred )
+function isPixelCollision( first, x, y, other, x2, y2, isCentered )
 {
     // we need to avoid using floats, as were doing array lookups
     x  = Math.round( x );
@@ -71,8 +71,8 @@ function isPixelCollision( first, x, y, other, x2, y2, isCentred )
         w2 = other.width,
         h2 = other.height ;
 
-    // deal with the image being centred
-    if ( isCentred ) {
+    // deal with the image being centered
+    if ( isCentered ) {
         // fast rounding, but positive only
         x  -= ( w/2 + 0.5) << 0
         y  -= ( h/2 + 0.5) << 0
@@ -180,7 +180,7 @@ function bound(num, low, high) {
 var assetLoader = (function() {
   // images dictionary
       this.imgs        = {
-    'bg'            : 'imgs/Blank.png',
+    'bg'            : 'imgs/bg.png',
     'sky'           : 'imgs/sky.png',
     'backdrop'      : 'imgs/backdrop.png',
     'backdrop2'     : 'imgs/backdrop_ground.png',
@@ -201,26 +201,6 @@ var assetLoader = (function() {
     'pause'         : 'imgs/pause.png',
     'play'          : 'imgs/play.png'
   };
-/*
-  this.imgs        = {
-    'bg'            : 'imgs/bg3.png',
-    'sky'           : 'imgs/sky.png',
-    'backdrop'      : 'imgs/backdrop.png',
-    'backdrop2'     : 'imgs/backdrop_ground.png',
-    'grass'         : 'imgs/grass.png',
-    'avatar_normal' : 'imgs/normal_walk.png',
-    'water'         : 'imgs/water.png',
-    'grass1'        : 'imgs/grassMid1.png',
-    'grass2'        : 'imgs/grassMid2.png',
-    'bridge'        : 'imgs/bridge.png',
-    'plant'         : 'imgs/plant.png',
-    'bush1'         : 'imgs/bush1.png',
-    'bush2'         : 'imgs/bush2.png',
-    'cliff'         : 'imgs/grassCliffRight.png',
-    'spikes'        : 'imgs/spikes.png',
-    'box'           : 'imgs/boxCoin.png',
-    'slime'         : 'imgs/slime.png'
-  };*/
 
   // sounds dictionary
   this.sounds      = {
@@ -434,7 +414,7 @@ var background = (function() {
   var backdrop = {};
   var backdrop2 = {};
   var particles = [];
-  var self =this;
+  var self = this;
   var angle = 0;
   var mp = 25; //max particles
 	for(var i = 0; i < mp; i++)
@@ -453,7 +433,7 @@ var background = (function() {
   this.draw = function() {
     //ctx.drawImage(assetLoader.imgs.bg, 0, 0);
     ctx.fillStyle = "rgb(44, 62, 80)";
-    ctx.fillRect(0,0,window.innerWidth,window.innerHeight);
+    ctx.fillRect(0, window.innerHeight, window.innerWidth, window.innerHeight);
     // Pan background
     sky.x -= sky.speed;
     backdrop.x -= backdrop.speed;
@@ -833,6 +813,10 @@ function updateEnemies() {
   for (var i = 0; i < enemies.length; i++) {
     enemies[i].update();
     enemies[i].draw();
+    
+	if(enemies[i].x > enemies[i].x - 10) {
+		enemies[i].x -= 2;
+	}
 
     // player ran into enemy
     //console.log(enemies[i].imageData);
