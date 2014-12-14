@@ -961,6 +961,7 @@ function spawnEnemySprites() {
       canvas.width + platformWidth % player.speed,
       (platformBase - platformHeight * platformSpacer - platformWidth) - 40,
       'squirrel'
+
     ));
   }
 }
@@ -1159,6 +1160,7 @@ function mainMenu() {
 
 function showInGameMenu() {
 	$('#inGameMenu').show();
+	$('#statistics').show();
 	$('#inGameButton1').css("background","orange");
 	$('#inGameButton2').css("background","#E0E0E0");
 	$('#inGameButton3').css("background","#E0E0E0");
@@ -1209,8 +1211,10 @@ $('#inGameButton4').click(function() {
  */
 function startGame() {
   document.getElementById('game-over').style.display = 'none';
+  document.getElementById('userGraph').innerHTML = '';
 
-  loadHighScore();    
+  loadHighScore();  
+  loadUserScores();
   ground = [];
   water = [];
   environment = [];

@@ -215,6 +215,33 @@ query.get(userId, {
 });          
     }
 
+function loadUserScores() {
+		var GameScore = Parse.Object.extend("HighScore");
+		var query = new Parse.Query(GameScore);
+		query.addDescending("score");
+        query.include("UserId");
+        function scoreObject(object)
+        {
+          this.userId = object.get('UserId').id;
+          this.score = object.get('score');
+          this.username = object.get('UserId')._serverData.username;
+        }
+        query.find().then(function(results)
+        { 
+          finalScores = [];
+          for(var i=0;i<results.length;i++){
+          	finalScores.push(new scoreObject(results[i]));
+          }
+		})
+        .then(function(){
+        	displayUserScores(finalScores);
+        })
+        ,
+        function(error)
+        {
+			alert("Error: " + error.code + " " + error.message);
+		}
+	}
 
 
     function loadHighScore()
