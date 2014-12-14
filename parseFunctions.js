@@ -2,7 +2,6 @@ Parse.initialize("PXtItYU56vgW8jbKgDhZQac0WMWvlE5uzhS6DtBB", "pI5dlkQ7teOaWlFyvc
 //Global Variable that keeps track of current user's highscore
 highScore = 0;
 FastClick.attach(document.body);
-
 document.ontouchmove = function(event){
 event.preventDefault();
 }
@@ -215,52 +214,7 @@ query.get(userId, {
   }
 });          
     }
-    
 
-	function findUserScores() {
-		var GameScore = Parse.Object.extend("HighScore");
-		var query = new Parse.Query(GameScore);
-		
-		var userIds = [];
-		var scores = [];
-		var finalUserArray = [];
-
-		query.find({
-		  success: function(results) {
-			// Do something with the returned Parse.Object values
-			for (var i = 0; i < results.length; i++) { 
-			  var object = results[i];
-			  userIds.push(object.get('UserId').id);
-			  scores.push(object.get('score'));
-			}
-		  },
-		  error: function(error) {
-			alert("Error: " + error.code + " " + error.message);
-		  }
-		});
-	
-		var User = Parse.Object.extend("User");
-		var user = new Parse.Query(User);
-		user.find({ success: function(results) {
-		for(var k = 0; k < userIds.length; ++k) {
-			user.equalTo("objectId", userIds[k]);
-			user.find({
-				success: function(theObj) {
-					finalUserArray.push(theObj[0]["attributes"]["username"]);
-					if(finalUserArray.length == userIds.length) {
-						var returnArr = [finalUserArray, scores];
-						return returnArr;
-					}
-				},
-				error: function(error) {
-					console.log("Error: " + error.code + " " + error.message);
-				}
-			});	
-		  }
-		}
-	  });
-	}
-	
 
 
     function loadHighScore()

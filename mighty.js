@@ -7,7 +7,7 @@ detectPortrait();
 mugCounter = 0;
 
 var canvas, player, score, stop, ticker;
-var ground = [], water = [], enemies = [], environment = [];
+var ground = [], water = [], enemies = [], environment = [], cafMugAttack = 0;
 var platformHeight, platformLength, gapLength;
 var canvasCounter = 0;
 //setUpCanvas();
@@ -197,7 +197,8 @@ var assetLoader = (function() {
     'spikes'        : 'imgs/spikes.png',
     'box'           : 'imgs/boxCoin.png',
     'cafMug'        : 'imgs/CafMug.png',
-    'slime'         : 'imgs/squirrel.png',
+    'cafMug2'       : 'imgs/CafMug.png',
+    'squirrel'      : 'imgs/squirrel.png',
     'pause'         : 'imgs/pause.png',
     'play'          : 'imgs/play.png'
   };
@@ -665,6 +666,8 @@ var player = (function(player) {
   return player;
 })(Object.create(Vector.prototype));
 
+  
+
 /**
  * Sprites are anything drawn to the screen (ground, enemies, etc.)
  * @param {integer} x - Starting x position of the player
@@ -784,6 +787,7 @@ function updateWater() {
  */
 function updateEnvironment() {
   // animate environment
+
   for (var i = 0; i < environment.length; i++) {
     environment[i].update();
     environment[i].draw();
@@ -796,7 +800,9 @@ if(environment[i].type=="cafMug"){      if(isPixelCollision(player.anim.imageDat
           mugCounter++;
       }
   }
-  }
+  
+    
+  }//End of Environment update for loop
 
   // remove environment that have gone off screen
   if (environment[0] && environment[0].x < -platformWidth) {
@@ -804,36 +810,56 @@ if(environment[i].type=="cafMug"){      if(isPixelCollision(player.anim.imageDat
   }
 }
 
+function updateAttackMug()
+  {
+    var velocity = 25;
+    var angle = -(Math.PI/1.5);
+    cafMugAttack.update();
+    cafMugAttack.draw();      
+    /*cafMugAttack.x -= Math.cos(angle) * velocity;
+    cafMugAttack.y -= Math.sin(angle) * velocity;*/
+    
+    cafMugAttack.x += velocity;
+    //cafMugAttack.y = velocity;
+  }
+  
+  
 /**
  * Update all enemies position and draw. Also check for collision against the player.
 Collision Detection :)
  */
 function updateEnemies() {
   // animate enemies
+
   for (var i = 0; i < enemies.length; i++) {
     enemies[i].update();
     enemies[i].draw();
-    
-	if(enemies[i].type == "slime") {
-		enemies[i].x -= 10;
+    //Moving Squirrels
+	if(enemies[i].type == "squirrel") {
+		enemies[i].x -= 3;
 	}
-
-    // player ran into enemy
-    //console.log(enemies[i].imageData);
-    //console.log(player.anim.imageData);
-    /*if (player.minDist(enemies[i]) <= player.width - 20 - platformWidth/2) {
-      gameOver();
-    }*/
+    
+    //Player Collided With Squirrel
       if(isPixelCollision(player.anim.imageData,player.x,player.y,enemies[i].imageData,enemies[i].x,enemies[i].y,false))
       {
           gameOver();
       }
-  }
+      if(cafMugAttack != 0){
+        if(isPixelCollision(cafMugAttack.imageData,cafMugAttack.x,cafMugAttack.y,enemies[i].imageData,enemies[i].x,enemies[i].y,false))
+        { 
+          console.log("hit");
+          enemies.splice(i, 1);
+          cafMugAttack = 0;
+        }
+      }
+    
+  }//End of update enemies for loop
 
   // remove enemies that have gone off screen
   if (enemies[0] && enemies[0].x < -platformWidth) {
     enemies.splice(0, 1);
   }
+  
 }
 
 /**
@@ -892,6 +918,8 @@ function spawnSprites() {
  */
 function spawnEnvironmentSprites() {
   if (score > 40 && rand(0, 20) === 0 && platformHeight < 3) {
+    
+    
     if (Math.random() > 0.5) {
       environment.push(new Sprite(
         canvas.width + platformWidth % player.speed,
@@ -932,7 +960,7 @@ function spawnEnemySprites() {
     enemies.push(new Sprite(
       canvas.width + platformWidth % player.speed,
       (platformBase - platformHeight * platformSpacer - platformWidth) - 40,
-      Math.random() > 0.5 ? 'spikes' : 'slime'
+      'squirrel'
     ));
   }
 }
@@ -953,19 +981,34 @@ function animate() {
     updatePlayer();
     updateGround();
     updateEnemies();
+    
 
     // draw the score
     ctx.font      = "bold 28px futura";
     ctx.fillStyle = "#000000";
     ctx.fillText('Time: ' + score + 's', canvas.width-(canvas.width/4.5), canvas.height/11);
     ctx.fillText('Best: '+ highScore + 's',canvas.width/2.7,canvas.height/11);
-    ctx.fillText('Mugs: '+ mugCounter,canvas.width/1.5,canvas.height/11);  
+    ctx.fillText('Mugs: '+ mugCounter,canvas.width/1.6,canvas.height/11);  
     //Draw Play
-      
     
+    if (KEY_STATUS.shift /*&& mugCounter > 0*/)
+    {
+    cafMugAttack = new Sprite(
+    player.x +canvas.width/10,
+    player.y +canvas.width/24,'cafMug2'
+    );
+    //updateAttackMug();
+    }
+    
+    if (cafMugAttack!=0)
+    {
+      updateAttackMug();
+    }
+
     // spawn a new Sprite
     if (ticker % Math.floor(platformWidth / player.speed) === 0) {
       spawnSprites();
+
     }
 
     // increase player speed only when player is jumping
@@ -997,6 +1040,7 @@ function animate() {
 var KEY_CODES = {
   32:  'space',
   93:  'command',
+  16:  'shift'
 };
 var KEY_STATUS = {};
 for (var code in KEY_CODES) {
@@ -1005,6 +1049,7 @@ for (var code in KEY_CODES) {
   }
 }
 document.onkeydown = function(e) {
+  //console.log(e.keyCode);//Utilize to get new keycode
   var keyCode = (e.keyCode) ? e.keyCode : e.charCode;
   if (KEY_CODES[keyCode]) {
     e.preventDefault();
@@ -1017,6 +1062,10 @@ document.onkeydown = function(e) {
         $('#game-over').hide();
         startGame();
       }
+  }
+  if(KEY_STATUS.shift)
+  {
+    console.log('Shift Pressed');
   }
 };
 document.onkeyup = function(e) {
@@ -1165,6 +1214,7 @@ function startGame() {
   ground = [];
   water = [];
   environment = [];
+  cafMugAttack = 0;
   enemies = [];
   player.reset();
   ticker = 0;
