@@ -1,4 +1,3 @@
-    
 Parse.initialize("PXtItYU56vgW8jbKgDhZQac0WMWvlE5uzhS6DtBB", "pI5dlkQ7teOaWlFyvc7i3RbW60ST0NkalJYPLtWr");
 //Global Variable that keeps track of current user's highscore
 highScore = 0;
@@ -51,6 +50,8 @@ $("#goSignUp").click(function(){ toggleView();});
 $("#goLogIn").click(function(){toggleView();});
 $("#goSignUp").on("touchstart",function(){ toggleView();});
 $("#goLogIn").on("touchstart",function(){toggleView();});
+$(".logoutNow").on("touchstart",function(){Parse.User.logOut(); location.reload();});
+$(".logoutNow").click(function(){Parse.User.logOut();  location.reload();});
 
 function checkEmailVerified(userId){
 var User = Parse.Object.extend("User");

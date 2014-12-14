@@ -436,7 +436,7 @@ var background = (function() {
   var particles = [];
   var self =this;
   var angle = 0;
-  var mp = 25; //max particles
+  var mp = 70; //max particles
 	for(var i = 0; i < mp; i++)
 	{
 		particles.push({
