@@ -332,8 +332,8 @@ a {
 
 .inGameMenuDiv {
   color: white;
-  height: 315px;
-  width: 560px;
+  height: 100%;
+  width: 100%;
   margin-top: 45px;
   margin-left: 20px;
   font-family: futura;
@@ -344,4 +344,48 @@ a {
 #statistics
 {
 	display:"";
+}
+
+
+rect {
+	fill: orange;
+}
+
+/* D3 Styles */
+rect:hover {
+	fill: grey;
+}
+
+#userGraph {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	width: 100%;
+}
+
+#tooltip {
+	position: absolute;
+	width: 200px;
+	height: auto;
+	padding: 10px;
+	background-color: white;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	pointer-events: none;
+}
+
+#tooltip.hidden {
+	display: none;
+}
+
+#tooltip p {
+	color: black;
+	margin: 0;
+  	font-family: futura;
+	font-size: 16px;
+	line-height: 20px;
 }

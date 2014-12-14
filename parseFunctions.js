@@ -217,49 +217,35 @@ query.get(userId, {
     }
     
 
-	function findUserScores() {
+function loadUserScores() {
 		var GameScore = Parse.Object.extend("HighScore");
 		var query = new Parse.Query(GameScore);
-		
-		var userIds = [];
-		var scores = [];
-		var finalUserArray = [];
-
-		query.find({
-		  success: function(results) {
-			// Do something with the returned Parse.Object values
-			for (var i = 0; i < results.length; i++) { 
-			  var object = results[i];
-			  userIds.push(object.get('UserId').id);
-			  scores.push(object.get('score'));
-			}
-		  },
-		  error: function(error) {
+		query.addDescending("score");
+        query.include("UserId");
+        function scoreObject(object)
+        {
+          this.userId = object.get('UserId').id;
+          this.score = object.get('score');
+          this.username = object.get('UserId')._serverData.username;
+        }
+        query.find().then(function(results)
+        { 
+          finalScores = [];
+          for(var i=0;i<results.length;i++){
+          	finalScores.push(new scoreObject(results[i]));
+          }
+		})
+        .then(function(){
+        	displayUserScores(finalScores);
+        })
+        ,
+        function(error)
+        {
 			alert("Error: " + error.code + " " + error.message);
-		  }
-		});
-	
-		var User = Parse.Object.extend("User");
-		var user = new Parse.Query(User);
-		user.find({ success: function(results) {
-		for(var k = 0; k < userIds.length; ++k) {
-			user.equalTo("objectId", userIds[k]);
-			user.find({
-				success: function(theObj) {
-					finalUserArray.push(theObj[0]["attributes"]["username"]);
-					if(finalUserArray.length == userIds.length) {
-						var returnArr = [finalUserArray, scores];
-						return returnArr;
-					}
-				},
-				error: function(error) {
-					console.log("Error: " + error.code + " " + error.message);
-				}
-			});	
-		  }
 		}
-	  });
 	}
+
+
 	
 
 

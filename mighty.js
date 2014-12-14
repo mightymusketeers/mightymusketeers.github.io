@@ -932,7 +932,7 @@ function spawnEnemySprites() {
     enemies.push(new Sprite(
       canvas.width + platformWidth % player.speed,
       (platformBase - platformHeight * platformSpacer - platformWidth) - 40,
-      Math.random() > 0.5 ? 'spikes' : 'slime'
+      'slime'
     ));
   }
 }
@@ -1110,6 +1110,7 @@ function mainMenu() {
 
 function showInGameMenu() {
 	$('#inGameMenu').show();
+	$('#statistics').show();
 	$('#inGameButton1').css("background","orange");
 	$('#inGameButton2').css("background","#E0E0E0");
 	$('#inGameButton3').css("background","#E0E0E0");
@@ -1160,8 +1161,10 @@ $('#inGameButton4').click(function() {
  */
 function startGame() {
   document.getElementById('game-over').style.display = 'none';
+  document.getElementById('userGraph').innerHTML = '';
 
-  loadHighScore();    
+  loadHighScore();  
+  loadUserScores();
   ground = [];
   water = [];
   environment = [];
