@@ -214,28 +214,54 @@ query.get(userId, {
   }
 });          
     }
+    
+
+	function findUserScores() {
+		var GameScore = Parse.Object.extend("HighScore");
+		var query = new Parse.Query(GameScore);
+		
+		var userIds = [];
+		var scores = [];
+		var finalUserArray = [];
+
+		query.find({
+		  success: function(results) {
+			// Do something with the returned Parse.Object values
+			for (var i = 0; i < results.length; i++) { 
+			  var object = results[i];
+			  userIds.push(object.get('UserId').id);
+			  scores.push(object.get('score'));
+			}
+		  },
+		  error: function(error) {
+			alert("Error: " + error.code + " " + error.message);
+		  }
+		});
+	
+		var User = Parse.Object.extend("User");
+		var user = new Parse.Query(User);
+		user.find({ success: function(results) {
+		for(var k = 0; k < userIds.length; ++k) {
+			user.equalTo("objectId", userIds[k]);
+			user.find({
+				success: function(theObj) {
+					finalUserArray.push(theObj[0]["attributes"]["username"]);
+					if(finalUserArray.length == userIds.length) {
+						var returnArr = [finalUserArray, scores];
+						return returnArr;
+					}
+				},
+				error: function(error) {
+					console.log("Error: " + error.code + " " + error.message);
+				}
+			});	
+		  }
+		}
+	  });
+	}
 	
 
-	
 
-/*
-var GameScore = Parse.Object.extend("GameScore");
-var query = new Parse.Query(GameScore);
-query.equalTo("playerName", "Dan Stemkoski");
-query.find({
-  success: function(results) {
-    alert("Successfully retrieved " + results.length + " scores.");
-    // Do something with the returned Parse.Object values
-    for (var i = 0; i < results.length; i++) { 
-      var object = results[i];
-      alert(object.id + ' - ' + object.get('playerName'));
-    }
-  },
-  error: function(error) {
-    alert("Error: " + error.code + " " + error.message);
-  }
-});
-*/
     function loadHighScore()
     {
      var HighScore = Parse.Object.extend("HighScore");

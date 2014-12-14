@@ -814,8 +814,8 @@ function updateEnemies() {
     enemies[i].update();
     enemies[i].draw();
     
-	if(enemies[i].x > enemies[i].x - 10) {
-		enemies[i].x -= 2;
+	if(enemies[i].type == "slime") {
+		enemies[i].x -= 10;
 	}
 
     // player ran into enemy
@@ -1203,7 +1203,6 @@ function startGame() {
  * End the game and restart
  */
 function gameOver() {
-  
   stop = true;
   gameIsOver = true;
   $('#score').html(score);
