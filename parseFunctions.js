@@ -121,7 +121,7 @@ query.get(userId, {
 	  $("#wrapper2").hide();
 	  $("#mainTitle").hide();
 	  $("#gameContainer").show();
-        $("#playerUsername").html(titleCase(Parse.User.current().getUsername()));
+        $(".playerUsername").html(titleCase(Parse.User.current().getUsername()));
 	}
 	   
  	var count = 0;
