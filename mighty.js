@@ -834,10 +834,11 @@ function updateEnemies() {
   for (var i = 0; i < enemies.length; i++) {
     enemies[i].update();
     enemies[i].draw();
-    //Moving Squirrels
-	if(enemies[i].type == "squirrel") {
+    
+    // Squirrel can move (but not off platform)
+  	if (enemies[i].type == "squirrel") {
 		enemies[i].x -= 3;
-	}
+  	}
     
     //Player Collided With Squirrel
       if(isPixelCollision(player.anim.imageData,player.x,player.y,enemies[i].imageData,enemies[i].x,enemies[i].y,false))
@@ -859,7 +860,6 @@ function updateEnemies() {
   if (enemies[0] && enemies[0].x < -platformWidth) {
     enemies.splice(0, 1);
   }
-  
 }
 
 /**
@@ -1210,6 +1210,7 @@ $('#inGameButton4').click(function() {
  * Start the game - reset all variables and entities, spawn ground and water.
  */
 function startGame() {
+
   document.getElementById('game-over').style.display = 'none';
   document.getElementById('userGraph').innerHTML = '';
 
@@ -1232,6 +1233,7 @@ function startGame() {
   mugCounter =0;
   
   ctx.font = '16px arial, sans-serif';
+  
 
   for (var i = 0; i < 30; i++) {
     ground.push(new Sprite(i * (platformWidth-3), platformBase - platformHeight * platformSpacer, 'grass'));
