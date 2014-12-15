@@ -993,11 +993,11 @@ function animate() {
     ctx.fillText('Mugs: '+ mugCounter,canvas.width/1.6,canvas.height/11);  
     //Draw Play
     
-    if (KEY_STATUS.shift /*&& mugCounter > 0*/)
-    {
-    cafMugAttack = new Sprite(
-    player.x +canvas.width/10,
-    player.y +canvas.width/24,'cafMug2'
+    if (KEY_STATUS.shift && mugCounter > 0) {
+    	cafMugAttack = new Sprite(
+    	player.x + canvas.width/10,
+    	player.y + 30,
+    	'cafMug2'
     );
     //updateAttackMug();
     }
