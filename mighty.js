@@ -850,6 +850,7 @@ function updateEnemies() {
         { 
           console.log("hit");
           enemies.splice(i, 1);
+          enemiesHit++;
           cafMugAttack = 0;
         }
       }
@@ -1216,11 +1217,13 @@ function startGame() {
 
   loadHighScore();  
   loadUserScores();
+  loadItemsScore();
   ground = [];
   water = [];
   environment = [];
   cafMugAttack = 0;
-  enemies = [];
+  enemies = [];  
+  enemiesHit = 0;
   player.reset();
   ticker = 0;
   stop = false;
@@ -1263,6 +1266,7 @@ function gameOver() {
   gameIsOver = true;
   $('#score').html(score);
   saveScore(score);
+  saveItems(mugCounter, enemiesHit);
   $('#game-over').show();
   assetLoader.sounds.bg.pause();
   assetLoader.sounds.gameOver.currentTime = 0;

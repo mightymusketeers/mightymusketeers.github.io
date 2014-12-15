@@ -1,6 +1,8 @@
 Parse.initialize("PXtItYU56vgW8jbKgDhZQac0WMWvlE5uzhS6DtBB", "pI5dlkQ7teOaWlFyvc7i3RbW60ST0NkalJYPLtWr");
 //Global Variable that keeps track of current user's highscore
 highScore = 0;
+var cafmugs;
+var enemies;
 FastClick.attach(document.body);
 document.ontouchmove = function(event){
 event.preventDefault();
@@ -214,6 +216,62 @@ query.get(userId, {
   }
 });          
     }
+    
+    
+function saveItems(mugCounter, enemiesHit) {
+     
+     loadItemsScore();
+
+     if(mugCounter <= cafmugs && enemiesHit <= enemies) {
+         return;
+     }
+     
+     var ItemScore = Parse.Object.extend("ItemScore");
+     var query = new Parse.Query(ItemScore);
+     
+     query.equalTo("UserId", {
+    __type: "Pointer",
+    className: "_User",
+    objectId: Parse.User.current().id
+    });
+ 
+    query.find({
+    success: function(results) {
+    // Do something with the returned Parse.Object values
+    var object;
+    if(results.length > 0){
+    	for (var i = 0; i < results.length; i++) { 
+      		object = results[i];
+    	}
+    	if(mugCounter > cafmugs) {
+    		object.set("cafmug", mugCounter);
+    	}
+    	if(enemiesHit > enemies) {
+    		object.set("enemies", enemiesHit);   
+    	} 
+    	object.save(); 
+    }
+    else{
+   	 	var itemScore = new ItemScore();
+    	itemScore.set("cafmug", mugCounter);
+    	itemScore.set("enemies", enemiesHit);
+    	itemScore.set("UserId", Parse.User.current())
+    
+		itemScore.save(null, {
+		  success: function(returnVar) {
+		  },
+		  error: function(returnVar, error) {
+		  }
+		});
+    }
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});          
+    }    
+    
+    
 
 function loadUserScores() {
 		var GameScore = Parse.Object.extend("HighScore");
@@ -263,6 +321,33 @@ function loadUserScores() {
       var object = results[i];
       highScore = object.get('score');
     }
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});  
+    }
+    
+    
+    function loadItemsScore()
+    {
+     var ItemScore = Parse.Object.extend("ItemScore");
+     var query = new Parse.Query(ItemScore);
+     
+     query.equalTo("UserId", {
+    __type: "Pointer",
+    className: "_User",
+    objectId: Parse.User.current().id
+    });
+ 
+    query.find({
+    success: function(results) {
+		// Do something with the returned Parse.Object values
+		for (var i = 0; i < results.length; i++) { 
+		  var object = results[i];
+		  cafmugs = object.get('cafmug');
+		  enemies = object.get('enemies');
+		}
   },
   error: function(error) {
     alert("Error: " + error.code + " " + error.message);
