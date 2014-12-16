@@ -7,7 +7,7 @@ function displayUserScores(scores) {
 	
 	// Width and height
 	var w = window.innerWidth;
-	var h =  window.innerHeight;
+	var h = window.innerHeight;
 	var userScores = [];
 	var userNames = [];
 
@@ -63,7 +63,7 @@ function displayUserScores(scores) {
 	   .attr("y", function(d) {
 			return h - yScale(d);
 	   })
-	   .attr("width", xScale.rangeBand() / 2)
+	   .attr("width", xScale.rangeBand() / 1.7)
 	   .attr("height", function(d) {
 			return yScale(d);
 	   })
@@ -76,7 +76,7 @@ function displayUserScores(scores) {
 	    */ 
 	   .on("mouseover", function(d, i) {
 			//Get this bar's x/y values, then augment for the tooltip
-			var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand() / 3;
+			var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand() / 500;
 			var yPosition = parseFloat(d3.select(this).attr("y")) / 2 + h / 3.5;
 
 			//Update the tooltip position and value
@@ -118,7 +118,7 @@ function displayUserScores(scores) {
 		   })
 		   .attr("text-anchor", "middle")
 		   .attr("x", function(d, i) {
-				return xScale(i) + xScale.rangeBand() / 4;
+				return xScale(i) + xScale.rangeBand() / 3.4;
 		   })
 		   .attr("y", function(d) {
 				return h - yScale(d) + 18;
@@ -127,4 +127,23 @@ function displayUserScores(scores) {
 		   .attr("font-size", "15px")
 		   .attr("font-weight", "bold")
 		   .attr("fill", "white");
+		   
+		   
+		  svg.selectAll("text.values")
+			 .data(dataset)
+			 .enter()
+			 .append("text")
+			 .text(function(d, i) {
+				return d;
+			 })
+		     .attr("text-anchor", "middle")
+		     .attr("x", function(d, i) {
+				return xScale(i) + xScale.rangeBand() / 3.4;
+		     })
+		     .attr("y", function(d) {
+				return h - yScale(d) + 50;
+		     })
+		     .attr("font-family", "sans-serif")
+		     .attr("font-size", "15px")
+		     .attr("fill", "white");
 }

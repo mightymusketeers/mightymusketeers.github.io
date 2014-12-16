@@ -7,7 +7,7 @@ detectPortrait();
 mugCounter = 0;
 
 var canvas, player, score, stop, ticker;
-var ground = [], water = [], enemies = [], environment = [], cafMugAttack = 0;
+var ground = [], water = [], enemies = [], environment = [], fishAttack = 0;
 var platformHeight, platformLength, gapLength;
 var canvasCounter = 0;
 //setUpCanvas();
@@ -197,7 +197,7 @@ var assetLoader = (function() {
     'spikes'        : 'imgs/spikes.png',
     'box'           : 'imgs/boxCoin.png',
     'cafMug'        : 'imgs/CafMug.png',
-    'cafMug2'       : 'imgs/CafMug.png',
+    'fish'       : 'imgs/fish.png',
     'squirrel'      : 'imgs/squirrel.png',
     'pause'         : 'imgs/pause.png',
     'play'          : 'imgs/play.png'
@@ -614,13 +614,14 @@ var player = (function(player) {
       player.dy = player.jumpDy;
       jumpCounter = 12;
       assetLoader.sounds.jump.play();
+      player.gravity = 1.0;
     }
 
 
     // jump higher if the space bar is continually pressed
     if ((TOUCHING || KEY_STATUS.space) && jumpCounter) {
       player.dy = player.jumpDy;
-      player.dy -= 4.0;
+      player.dy -= 3.0;
       player.anim = player.glideAnim;
     }
 
@@ -810,17 +811,15 @@ if(environment[i].type=="cafMug"){      if(isPixelCollision(player.anim.imageDat
   }
 }
 
-function updateAttackMug()
+function updateAttackFish()
   {
-    var velocity = 25;
-    var angle = -(Math.PI/1.5);
-    cafMugAttack.update();
-    cafMugAttack.draw();      
-    /*cafMugAttack.x -= Math.cos(angle) * velocity;
-    cafMugAttack.y -= Math.sin(angle) * velocity;*/
-    
-    cafMugAttack.x += velocity;
-    //cafMugAttack.y = velocity;
+    var velocity = player.speed*1.8;
+    //var angle = (Math.PI/1.5);
+    fishAttack.update();
+    fishAttack.draw();      
+    fishAttack.x += velocity;
+    //fishAttack.y += Math.sin(angle) * velocity/12;
+
   }
   
   
@@ -844,12 +843,12 @@ function updateEnemies() {
       {
           gameOver();
       }
-      if(cafMugAttack != 0){
-        if(isPixelCollision(cafMugAttack.imageData,cafMugAttack.x,cafMugAttack.y,enemies[i].imageData,enemies[i].x,enemies[i].y,false))
+      if(fishAttack != 0){
+        if(isPixelCollision(fishAttack.imageData,fishAttack.x,fishAttack.y,enemies[i].imageData,enemies[i].x,enemies[i].y,false))
         { 
           console.log("hit");
           enemies.splice(i, 1);
-          cafMugAttack = 0;
+          fishAttack = 0;
         }
       }
     
@@ -979,6 +978,10 @@ function animate() {
     // update entities
     updateWater();
     updateEnvironment();
+     if (fishAttack!=0)
+    {
+      updateAttackFish();
+    }
     updatePlayer();
     updateGround();
     updateEnemies();
@@ -992,19 +995,16 @@ function animate() {
     ctx.fillText('Mugs: '+ mugCounter,canvas.width/1.6,canvas.height/11);  
     //Draw Play
     
-    if (KEY_STATUS.shift /*&& mugCounter > 0*/)
+    if ((KEY_STATUS.shift || SWIPING_RIGHT) /*&& mugCounter > 0*/)
     {
-    cafMugAttack = new Sprite(
-    player.x +canvas.width/10,
-    player.y +canvas.width/24,'cafMug2'
+    fishAttack = new Sprite(
+    player.x + player.width/1.5,
+    player.y + player.height/2,'fish'
     );
-    //updateAttackMug();
+    //updateAttackFish();
     }
-    
-    if (cafMugAttack!=0)
-    {
-      updateAttackMug();
-    }
+    if(player.speed > 16){ player.speed = window.innerWidth/10.0 };
+   
 
     // spawn a new Sprite
     if (ticker % Math.floor(platformWidth / player.speed) === 0) {
@@ -1078,10 +1078,22 @@ document.onkeyup = function(e) {
 };
 /* Keep Track of Touch Events*/
 var TOUCHING = false;
+var SWIPING_RIGHT = false;
 var myBody = document.body;
   myBody.addEventListener("touchstart", funcTouchStart, false);
   myBody.addEventListener("touchend", funcTouchEnd, false);
   myBody.addEventListener("touchmove", funcTouchMove, false);
+  $("body").swipe( {
+        //Generic swipe handler for all directions
+        swipeStatus:function(event, phase, direction, distance, duration, fingerCount)
+        {
+        if (phase == 'start'){ 
+          //console.log("You swiped " + direction + " " + ++count + " times " ); 
+          SWIPING_RIGHT = true;
+          }
+        else if(phase == 'end'){ SWIPING_RIGHT = false; }
+        }
+      });
 
   function funcTouchStart(e) {
       
@@ -1218,7 +1230,7 @@ function startGame() {
   ground = [];
   water = [];
   environment = [];
-  cafMugAttack = 0;
+  fishAttack = 0;
   enemies = [];
   player.reset();
   ticker = 0;
