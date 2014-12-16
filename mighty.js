@@ -833,10 +833,11 @@ function updateEnemies() {
   for (var i = 0; i < enemies.length; i++) {
     enemies[i].update();
     enemies[i].draw();
-    //Moving Squirrels
-	if(enemies[i].type == "squirrel") {
+    
+    // Squirrel can move (but not off platform)
+  	if (enemies[i].type == "squirrel") {
 		enemies[i].x -= 3;
-	}
+  	}
     
     //Player Collided With Squirrel
       if(isPixelCollision(player.anim.imageData,player.x,player.y,enemies[i].imageData,enemies[i].x,enemies[i].y,false))
@@ -848,7 +849,10 @@ function updateEnemies() {
         { 
           console.log("hit");
           enemies.splice(i, 1);
+
+          enemiesHit++;
           fishAttack = 0;
+          cafMugAttack = 0;
         }
       }
     
@@ -858,7 +862,6 @@ function updateEnemies() {
   if (enemies[0] && enemies[0].x < -platformWidth) {
     enemies.splice(0, 1);
   }
-  
 }
 
 /**
@@ -1000,6 +1003,7 @@ function animate() {
     fishAttack = new Sprite(
     player.x + player.width/1.5,
     player.y + player.height/2,'fish'
+
     );
     //updateAttackFish();
     }
@@ -1222,16 +1226,19 @@ $('#inGameButton4').click(function() {
  * Start the game - reset all variables and entities, spawn ground and water.
  */
 function startGame() {
+
   document.getElementById('game-over').style.display = 'none';
   document.getElementById('userGraph').innerHTML = '';
 
   loadHighScore();  
   loadUserScores();
+  loadItemsScore();
   ground = [];
   water = [];
   environment = [];
   fishAttack = 0;
   enemies = [];
+  enemiesHit = 0;
   player.reset();
   ticker = 0;
   stop = false;
@@ -1244,6 +1251,7 @@ function startGame() {
   mugCounter =0;
   
   ctx.font = '16px arial, sans-serif';
+  
 
   for (var i = 0; i < 30; i++) {
     ground.push(new Sprite(i * (platformWidth-3), platformBase - platformHeight * platformSpacer, 'grass'));
@@ -1273,6 +1281,7 @@ function gameOver() {
   gameIsOver = true;
   $('#score').html(score);
   saveScore(score);
+  saveItems(mugCounter, enemiesHit);
   $('#game-over').show();
   assetLoader.sounds.bg.pause();
   assetLoader.sounds.gameOver.currentTime = 0;
