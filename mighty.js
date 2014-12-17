@@ -5,9 +5,11 @@ isPaused = false;
 soundPlaying = false;	
 detectPortrait();
 mugCounter = 0;
+IS_INVINCIBLE = false;
+ENERGY_LEVEL = 100;
 
 var canvas, player, score, stop, ticker;
-var ground = [], water = [], enemies = [], environment = [], cafMugAttack = 0;
+var ground = [], water = [], enemies = [], environment = [], fishAttack = 0;
 var platformHeight, platformLength, gapLength;
 var canvasCounter = 0;
 //setUpCanvas();
@@ -197,7 +199,7 @@ var assetLoader = (function() {
     'spikes'        : 'imgs/spikes.png',
     'box'           : 'imgs/boxCoin.png',
     'cafMug'        : 'imgs/CafMug.png',
-    'cafMug2'       : 'imgs/CafMug.png',
+    'fish'       : 'imgs/fish.png',
     'squirrel'      : 'imgs/squirrel.png',
     'pause'         : 'imgs/pause.png',
     'play'          : 'imgs/play.png'
@@ -620,15 +622,15 @@ var player = (function(player) {
       player.dy = player.jumpDy;
       jumpCounter = 12;
       assetLoader.sounds.jump.play();
+      player.gravity = 1.0;
     }
-
 
     // jump higher if the space bar is continually pressed
     if ((TOUCHING || KEY_STATUS.space) && jumpCounter) {
       player.dy = player.jumpDy;
-      player.dy -= 4.0;
+      player.dy -= 3.0;
       player.anim = player.glideAnim;
-    }
+    } 
 
     jumpCounter = Math.max(jumpCounter-1, 0);
 
@@ -636,7 +638,11 @@ var player = (function(player) {
 
     // add gravity
     if (player.isFalling || player.isJumping) {
-      player.dy += player.gravity;
+      if(KEY_STATUS.shift)
+      {
+          player.dy += (player.gravity/3);
+      }
+      else{ player.dy += player.gravity;}
     }
 
     // change animation if falling
@@ -759,6 +765,7 @@ function updateGround() {
         angle < -50) {
       player.isJumping = false;
       player.isFalling = false;
+
       player.y = ground[i].y - player.height + 7;
       player.dy = 0;
     }
@@ -804,10 +811,13 @@ if(environment[i].type=="cafMug"){      if(isPixelCollision(player.anim.imageDat
           console.log("Mug Collected");
           assetLoader.sounds.cafMug.play();
           mugCounter++;
+          if(ENERGY_LEVEL < 100) {
+            if(ENERGY_LEVEL >= 80){ENERGY_LEVEL =100;}
+            else{ENERGY_LEVEL+=20;}
+          }
       }
   }
   
-    
   }//End of Environment update for loop
 
   // remove environment that have gone off screen
@@ -816,17 +826,16 @@ if(environment[i].type=="cafMug"){      if(isPixelCollision(player.anim.imageDat
   }
 }
 
-function updateAttackMug()
+function updateAttackFish()
   {
-    var velocity = 25;
-    var angle = -(Math.PI/1.5);
-    cafMugAttack.update();
-    cafMugAttack.draw();      
-    /*cafMugAttack.x -= Math.cos(angle) * velocity;
-    cafMugAttack.y -= Math.sin(angle) * velocity;*/
-    
-    cafMugAttack.x += velocity;
-    //cafMugAttack.y = velocity;
+    var velocity = player.speed*1.8;
+    //var angle = (Math.PI/1.5);
+    fishAttack.update();
+    fishAttack.draw();      
+    fishAttack.x = player.x;
+    fishAttack.y = player.y;
+    //fishAttack.y += Math.sin(angle) * velocity/12;
+
   }
   
   
@@ -849,17 +858,23 @@ function updateEnemies() {
     //Player Collided With Squirrel
       if(isPixelCollision(player.anim.imageData,player.x,player.y,enemies[i].imageData,enemies[i].x,enemies[i].y,false))
       {
-          gameOver();
+          if(IS_INVINCIBLE){
+            enemies.splice(i, 1);
+            enemiesHit++;
+            fishAttack = 0; } 
+           else {gameOver();}
       }
-      if(cafMugAttack != 0){
-        if(isPixelCollision(cafMugAttack.imageData,cafMugAttack.x,cafMugAttack.y,enemies[i].imageData,enemies[i].x,enemies[i].y,false))
+      /*if(fishAttack != 0){
+        if(isPixelCollision(fishAttack.imageData,fishAttack.x,fishAttack.y,enemies[i].imageData,enemies[i].x,enemies[i].y,false))
         { 
  		  //assetLoader.sounds.hit.play();  sound after hitting the enemy
           enemies.splice(i, 1);
+
           enemiesHit++;
+          fishAttack = 0;
           cafMugAttack = 0;
         }
-      }
+      }*/
     
   }//End of update enemies for loop
 
@@ -982,10 +997,31 @@ function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     background.draw();
+    ctx.fillStyle="#27ae60";
+    ctx.fillRect(220,canvas.height/14,(ENERGY_LEVEL/110)*100,15);
+    ctx.strokeRect(220,canvas.height/14,(100/110)*100,15);
+    /*ctx.fillStyle="#000000";
+    ctx.fillRect(200,canvas.height/14,(ENERGY_LEVEL/100)*120,14);*/
     if(!isPaused){drawPlayPause("pause");}
     // update entities
     updateWater();
     updateEnvironment();
+     if (fishAttack!=0)
+    {
+      //updateAttackFish();
+    }
+    IS_INVINCIBLE = false;
+    if ((KEY_STATUS.shift || SWIPING_RIGHT) && (ENERGY_LEVEL >= 0.3))
+    {
+    fishAttack = new Sprite(       
+    player.x + (player.width/4),
+    player.y,'fish'
+    );
+    ENERGY_LEVEL-=0.3;
+    fishAttack.draw();
+    IS_INVINCIBLE = true;
+    //updateAttackFish();
+    }
     updatePlayer();
     updateGround();
     updateEnemies();    
@@ -998,19 +1034,9 @@ function animate() {
     ctx.fillText('Mugs: '+ mugCounter,canvas.width/1.6,canvas.height/11);  
     //Draw Play
     
-    if (KEY_STATUS.shift && mugCounter > 0) {
-    	cafMugAttack = new Sprite(
-    	player.x + canvas.width/10,
-    	player.y + 30,
-    	'cafMug2'
-    );
-    //updateAttackMug();
-    }
     
-    if (cafMugAttack!=0)
-    {
-      updateAttackMug();
-    }
+    if(player.speed > 16){ player.speed = window.innerWidth/10.0 };
+   
 
     // spawn a new Sprite
     if (ticker % Math.floor(platformWidth / player.speed) === 0) {
@@ -1084,6 +1110,7 @@ document.onkeyup = function(e) {
 };
 /* Keep Track of Touch Events*/
 var TOUCHING = false;
+var SWIPING_RIGHT = false;
 var myBody = document.body;
   myBody.addEventListener("touchstart", funcTouchStart, false);
   myBody.addEventListener("touchend", funcTouchEnd, false);
@@ -1241,15 +1268,15 @@ function startGame() {
 
   document.getElementById('game-over').style.display = 'none';
   document.getElementById('userGraph').innerHTML = '';
-
+  ENERGY_LEVEL = 0;
   loadHighScore();  
   loadUserScores();
   loadItemsScore();
   ground = [];
   water = [];
   environment = [];
-  cafMugAttack = 0;
-  enemies = [];  
+  fishAttack = 0;
+  enemies = [];
   enemiesHit = 0;
   player.reset();
   ticker = 0;
