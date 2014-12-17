@@ -1,3 +1,4 @@
+var checkRaceCondition = false;
 Parse.initialize("PXtItYU56vgW8jbKgDhZQac0WMWvlE5uzhS6DtBB", "pI5dlkQ7teOaWlFyvc7i3RbW60ST0NkalJYPLtWr");
 //Global Variable that keeps track of current user's highscore
 highScore = 0;
@@ -264,11 +265,11 @@ function saveItems() {
     	for (var i = 0; i < results.length; i++) { 
       		object = results[i];
     	}
-    	if(mugCounter > cafmugs) {
+    	if(achievementTracker.mug > cafmugs) {
             
     		object.set("cafmug", cafmugs + achievementTracker.mug);
     	}
-    	if(enemiesHit > squirels) {
+    	if(achievementTracker.squirrel > squirrels) {
     		object.set("enemies", squirrels + achievementTracker.squirrel );   
     	} 
     	object.save(); 
@@ -376,3 +377,53 @@ function loadUserScores() {
 });  
     }
     
+function checkAchievements()
+{
+  checkRaceCondition = true;
+    switch(achievementTracker.distance)
+  {
+      case 500:
+        grantAchievement(0);
+        break;
+      case 1000:
+        grantAchievement(1);
+        break;
+      case 2000:
+        grantAchievement(2);
+        break;
+      case 3000:
+        grantAchievement(3);
+        break;
+  }
+  switch(achievementTracker.squirrel)
+  {
+      case 25:
+        grantAchievement(4);
+        break;
+      case 100:
+        grantAchievement(5);
+        break;
+      case 150:
+        grantAchievement(6);
+        break;
+      case 250:
+        grantAchievement(7);
+        break;
+  }
+  
+    switch(achievementTracker.mug)
+  {
+      case 25:
+        grantAchievement(8);
+        break;
+      case 100:
+        grantAchievement(9);
+        break;
+      case 150:
+        grantAchievement(10);
+        break;
+      case 250:
+        grantAchievement(11);
+        break;
+  }
+}

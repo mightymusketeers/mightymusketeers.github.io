@@ -1,10 +1,11 @@
-
+var checkRaceCondition = true;
 (function ($) {       
 // define variables
 isPaused = false;   
 soundPlaying = false;	
 detectPortrait();
 IS_INVINCIBLE = false;
+
 ENERGY_LEVEL = 100;
 
 var canvas, player, score, stop, ticker;
@@ -885,58 +886,14 @@ function updateEnemies() {
   }
 }
 
+  
 /**
  * Update the players position and draw
  */
 function updatePlayer() {
   player.update();
   player.draw();
-  switch(achievementTracker.distance)
-  {
-      case 500:
-        grantAchievement(0);
-        break;
-      case 1000:
-        grantAchievement(1);
-        break;
-      case 2000:
-        grantAchievement(2);
-        break;
-      case 3000:
-        grantAchievement(3);
-        break;
-  }
-  switch(achievementTracker.squirrel)
-  {
-      case 25:
-        grantAchievement(4);
-        break;
-      case 100:
-        grantAchievement(5);
-        break;
-      case 150:
-        grantAchievement(6);
-        break;
-      case 250:
-        grantAchievement(7);
-        break;
-  }
-  
-    switch(achievementTracker.mug)
-  {
-      case 25:
-        grantAchievement(8);
-        break;
-      case 100:
-        grantAchievement(9);
-        break;
-      case 150:
-        grantAchievement(10);
-        break;
-      case 250:
-        grantAchievement(11);
-        break;
-  }
+  if(checkRaceCondition){checkAchievements();}
   
   // game over
   if (player.y + player.height >= canvas.height) {
@@ -1331,6 +1288,8 @@ function startGame() {
   document.getElementById('game-over').style.display = 'none';
   document.getElementById('userGraph').innerHTML = '';
   achievementTracker.mug = 0;
+  achievementTracker.distance = 0;
+  achievementTracker.squirrel = 0;
   ENERGY_LEVEL = 0;
   loadHighScore();  
   loadUserScores();

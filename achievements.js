@@ -32,16 +32,90 @@ var achievementTracker =
 
 function grantAchievement(id)
 {     
+   checkRaceCondition =false;
      var Achievement = Parse.Object.extend("Achievement");
-        var newAchievement = new Achievement();
-    	newAchievement.set("achievementId", id)
-    	newAchievement.set("UserId", Parse.User.current())
-    
-		newAchievement.save(null, {
-		  success: function(returnVar) {
-		  },
-		  error: function(returnVar, error) {
-		  }
-		});
+     var query = new Parse.Query(Achievement);
+
+    query.equalTo("UserId", {
+    __type: "Pointer",
+    className: "_User",
+    objectId: Parse.User.current().id
+    });
+  
+    query.equalTo("achievementId",id);
+ 
+    query.find({
+    success: function(results) {
+    checkRaceCondition = true;
+    if(results.length > 0)
+    {
+    }
+    else{
+    var newAchievement = new Achievement();
+    newAchievement.set("achievementId", id);
+    newAchievement.set("UserId", Parse.User.current());
+    newAchievement.save(null, {
+      success: function(gameScore) {
+      },
+      error: function(gameScore, error) {
+      }
+    });
+    }
+  },
+  error: function(error) {
+    console.log("Error: " + error.code + " " + error.message);
+  }
+});
 }
 
+
+function checkAchievements()
+{
+
+    switch(achievementTracker.distance)
+  {
+      case 500:
+        grantAchievement(0);
+        break;
+      case 1000:
+        grantAchievement(1);
+        break;
+      case 2000:
+        grantAchievement(2);
+        break;
+      case 3000:
+        grantAchievement(3);
+        break;
+  }
+  switch(achievementTracker.squirrel)
+  {
+      case 25:
+        grantAchievement(4);
+        break;
+      case 100:
+        grantAchievement(5);
+        break;
+      case 150:
+        grantAchievement(6);
+        break;
+      case 250:
+        grantAchievement(7);
+        break;
+  }
+  
+    switch(achievementTracker.mug)
+  {
+      case 25:
+        grantAchievement(8);
+        break;
+      case 100:
+        grantAchievement(9);
+        break;
+      case 150:
+        grantAchievement(10);
+        break;
+      case 250:
+        grantAchievement(11);
+        break;
+  }
+}
