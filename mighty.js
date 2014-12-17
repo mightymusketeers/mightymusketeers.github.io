@@ -1363,11 +1363,18 @@ function gameOver() {
 $('.credits').click(function() {
   $('#main').hide();
   $('#credits').show();
+  $('#instructions').hide();
   $('#menu').addClass('credits');
+});
+$('.instructionButton').click(function() {
+  $('#main').hide();
+   $('#credits').hide();
+  $('#instructions').show();
 });
 // back
 $('.back').click(function() {
   $('#credits').hide();
+  $('#instructions').hide();
   $('#main').show();
   $('#menu').removeClass('credits');
 });

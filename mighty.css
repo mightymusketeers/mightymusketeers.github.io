@@ -421,6 +421,25 @@ rect:hover {
 	pointer-events: none;
 }
 
+#instructions
+{
+  display: none;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0; 
+  margin-top:10%
+}
+
+.instruction
+{
+   color: #f39c12;
+  -webkit-text-stroke: 2.0px black !important;
+  
+  font-size: 35px;
+  font-family: futura;
+  margin-top:-12px;
+}
+
 #tooltip.hidden {
 	display: none;
 }
