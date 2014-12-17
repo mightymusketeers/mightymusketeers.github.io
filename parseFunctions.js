@@ -233,7 +233,7 @@ query.get(userId, {
     }
   },
   error: function(error) {
-    alert("Error: " + error.code + " " + error.message);
+    console.log("Error: " + error.code + " " + error.message);
   }
 });          
     }
@@ -287,7 +287,7 @@ function saveItems(mugCounter, enemiesHit) {
     }
   },
   error: function(error) {
-    alert("Error: " + error.code + " " + error.message);
+    console.log("Error: " + error.code + " " + error.message);
   }
 });          
     }    
@@ -318,7 +318,7 @@ function loadUserScores() {
         ,
         function(error)
         {
-			alert("Error: " + error.code + " " + error.message);
+			console.log("Error: " + error.code + " " + error.message);
 		}
 	}
 
@@ -344,7 +344,7 @@ function loadUserScores() {
     }
   },
   error: function(error) {
-    alert("Error: " + error.code + " " + error.message);
+    console.log("Error: " + error.code + " " + error.message);
   }
 });  
     }
@@ -371,7 +371,7 @@ function loadUserScores() {
 		}
   },
   error: function(error) {
-    alert("Error: " + error.code + " " + error.message);
+    console.log("Error: " + error.code + " " + error.message);
   }
 });  
     }
