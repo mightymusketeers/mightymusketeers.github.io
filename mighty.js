@@ -1117,6 +1117,13 @@ var myBody = document.body;
   myBody.addEventListener("touchmove", funcTouchMove, false);
 
   function funcTouchStart(e) {
+  
+    if(gameIsOver)
+      {
+        $('#game-over').hide();
+        startGame();
+      }
+  
   	if(isPaused) { return; }
   	
     var touchlist = e.touches
@@ -1138,11 +1145,7 @@ var myBody = document.body;
         }
      }
       
-      if(gameIsOver)
-      {
-        $('#game-over').hide();
-        startGame();
-      }
+
     //code to do what you want like set variables and check where on screen touch happened
      TOUCHING = true;
     var touches = e.changedTouches; //gets array of touch points, to get position
@@ -1265,7 +1268,6 @@ $('#inGameButton4').click(function() {
  * Start the game - reset all variables and entities, spawn ground and water.
  */
 function startGame() {
-
   document.getElementById('game-over').style.display = 'none';
   document.getElementById('userGraph').innerHTML = '';
   ENERGY_LEVEL = 0;
