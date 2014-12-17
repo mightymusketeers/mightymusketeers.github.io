@@ -208,7 +208,8 @@ var assetLoader = (function() {
     'bg'            : 'sounds/stolaf.mp3',
     'jump'          : 'sounds/jump.mp3',
     'gameOver'      : 'sounds/gameOver.mp3',
-    'cafMug'          : 'sounds/cafMugCollected.wav'
+    'cafMug'        : 'sounds/cafMugCollected.wav',
+    'hit'           : 'sounds/hit.mp3'
   };
 
   var assetsLoaded = 0;                                // how many assets have been loaded
@@ -348,6 +349,8 @@ function drawPlayPause(type)
     ctx.drawImage(assetLoader.imgs[type],120,(window.innerHeight/50),50,50);
     ctx.restore();  
 }
+
+
     
     
     
@@ -432,20 +435,23 @@ var background = (function() {
    */
   //Creating Magical Snow
   this.draw = function() {
-    //ctx.drawImage(assetLoader.imgs.bg, 0, 0);
-    ctx.fillStyle = "rgb(44, 62, 80)";
-    ctx.fillRect(0, window.innerHeight, window.innerWidth, window.innerHeight);
+    ctx.rect(0, 0, window.innerWidth, 90);
+  	ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+  	ctx.fill();
+  
     // Pan background
     sky.x -= sky.speed;
     backdrop.x -= backdrop.speed;
     backdrop2.x -= backdrop2.speed;
+    
+
 
     // draw images side by side to loop
     //ctx.drawImage(assetLoader.imgs.sky, sky.x, sky.y);
     //ctx.drawImage(assetLoader.imgs.sky, sky.x + canvas.width, sky.y);
     
 
-      ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+      
 		ctx.beginPath();
 		for(var i = 0; i < mp; i++)
 		{
@@ -848,7 +854,7 @@ function updateEnemies() {
       if(cafMugAttack != 0){
         if(isPixelCollision(cafMugAttack.imageData,cafMugAttack.x,cafMugAttack.y,enemies[i].imageData,enemies[i].x,enemies[i].y,false))
         { 
-          console.log("hit");
+ 		  //assetLoader.sounds.hit.play();  sound after hitting the enemy
           enemies.splice(i, 1);
           enemiesHit++;
           cafMugAttack = 0;
@@ -982,8 +988,7 @@ function animate() {
     updateEnvironment();
     updatePlayer();
     updateGround();
-    updateEnemies();
-    
+    updateEnemies();    
 
     // draw the score
     ctx.font      = "bold 28px futura";
@@ -1085,7 +1090,8 @@ var myBody = document.body;
   myBody.addEventListener("touchmove", funcTouchMove, false);
 
   function funcTouchStart(e) {
-      
+  	if(isPaused) { return; }
+  	
     var touchlist = e.touches
     for (var i=0; i<touchlist.length; i++){ 
         var touchPoint = touchlist[i];
@@ -1104,7 +1110,6 @@ var myBody = document.body;
             }
         }
      }
-
       
       if(gameIsOver)
       {
@@ -1124,8 +1129,29 @@ var myBody = document.body;
   function funcTouchMove(e) {
     //code
   }
-
-
+  
+  
+  // checking clicks on the body element
+  $('body').click(function(event){
+		var xPos = event.offsetX;
+		var yPos = event.offsetY;
+		
+		if(!isPaused) {
+			if(xPos >=111.0 && xPos <=182.0)
+			{
+				if(yPos>=9.0 && yPos <=66.0)
+				{ 
+					if (stop == false ) {
+					pauseActions();
+					} 
+					// Play: command pressed and we are currently paused
+					else if (stop == true && gameIsOver == false ) {
+					unpauseActions();
+					}
+				}
+			}
+		}	
+  });
     
     
 /**
@@ -1206,6 +1232,7 @@ $('#inGameButton3').click(function() {
 $('#inGameButton4').click(function() {
 	unpauseActions();
 });
+
 
 /**
  * Start the game - reset all variables and entities, spawn ground and water.
@@ -1350,6 +1377,25 @@ $('.sound').click(function() {
     }
   }
 });
+
+
+function getClickPosition(e) {
+    var parentPosition = getPosition(e.currentTarget);
+    var xPosition = e.clientX - parentPosition.x;
+    var yPosition = e.clientY - parentPosition.y;
+}
+ 
+function getPosition(element) {
+    var xPosition = 0;
+    var yPosition = 0;
+      
+    while (element) {
+        xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+        yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+        element = element.offsetParent;
+    }
+    return { x: xPosition, y: yPosition };
+}
 
 
 function detectPortrait() {

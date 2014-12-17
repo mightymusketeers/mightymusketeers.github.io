@@ -53,6 +53,27 @@ $("#goSignUp").on("touchstart",function(){ toggleView();});
 $("#goLogIn").on("touchstart",function(){toggleView();});
 $(".logoutNow").on("touchstart",function(){Parse.User.logOut(); location.reload();});
 $(".logoutNow").click(function(){Parse.User.logOut();  location.reload();});
+$("#inGameButton5").on("touchstart",function(){
+ var confirmMe = confirm('Are you sure you want to logout?');
+    if (confirmMe) {
+      // log the user out
+      Parse.User.logOut(); 
+      location.reload();
+    } else {
+      //return to the game
+    }
+});
+$("#inGameButton5").click(function(){	
+    var confirmMe = confirm('Are you sure you want to logout?');
+    if (confirmMe) {
+      // log the user out
+      Parse.User.logOut(); 
+      location.reload();
+    } else {
+      //return to the game
+    }
+  });
+
 
 function checkEmailVerified(userId){
 var User = Parse.Object.extend("User");

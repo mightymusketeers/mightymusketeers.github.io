@@ -27,7 +27,6 @@
    <div class="wrapper">
    <div id="gameContainer" style="display:none;">
    <div class="sound sound-off"></div>
-   <!--<div class="gameStatus playGame"></div>-->
     <div id="menu">
       <div id="progress">
         <div id="percent">Loading: <span id="p"></span></div>
@@ -42,16 +41,6 @@
         </ul>
       </div>
       <div id="credits">
-        <ul>
-          <li class="artwork">Character design and art: <a href="http://www.acrylicana.com/">Mary Winkler</a></li>
-          <li class="artwork">Walk cycle animation: <a href="http://vimeo.com/hellostudios">Adam Everett Miller</a></li>
-          <li class="artwork">Platformer tiles: <a href="http://www.kenney.nl/">Kenney</a></li>
-        </ul>
-        <ul>
-          <li class="music">Game music: <a href="http://opengameart.org/content/jump-and-run-8-bit">bart</a></li>
-          <li class="music">Jump sound effect: <a href="http://opengameart.org/content/platformer-jumping-sounds">dklon</a></li>
-          <li class="music">Game over music: <a href="http://opengameart.org/content/lose-music-3">remaxim</a></li>
-        </ul>
         <ul>
           <li class="developer">Developers: <a href="http://blog.sklambert.com/">Armaan Bindra and Drew Volz</a></li>
         </ul>
@@ -73,8 +62,11 @@
     	<button class="inGameMenuButton" id="inGameButton1">Statistics</button>
     	<button class="inGameMenuButton" id="inGameButton2">Achievements</button>
     	<button class="inGameMenuButton" id="inGameButton3">Store</button>
+		<!-- Close button for in-game menu -->
 		<a id="inGameButton4"></a>
-    	
+		<!-- Logout button for in-game menu -->
+    	<a id="inGameButton5"></a>
+
     	<!-- Stats -->
     	<div class="inGameMenuDiv" id="statistics">
     		<br>	
