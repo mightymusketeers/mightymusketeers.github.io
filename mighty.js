@@ -4,7 +4,6 @@
 isPaused = false;   
 soundPlaying = false;	
 detectPortrait();
-mugCounter = 0;
 IS_INVINCIBLE = false;
 ENERGY_LEVEL = 100;
 
@@ -812,7 +811,7 @@ if(environment[i].type=="cafMug"){      if(isPixelCollision(player.anim.imageDat
           environment.splice(i, 1);
           console.log("Mug Collected");
           assetLoader.sounds.cafMug.play();
-          mugCounter++;
+          achievementTracker.mug++;
           if(ENERGY_LEVEL < 100) {
             if(ENERGY_LEVEL >= 80){ENERGY_LEVEL =100;}
             else{ENERGY_LEVEL+=20;}
@@ -862,7 +861,7 @@ function updateEnemies() {
       {
           if(IS_INVINCIBLE){
             enemies.splice(i, 1);
-            enemiesHit++;
+            achievementTracker.squirrel++;
             fishAttack = 0; } 
            else {gameOver();}
       }
@@ -872,7 +871,7 @@ function updateEnemies() {
  		  //assetLoader.sounds.hit.play();  sound after hitting the enemy
           enemies.splice(i, 1);
 
-          enemiesHit++;
+          achievementTracker.squirrel++;
           fishAttack = 0;
           cafMugAttack = 0;
         }
@@ -892,7 +891,53 @@ function updateEnemies() {
 function updatePlayer() {
   player.update();
   player.draw();
-
+  switch(achievementTracker.distance)
+  {
+      case 500:
+        grantAchievement(0);
+        break;
+      case 1000:
+        grantAchievement(1);
+        break;
+      case 2000:
+        grantAchievement(2);
+        break;
+      case 3000:
+        grantAchievement(3);
+        break;
+  }
+  switch(achievementTracker.squirrel)
+  {
+      case 25:
+        grantAchievement(4);
+        break;
+      case 100:
+        grantAchievement(5);
+        break;
+      case 150:
+        grantAchievement(6);
+        break;
+      case 250:
+        grantAchievement(7);
+        break;
+  }
+  
+    switch(achievementTracker.mug)
+  {
+      case 25:
+        grantAchievement(8);
+        break;
+      case 100:
+        grantAchievement(9);
+        break;
+      case 150:
+        grantAchievement(10);
+        break;
+      case 250:
+        grantAchievement(11);
+        break;
+  }
+  
   // game over
   if (player.y + player.height >= canvas.height) {
     gameOver();
@@ -905,6 +950,7 @@ function updatePlayer() {
 function spawnSprites() {
   // increase score
   score++;
+  achievementTracker.distance++;
 
   // first create a gap
   if (gapLength > 0) {
@@ -1033,7 +1079,7 @@ function animate() {
     ctx.fillStyle = "#000000";
     ctx.fillText('Time: ' + score + 's', canvas.width-(canvas.width/4.5), canvas.height/11);
     ctx.fillText('Best: '+ highScore + 's',canvas.width/2.7,canvas.height/11);
-    ctx.fillText('Mugs: '+ mugCounter,canvas.width/1.6,canvas.height/11);  
+    ctx.fillText('Mugs: '+ achievementTracker.mug,canvas.width/1.6,canvas.height/11);  
     //Draw Play
     
     
@@ -1284,6 +1330,7 @@ $('#inGameButton4').click(function() {
 function startGame() {
   document.getElementById('game-over').style.display = 'none';
   document.getElementById('userGraph').innerHTML = '';
+  achievementTracker.mug = 0;
   ENERGY_LEVEL = 0;
   loadHighScore();  
   loadUserScores();
@@ -1293,7 +1340,7 @@ function startGame() {
   environment = [];
   fishAttack = 0;
   enemies = [];
-  enemiesHit = 0;
+  achievementTracker.squirrel = 0;
   player.reset();
   ticker = 0;
   stop = false;
@@ -1303,7 +1350,7 @@ function startGame() {
   platformHeight = 2;
   platformLength = 15;
   gapLength = 0;
-  mugCounter =0;
+  achievementTracker.mug = 0;
   
   ctx.font = '16px arial, sans-serif';
   
@@ -1336,7 +1383,7 @@ function gameOver() {
   gameIsOver = true;
   $('#score').html(score);
   saveScore(score);
-  saveItems(mugCounter, enemiesHit);
+  saveItems();
   $('#game-over').show();
   assetLoader.sounds.bg.pause();
   assetLoader.sounds.gameOver.currentTime = 0;

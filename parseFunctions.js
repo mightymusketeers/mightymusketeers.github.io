@@ -2,7 +2,7 @@ Parse.initialize("PXtItYU56vgW8jbKgDhZQac0WMWvlE5uzhS6DtBB", "pI5dlkQ7teOaWlFyvc
 //Global Variable that keeps track of current user's highscore
 highScore = 0;
 var cafmugs;
-var enemies;
+var squirrels;
 FastClick.attach(document.body);
 document.ontouchmove = function(event){
 event.preventDefault();
@@ -239,11 +239,11 @@ query.get(userId, {
     }
     
     
-function saveItems(mugCounter, enemiesHit) {
+function saveItems() {
      
      loadItemsScore();
 
-     if(mugCounter <= cafmugs && enemiesHit <= enemies) {
+     if(achievementTracker.mug == 0 && achievementTracker.squirrel == 0) {
          return;
      }
      
@@ -265,19 +265,19 @@ function saveItems(mugCounter, enemiesHit) {
       		object = results[i];
     	}
     	if(mugCounter > cafmugs) {
-    		object.set("cafmug", mugCounter);
+            
+    		object.set("cafmug", cafmugs + achievementTracker.mug);
     	}
-    	if(enemiesHit > enemies) {
-    		object.set("enemies", enemiesHit);   
+    	if(enemiesHit > squirels) {
+    		object.set("enemies", squirrels + achievementTracker.squirrel );   
     	} 
     	object.save(); 
     }
     else{
    	 	var itemScore = new ItemScore();
-    	itemScore.set("cafmug", mugCounter);
-    	itemScore.set("enemies", enemiesHit);
-    	itemScore.set("UserId", Parse.User.current())
-    
+    	itemScore.set("cafmug", cafmugs + achievementTracker.mug);
+    	itemScore.set("enemies", squirrels + achievementTracker.squirrel );  
+    	itemScore.set("UserId", Parse.User.current());
 		itemScore.save(null, {
 		  success: function(returnVar) {
 		  },
@@ -367,7 +367,7 @@ function loadUserScores() {
 		for (var i = 0; i < results.length; i++) { 
 		  var object = results[i];
 		  cafmugs = object.get('cafmug');
-		  enemies = object.get('enemies');
+		  squirrels = object.get('enemies');
 		}
   },
   error: function(error) {
