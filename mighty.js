@@ -616,7 +616,7 @@ var player = (function(player) {
   player.update = function() {
 
     // jump if not currently jumping or falling
-    if ((TOUCHING || KEY_STATUS.space) && player.dy === 0 && !player.isJumping) {
+    if ((TOUCHING_RIGHT || KEY_STATUS.space) && player.dy === 0 && !player.isJumping) {
       
       player.isJumping = true;
       player.dy = player.jumpDy;
@@ -626,7 +626,7 @@ var player = (function(player) {
     }
 
     // jump higher if the space bar is continually pressed
-    if ((TOUCHING || KEY_STATUS.space) && jumpCounter) {
+    if ((TOUCHING_RIGHT || KEY_STATUS.space) && jumpCounter) {
       player.dy = player.jumpDy;
       player.dy -= 3.0;
       player.anim = player.glideAnim;
@@ -1011,16 +1011,16 @@ function animate() {
       //updateAttackFish();
     }
     IS_INVINCIBLE = false;
-    if ((KEY_STATUS.shift || SWIPING_RIGHT) && (ENERGY_LEVEL >= 0.3))
+    if ((KEY_STATUS.shift || TOUCHING_LEFT) && (ENERGY_LEVEL >= 0.3))
     {
-    fishAttack = new Sprite(       
-    player.x + (player.width/4),
-    player.y,'fish'
+		fishAttack = new Sprite(       
+		player.x + (player.width/4),
+		player.y,'fish'
     );
-    ENERGY_LEVEL-=0.3;
-    fishAttack.draw();
-    IS_INVINCIBLE = true;
-    //updateAttackFish();
+		ENERGY_LEVEL-=0.3;
+		fishAttack.draw();
+		IS_INVINCIBLE = true;
+		//updateAttackFish();
     }
     updatePlayer();
     updateGround();
@@ -1109,8 +1109,8 @@ document.onkeyup = function(e) {
   }
 };
 /* Keep Track of Touch Events*/
-var TOUCHING = false;
-var SWIPING_RIGHT = false;
+var TOUCHING_RIGHT = false;
+var TOUCHING_LEFT = false;
 var myBody = document.body;
   myBody.addEventListener("touchstart", funcTouchStart, false);
   myBody.addEventListener("touchend", funcTouchEnd, false);
@@ -1130,6 +1130,19 @@ var myBody = document.body;
     for (var i=0; i<touchlist.length; i++){ 
         var touchPoint = touchlist[i];
         //console.log(touchPoint.clientY);
+        
+        // Dividing our screen in half: power-up vs jumping
+        
+        // Left
+        if(touchPoint.clientX < (canvas.width / 2)) {
+        	TOUCHING_LEFT = true;
+        }
+        // Right
+        else {
+        	TOUCHING_RIGHT = true;
+        }
+        
+        // Detecting if the "pause" button is pushed (cords between ranges)
         if(touchPoint.clientX >=111.0 && touchPoint.clientX <=182.0)
         {
             if(touchPoint.clientY >=9.0 && touchPoint.clientY <=66.0)
@@ -1147,13 +1160,12 @@ var myBody = document.body;
       
 
     //code to do what you want like set variables and check where on screen touch happened
-     TOUCHING = true;
     var touches = e.changedTouches; //gets array of touch points, to get position
   }
 
   function funcTouchEnd(e) {
-    //code
-    TOUCHING = false;
+    TOUCHING_RIGHT = false;
+    TOUCHING_LEFT = false;
   }
 
   function funcTouchMove(e) {
@@ -1406,25 +1418,6 @@ $('.sound').click(function() {
     }
   }
 });
-
-
-function getClickPosition(e) {
-    var parentPosition = getPosition(e.currentTarget);
-    var xPosition = e.clientX - parentPosition.x;
-    var yPosition = e.clientY - parentPosition.y;
-}
- 
-function getPosition(element) {
-    var xPosition = 0;
-    var yPosition = 0;
-      
-    while (element) {
-        xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
-        yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
-        element = element.offsetParent;
-    }
-    return { x: xPosition, y: yPosition };
-}
 
 
 function detectPortrait() {
