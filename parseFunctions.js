@@ -3,6 +3,7 @@ Parse.initialize("PXtItYU56vgW8jbKgDhZQac0WMWvlE5uzhS6DtBB", "pI5dlkQ7teOaWlFyvc
 //Global Variable that keeps track of current user's highscore
 highScore = 0;
 var cafmugs;
+var mugCounter = 0;
 var squirrels;
 FastClick.attach(document.body);
 document.ontouchmove = function(event){
@@ -194,6 +195,45 @@ query.get(userId, {
           signInLink.style.display = "none";
       }
 
+    function checkLocalAchievement(localMug,localSquirrel)
+   {
+       console.log(localMug, localSquirrel);
+         switch(localSquirrel)
+        {
+            case 25:
+                console.log("25 enemies");
+                grantAchievement(4);
+                break;
+            case 100:
+                grantAchievement(5);
+                break;
+            case 150:
+                grantAchievement(6);
+                break;
+            case 250:
+                grantAchievement(7);
+                break;
+        }
+
+        switch(localMug)
+        {
+            case 25:
+                console.log("25 enemies");
+                grantAchievement(8);
+                break;
+            case 100:
+                grantAchievement(9);
+                break;
+            case 150:
+                grantAchievement(10);
+                break;
+            case 250:
+                grantAchievement(11);
+                break;
+            }     
+    }
+    
+
     function saveScore(userScore)
     {
      if(userScore <= highScore) {
@@ -241,12 +281,12 @@ query.get(userId, {
     
     
 function saveItems() {
-     
+     checkRaceCondition2 = false;
      loadItemsScore();
 
-     if(achievementTracker.mug == 0 && achievementTracker.squirrel == 0) {
+     /*if(achievementTracker.mug == 0 && achievementTracker.squirrel == 0) {
          return;
-     }
+     }*/
      
      var ItemScore = Parse.Object.extend("ItemScore");
      var query = new Parse.Query(ItemScore);
@@ -260,29 +300,38 @@ function saveItems() {
     query.find({
     success: function(results) {
     // Do something with the returned Parse.Object values
+    
+    checkRaceCondition2 = true;
     var object;
+    var localMugCount = 0;
+    var localSquirrelCount = 0;
+    localMugCount = cafmugs + achievementTracker.mug;
+    localSquirrelCount = squirrels + achievementTracker.squirrel;
+    checkLocalAchievement(localMugCount,localSquirrelCount);
+        
+        
     if(results.length > 0){
     	for (var i = 0; i < results.length; i++) { 
       		object = results[i];
-    	}
-    	if(achievementTracker.mug > cafmugs) {
-            
-    		object.set("cafmug", cafmugs + achievementTracker.mug);
-    	}
-    	if(achievementTracker.squirrel > squirrels) {
-    		object.set("enemies", squirrels + achievementTracker.squirrel );   
-    	} 
-    	object.save(); 
+    	}            
+        
+        object.set("cafmug", localMugCount);
+        object.set("enemies", localSquirrelCount);   
+        object.save(); 
+        
+        achievementTracker.mug = 0; 
+        achievementTracker.squirrel = 0;
     }
     else{
    	 	var itemScore = new ItemScore();
-    	itemScore.set("cafmug", cafmugs + achievementTracker.mug);
-    	itemScore.set("enemies", squirrels + achievementTracker.squirrel );  
+    	itemScore.set("cafmug", localMugCount);
+    	itemScore.set("enemies", localSquirrelCount);  
     	itemScore.set("UserId", Parse.User.current());
 		itemScore.save(null, {
 		  success: function(returnVar) {
 		  },
 		  error: function(returnVar, error) {
+             console.log("Error: " + error.code + " " + error.message);
 		  }
 		});
     }
@@ -376,54 +425,3 @@ function loadUserScores() {
   }
 });  
     }
-    
-function checkAchievements()
-{
-  checkRaceCondition = true;
-    switch(achievementTracker.distance)
-  {
-      case 500:
-        grantAchievement(0);
-        break;
-      case 1000:
-        grantAchievement(1);
-        break;
-      case 2000:
-        grantAchievement(2);
-        break;
-      case 3000:
-        grantAchievement(3);
-        break;
-  }
-  switch(achievementTracker.squirrel)
-  {
-      case 25:
-        grantAchievement(4);
-        break;
-      case 100:
-        grantAchievement(5);
-        break;
-      case 150:
-        grantAchievement(6);
-        break;
-      case 250:
-        grantAchievement(7);
-        break;
-  }
-  
-    switch(achievementTracker.mug)
-  {
-      case 25:
-        grantAchievement(8);
-        break;
-      case 100:
-        grantAchievement(9);
-        break;
-      case 150:
-        grantAchievement(10);
-        break;
-      case 250:
-        grantAchievement(11);
-        break;
-  }
-}
