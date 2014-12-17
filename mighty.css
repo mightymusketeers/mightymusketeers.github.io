@@ -56,10 +56,7 @@ li {
   padding: 10px 0;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
+
 
 .wrapper {
   width: 100%;
@@ -235,7 +232,7 @@ a {
 #credits {
   display: none;
   line-height: 30px;
-  margin: auto;
+  margin-top: 10%;
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
 }
@@ -254,7 +251,12 @@ a {
   color: #e6e71f;
 }
 .developer {
-  color: #13eb8a;
+     color: #f39c12;
+  -webkit-text-stroke: 2.0px black !important;
+  
+  font-size: 35px;
+  font-family: futura;
+  margin-top:-12px;
 }
 
 .back, .back:hover {
