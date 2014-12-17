@@ -1248,7 +1248,7 @@ function showInGameMenu() {
     
     
     // Reward the user for spending time on the menu
-    var timeout = setTimeout(function(){ grantAchievement(12); }, 5000);
+    var timeout = setTimeout(function(){ grantAchievement(12); }, 30000);
 }
 
 function hideInGameMenu() {
