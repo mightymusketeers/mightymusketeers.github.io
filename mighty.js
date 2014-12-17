@@ -5,6 +5,8 @@ isPaused = false;
 soundPlaying = false;	
 detectPortrait();
 mugCounter = 0;
+IS_INVINCIBLE = false;
+ENERGY_LEVEL = 100;
 
 var canvas, player, score, stop, ticker;
 var ground = [], water = [], enemies = [], environment = [], fishAttack = 0;
@@ -617,13 +619,12 @@ var player = (function(player) {
       player.gravity = 1.0;
     }
 
-
     // jump higher if the space bar is continually pressed
     if ((TOUCHING || KEY_STATUS.space) && jumpCounter) {
       player.dy = player.jumpDy;
       player.dy -= 3.0;
       player.anim = player.glideAnim;
-    }
+    } 
 
     jumpCounter = Math.max(jumpCounter-1, 0);
 
@@ -631,7 +632,11 @@ var player = (function(player) {
 
     // add gravity
     if (player.isFalling || player.isJumping) {
-      player.dy += player.gravity;
+      if(KEY_STATUS.shift)
+      {
+          player.dy += (player.gravity/3);
+      }
+      else{ player.dy += player.gravity;}
     }
 
     // change animation if falling
@@ -754,6 +759,7 @@ function updateGround() {
         angle < -50) {
       player.isJumping = false;
       player.isFalling = false;
+
       player.y = ground[i].y - player.height + 7;
       player.dy = 0;
     }
@@ -799,10 +805,13 @@ if(environment[i].type=="cafMug"){      if(isPixelCollision(player.anim.imageDat
           console.log("Mug Collected");
           assetLoader.sounds.cafMug.play();
           mugCounter++;
+          if(ENERGY_LEVEL < 100) {
+            if(ENERGY_LEVEL >= 80){ENERGY_LEVEL =100;}
+            else{ENERGY_LEVEL+=20;}
+          }
       }
   }
   
-    
   }//End of Environment update for loop
 
   // remove environment that have gone off screen
@@ -817,7 +826,8 @@ function updateAttackFish()
     //var angle = (Math.PI/1.5);
     fishAttack.update();
     fishAttack.draw();      
-    fishAttack.x += velocity;
+    fishAttack.x = player.x;
+    fishAttack.y = player.y;
     //fishAttack.y += Math.sin(angle) * velocity/12;
 
   }
@@ -842,9 +852,13 @@ function updateEnemies() {
     //Player Collided With Squirrel
       if(isPixelCollision(player.anim.imageData,player.x,player.y,enemies[i].imageData,enemies[i].x,enemies[i].y,false))
       {
-          gameOver();
+          if(IS_INVINCIBLE){
+            enemies.splice(i, 1);
+            enemiesHit++;
+            fishAttack = 0; } 
+           else {gameOver();}
       }
-      if(fishAttack != 0){
+      /*if(fishAttack != 0){
         if(isPixelCollision(fishAttack.imageData,fishAttack.x,fishAttack.y,enemies[i].imageData,enemies[i].x,enemies[i].y,false))
         { 
           console.log("hit");
@@ -854,7 +868,7 @@ function updateEnemies() {
           fishAttack = 0;
           cafMugAttack = 0;
         }
-      }
+      }*/
     
   }//End of update enemies for loop
 
@@ -977,13 +991,30 @@ function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     background.draw();
+    ctx.fillStyle="#27ae60";
+    ctx.fillRect(220,canvas.height/14,(ENERGY_LEVEL/110)*100,15);
+    ctx.strokeRect(220,canvas.height/14,(100/110)*100,15);
+    /*ctx.fillStyle="#000000";
+    ctx.fillRect(200,canvas.height/14,(ENERGY_LEVEL/100)*120,14);*/
     if(!isPaused){drawPlayPause("pause");}
     // update entities
     updateWater();
     updateEnvironment();
      if (fishAttack!=0)
     {
-      updateAttackFish();
+      //updateAttackFish();
+    }
+    IS_INVINCIBLE = false;
+    if ((KEY_STATUS.shift || SWIPING_RIGHT) && (ENERGY_LEVEL >= 0.3))
+    {
+    fishAttack = new Sprite(       
+    player.x + (player.width/4),
+    player.y,'fish'
+    );
+    ENERGY_LEVEL-=0.3;
+    fishAttack.draw();
+    IS_INVINCIBLE = true;
+    //updateAttackFish();
     }
     updatePlayer();
     updateGround();
@@ -998,15 +1029,7 @@ function animate() {
     ctx.fillText('Mugs: '+ mugCounter,canvas.width/1.6,canvas.height/11);  
     //Draw Play
     
-    if ((KEY_STATUS.shift || SWIPING_RIGHT) /*&& mugCounter > 0*/)
-    {
-    fishAttack = new Sprite(
-    player.x + player.width/1.5,
-    player.y + player.height/2,'fish'
-
-    );
-    //updateAttackFish();
-    }
+    
     if(player.speed > 16){ player.speed = window.innerWidth/10.0 };
    
 
@@ -1087,17 +1110,6 @@ var myBody = document.body;
   myBody.addEventListener("touchstart", funcTouchStart, false);
   myBody.addEventListener("touchend", funcTouchEnd, false);
   myBody.addEventListener("touchmove", funcTouchMove, false);
-  $("body").swipe( {
-        //Generic swipe handler for all directions
-        swipeStatus:function(event, phase, direction, distance, duration, fingerCount)
-        {
-        if (phase == 'start'){ 
-          //console.log("You swiped " + direction + " " + ++count + " times " ); 
-          SWIPING_RIGHT = true;
-          }
-        else if(phase == 'end'){ SWIPING_RIGHT = false; }
-        }
-      });
 
   function funcTouchStart(e) {
       
@@ -1229,7 +1241,7 @@ function startGame() {
 
   document.getElementById('game-over').style.display = 'none';
   document.getElementById('userGraph').innerHTML = '';
-
+  ENERGY_LEVEL = 0;
   loadHighScore();  
   loadUserScores();
   loadItemsScore();
