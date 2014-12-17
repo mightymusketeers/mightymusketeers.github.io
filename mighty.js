@@ -437,9 +437,7 @@ var background = (function() {
    */
   //Creating Magical Snow
   this.draw = function() {
-    ctx.rect(0, 0, window.innerWidth, 90);
-  	ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-  	ctx.fill();
+    
   
     // Pan background
     sky.x -= sky.speed;
@@ -462,8 +460,12 @@ var background = (function() {
 			ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
 		}
 		ctx.fill();
+        ctx.rect(0, 0, window.innerWidth, 90);
+  	    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+  	    ctx.fill();
         self.update();
-
+       
+    
   };
     
  this.update = function()
@@ -498,7 +500,7 @@ var background = (function() {
 					else
 					{
 						//Enter from the right
-						particles[i] = {x: window.innerWidth+5, y: Math.random()*window.innerHeight, r: p.r, d: p.d};
+						particles[i] = {x: window.innerWidth+5, y: Math.random()* window.innerHeight, r: p.r, d: p.d};
 					}
 				}
 			}
@@ -998,8 +1000,8 @@ function animate() {
 
     background.draw();
     ctx.fillStyle="#27ae60";
-    ctx.fillRect(220,canvas.height/14,(ENERGY_LEVEL/110)*100,15);
-    ctx.strokeRect(220,canvas.height/14,(100/110)*100,15);
+    ctx.fillRect(220,canvas.height/14,(ENERGY_LEVEL/110)*140,15);
+    ctx.strokeRect(220,canvas.height/14,(100/110)*140,15);
     /*ctx.fillStyle="#000000";
     ctx.fillRect(200,canvas.height/14,(ENERGY_LEVEL/100)*120,14);*/
     if(!isPaused){drawPlayPause("pause");}
