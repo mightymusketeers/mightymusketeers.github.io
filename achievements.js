@@ -91,3 +91,14 @@ function checkAchievements()
         break;
   }
 }
+
+function createTable(myArr)
+{
+  var result = "";
+  for(var i=0;i < myArr.length;i++)
+  {
+    //console.log(achievements);
+    result+="<tr><td align=\"center\">"+achievements[myArr[i]].description+"</td></tr>";
+  }
+  return result;
+}

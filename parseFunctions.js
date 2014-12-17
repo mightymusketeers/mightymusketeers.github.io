@@ -1,10 +1,11 @@
-var checkRaceCondition = false;
+
 Parse.initialize("PXtItYU56vgW8jbKgDhZQac0WMWvlE5uzhS6DtBB", "pI5dlkQ7teOaWlFyvc7i3RbW60ST0NkalJYPLtWr");
 //Global Variable that keeps track of current user's highscore
 highScore = 0;
 var cafmugs;
 var mugCounter = 0;
 var squirrels;
+var myAchievements = [];
 FastClick.attach(document.body);
 document.ontouchmove = function(event){
 event.preventDefault();
@@ -398,7 +399,34 @@ function loadUserScores() {
   }
 });  
     }
-    
+
+    function loadAchievements()
+    {
+     var Achievement = Parse.Object.extend("Achievement");
+     var query = new Parse.Query(Achievement);
+     
+     query.equalTo("UserId", {
+    __type: "Pointer",
+    className: "_User",
+    objectId: Parse.User.current().id
+    });
+ 
+    query.find({
+    success: function(results) {
+    // Do something with the returned Parse.Object values
+    myAchievements = [];
+      
+    for (var i = 0; i < results.length; i++) { 
+      var object = results[i];
+      myAchievements.push(object.get('achievementId'));
+    }
+      $(".achievementsTable").html(createTable(myAchievements));
+  },
+  error: function(error) {
+    console.log("Error: " + error.code + " " + error.message);
+  }
+});  
+    }
     
     function loadItemsScore()
     {

@@ -326,6 +326,27 @@ a {
     padding: 11px 3px;
 	zoom:200%;       
 }
+#achievementsHolder
+{
+  -webkit-overflow-scrolling:touch;
+  overflow-x: hidden;
+  overflow-y: auto;
+  
+}
+
+.achievementsTable
+{
+  width:80%;
+  border-collapse: collapse;
+  overflow: auto;
+}
+.achievementsTable td
+{
+  font-size:40px;
+  border:5px solid #2ecc71;
+  text-align: center;
+  padding:20px;
+}
 
 #inGameButton5{
     float:right;
@@ -355,6 +376,7 @@ a {
   color: white;
   height: 100%;
   width: 100%;
+  font-size: 25px;
   margin-top: 45px;
   margin-left: 20px;
   font-family: futura;
