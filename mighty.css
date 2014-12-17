@@ -58,6 +58,7 @@ li {
 
 
 
+
 .wrapper {
   width: 100%;
   top: 5px;
@@ -437,7 +438,7 @@ rect:hover {
    color: #f39c12;
   -webkit-text-stroke: 2.0px black !important;
   
-  font-size: 35px;
+  font-size: 25px;
   font-family: futura;
   margin-top:-12px;
 }
