@@ -1239,13 +1239,16 @@ function mainMenu() {
 }
 
 function showInGameMenu() {
-    //humane.log("<b>Achievement</b>" + "<br/>" + "TEST", { timeout: 5000, clickToClose: true })
     loadAchievements();
 	$('#inGameMenu').show();
 	$('#statistics').show();
 	$('#inGameButton1').css("background","orange");
 	$('#inGameButton2').css("background","#E0E0E0");
 	$('#inGameButton3').css("background","#E0E0E0");
+    
+    
+    // Reward the user for spending time on the menu
+    var timeout = setTimeout(function(){ grantAchievement(12); }, 5000);
 }
 
 function hideInGameMenu() {
