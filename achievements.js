@@ -4,19 +4,19 @@ function Achievement(title,description)
   this.description = description;
 }
 var achievements = [
-  Achievement("distance500","500 seconds"),//0
-  Achievement("distance1000","1000 seconds"),//1
-  Achievement("distance2000","2000 seconds"),//2
-  Achievement("distance3000","3000 seconds"),//3
-  Achievement("squirrel25","Hit 25 Squirrels"),//4
-  Achievement("squirrel100","Hit 100 Squirrels"),//5
-  Achievement("squirrel150","Hit 150 Squirrels"),//6
-  Achievement("squirrel250","Hit 250 Squirrels"),//7
-  Achievement("mug25","Collected 25 Mugs"),//8
-  Achievement("mug100","Collected 100 Mugs"),//9
-  Achievement("mug150","Collected 150 Mugs"),//10
-  Achievement("mug250","Collected 250 Mugs"),//11
-  Achievement("distracted","Spent over 30 Seconds on menu screen")//12
+  new Achievement("distance500","500 seconds"),//0
+  new Achievement("distance1000","1000 seconds"),//1
+  new Achievement("distance2000","2000 seconds"),//2
+  new Achievement("distance3000","3000 seconds"),//3
+  new Achievement("squirrel25","Hit 25 Squirrels"),//4
+  new Achievement("squirrel100","Hit 100 Squirrels"),//5
+  new Achievement("squirrel150","Hit 150 Squirrels"),//6
+  new Achievement("squirrel250","Hit 250 Squirrels"),//7
+  new Achievement("mug25","Collected 25 Mugs"),//8
+  new Achievement("mug100","Collected 100 Mugs"),//9
+  new Achievement("mug150","Collected 150 Mugs"),//10
+  new Achievement("mug250","Collected 250 Mugs"),//11
+  new Achievement("distracted","Spent over 30 Seconds on menu screen")//12
 ];
 /*
 achievments[idFromParse].title;
@@ -55,7 +55,9 @@ function grantAchievement(id)
     newAchievement.set("achievementId", id);
     newAchievement.set("UserId", Parse.User.current());
     newAchievement.save(null, {
-      success: function(gameScore) {
+      success: function(result) {
+          console.log("made it to the grantAchievo success");
+          humane.log("<b>Achievement</b>" + "<br/>" + achievements[id].description, { timeout: 5000, clickToClose: true })
       },
       error: function(gameScore, error) {
       }
@@ -72,10 +74,11 @@ function grantAchievement(id)
 function checkAchievements()
 {
 
-    switch(achievementTracker.distance)
+  switch(achievementTracker.distance)
   {
       case 500:
         grantAchievement(0);
+        console.log("500 distance");
         break;
       case 1000:
         grantAchievement(1);
@@ -85,37 +88,6 @@ function checkAchievements()
         break;
       case 3000:
         grantAchievement(3);
-        break;
-  }
-  switch(achievementTracker.squirrel)
-  {
-      case 25:
-        grantAchievement(4);
-        break;
-      case 100:
-        grantAchievement(5);
-        break;
-      case 150:
-        grantAchievement(6);
-        break;
-      case 250:
-        grantAchievement(7);
-        break;
-  }
-  
-    switch(achievementTracker.mug)
-  {
-      case 25:
-        grantAchievement(8);
-        break;
-      case 100:
-        grantAchievement(9);
-        break;
-      case 150:
-        grantAchievement(10);
-        break;
-      case 250:
-        grantAchievement(11);
         break;
   }
 }

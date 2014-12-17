@@ -1,4 +1,5 @@
 var checkRaceCondition = true;
+var checkRaceCondition2 = true;
 (function ($) {       
 // define variables
 isPaused = false;   
@@ -813,6 +814,8 @@ if(environment[i].type=="cafMug"){      if(isPixelCollision(player.anim.imageDat
           console.log("Mug Collected");
           assetLoader.sounds.cafMug.play();
           achievementTracker.mug++;
+          mugCounter++;
+          if(checkRaceCondition2) {  saveItems(); }
           if(ENERGY_LEVEL < 100) {
             if(ENERGY_LEVEL >= 80){ENERGY_LEVEL =100;}
             else{ENERGY_LEVEL+=20;}
@@ -863,6 +866,7 @@ function updateEnemies() {
           if(IS_INVINCIBLE){
             enemies.splice(i, 1);
             achievementTracker.squirrel++;
+            if(checkRaceCondition2) {  saveItems(); }
             fishAttack = 0; } 
            else {gameOver();}
       }
@@ -893,8 +897,10 @@ function updateEnemies() {
 function updatePlayer() {
   player.update();
   player.draw();
-  if(checkRaceCondition){checkAchievements();}
+  if(checkRaceCondition){ checkAchievements(); }
+  //console.log("food");
   
+    
   // game over
   if (player.y + player.height >= canvas.height) {
     gameOver();
@@ -1036,7 +1042,7 @@ function animate() {
     ctx.fillStyle = "#000000";
     ctx.fillText('Time: ' + score + 's', canvas.width-(canvas.width/4.5), canvas.height/11);
     ctx.fillText('Best: '+ highScore + 's',canvas.width/2.7,canvas.height/11);
-    ctx.fillText('Mugs: '+ achievementTracker.mug,canvas.width/1.6,canvas.height/11);  
+    ctx.fillText('Mugs: '+ mugCounter,canvas.width/1.6,canvas.height/11);  
     //Draw Play
     
     
@@ -1233,6 +1239,8 @@ function mainMenu() {
 }
 
 function showInGameMenu() {
+    //humane.log("<b>Achievement</b>" + "<br/>" + "TEST", { timeout: 5000, clickToClose: true })
+
 	$('#inGameMenu').show();
 	$('#statistics').show();
 	$('#inGameButton1').css("background","orange");
@@ -1288,6 +1296,7 @@ function startGame() {
   document.getElementById('game-over').style.display = 'none';
   document.getElementById('userGraph').innerHTML = '';
   achievementTracker.mug = 0;
+  mugCounter = 0;
   achievementTracker.distance = 0;
   achievementTracker.squirrel = 0;
   ENERGY_LEVEL = 0;
@@ -1309,7 +1318,6 @@ function startGame() {
   platformHeight = 2;
   platformLength = 15;
   gapLength = 0;
-  achievementTracker.mug = 0;
   
   ctx.font = '16px arial, sans-serif';
   
@@ -1342,7 +1350,6 @@ function gameOver() {
   gameIsOver = true;
   $('#score').html(score);
   saveScore(score);
-  saveItems();
   $('#game-over').show();
   assetLoader.sounds.bg.pause();
   assetLoader.sounds.gameOver.currentTime = 0;
