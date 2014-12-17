@@ -1077,7 +1077,7 @@ function animate() {
  */
 var KEY_CODES = {
   32:  'space',
-  93:  'command',
+  17:  'control',
   16:  'shift'
 };
 var KEY_STATUS = {};
@@ -1375,12 +1375,12 @@ $('.back').click(function() {
 
 // pause for menu
 $( window ).keydown( function ( e ){
-	// Pause: command pressed and we are not currently paused
-    if ( e.keyCode == 91 && stop == false ) {
+	// Pause: control pressed and we are not currently paused
+    if ( e.keyCode == 17 && stop == false ) {
         pauseActions();
     } 
-	// Play: command pressed and we are currently paused
-    else if ( e.keyCode == 91 && stop == true && gameIsOver == false ) {
+	// Play: control pressed and we are currently paused
+    else if ( e.keyCode == 17 && stop == true && gameIsOver == false ) {
         unpauseActions();
     }
 });
