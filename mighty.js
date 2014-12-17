@@ -1240,7 +1240,7 @@ function mainMenu() {
 
 function showInGameMenu() {
     //humane.log("<b>Achievement</b>" + "<br/>" + "TEST", { timeout: 5000, clickToClose: true })
-
+    loadAchievements();
 	$('#inGameMenu').show();
 	$('#statistics').show();
 	$('#inGameButton1').css("background","orange");

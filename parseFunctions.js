@@ -420,6 +420,7 @@ function loadUserScores() {
       var object = results[i];
       myAchievements.push(object.get('achievementId'));
     }
+      $(".achievementsTable").html(createTable(myAchievements));
   },
   error: function(error) {
     console.log("Error: " + error.code + " " + error.message);
