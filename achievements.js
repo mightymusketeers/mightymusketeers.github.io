@@ -16,7 +16,13 @@ var achievements = [
   new Achievement("mug100","Collected 100 Mugs"),//9
   new Achievement("mug150","Collected 150 Mugs"),//10
   new Achievement("mug250","Collected 250 Mugs"),//11
-  new Achievement("distracted","Spent over 30 Seconds on menu screen")//12
+  new Achievement("distracted","Spent over 30 Seconds on menu screen"),//12
+  new Achievement("distance4000","4000 seconds"),//13
+  new Achievement("distance5000","5000 seconds"),//14
+  new Achievement("distance6000","6000 seconds"),//15
+  new Achievement("distance7000","7000 seconds"),//16
+  new Achievement("distance8000","8000 seconds")//17
+
 ];
 /*
 achievments[idFromParse].title;
@@ -56,7 +62,6 @@ function grantAchievement(id)
     newAchievement.set("UserId", Parse.User.current());
     newAchievement.save(null, {
       success: function(result) {
-          console.log("made it to the grantAchievo success");
           humane.log("<b>Achievement</b>" + "<br/>" + achievements[id].description, { timeout: 5000, clickToClose: true })
       },
       error: function(gameScore, error) {
@@ -78,7 +83,6 @@ function checkAchievements()
   {
       case 500:
         grantAchievement(0);
-        console.log("500 distance");
         break;
       case 1000:
         grantAchievement(1);
@@ -88,6 +92,21 @@ function checkAchievements()
         break;
       case 3000:
         grantAchievement(3);
+        break;
+      case 4000:
+        grantAchievement(13);
+        break;
+      case 5000:
+        grantAchievement(14);
+        break;
+      case 6000:
+        grantAchievement(15);
+        break;
+      case 7000:
+        grantAchievement(16);
+        break;
+      case 8000:
+        grantAchievement(17);
         break;
   }
 }
