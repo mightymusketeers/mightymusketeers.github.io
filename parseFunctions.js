@@ -8,7 +8,7 @@ var squirrels;
 var myAchievements = [];
 FastClick.attach(document.body);
 document.ontouchmove = function(event){
-event.preventDefault();
+//event.preventDefault();
 }
 if(checkUserLogin()){prepareGameStage();}
 
