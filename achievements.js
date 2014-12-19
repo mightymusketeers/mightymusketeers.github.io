@@ -95,7 +95,7 @@ function checkAchievements()
 function createTable(myArr)
 {
   var result = "";
-  for(var i=0;i < myArr.length;i++)
+  for(var i=myArr.length-1;i > 0;i--)
   {
     //console.log(achievements);
     result+="<tr><td align=\"center\">"+achievements[myArr[i]].description+"</td></tr>";
