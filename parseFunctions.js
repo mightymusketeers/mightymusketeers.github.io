@@ -350,6 +350,7 @@ function loadUserScores() {
 		var query = new Parse.Query(GameScore);
 		query.addDescending("score");
         query.include("UserId");
+        query.limit(5);
         function scoreObject(object)
         {
           this.userId = object.get('UserId').id;

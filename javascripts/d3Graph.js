@@ -121,7 +121,7 @@ function displayUserScores(scores) {
 				return xScale(i) + xScale.rangeBand() / 3.4;
 		   })
 		   .attr("y", function(d) {
-				return h - yScale(d);
+				return h - yScale(d) + 18;
 		   })
 		   .attr("font-family", "sans-serif")
 		   .attr("font-size", "15px")
