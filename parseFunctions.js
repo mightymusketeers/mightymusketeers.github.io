@@ -54,8 +54,20 @@ $("#goSignUp").click(function(){ toggleView();});
 $("#goLogIn").click(function(){toggleView();});
 $("#goSignUp").on("touchstart",function(){ toggleView();});
 $("#goLogIn").on("touchstart",function(){toggleView();});
-$(".logoutNow").on("touchstart",function(){Parse.User.logOut(); location.reload();});
-$(".logoutNow").click(function(){Parse.User.logOut();  location.reload();});
+$(".logoutNow").on("touchstart",function(){
+  Parse.User.logOut(); 
+  location.reload();
+  FB.logout(function(response) {
+  // user is now logged out
+});
+});
+$(".logoutNow").click(function(){
+  Parse.User.logOut();  
+  location.reload();
+  FB.logout(function(response) {
+  // user is now logged out
+});
+});
 $("#inGameButton5").on("touchstart",function(){
  var confirmMe = confirm('Are you sure you want to logout?');
     if (confirmMe) {
@@ -143,9 +155,12 @@ query.get(userId, {
     } else {
       alert("User logged in through Facebook!");
     }
+    prepareGameStage();
   },
   error: function(user, error) {
-    alert("User cancelled the Facebook login or did not fully authorize.");
+   var warning = document.getElementById("warning");
+				warning.innerHTML = "Error: " + error.code + " " + error.message;
+         		warning.style.visibility = "visible";
   }
 });
     });
