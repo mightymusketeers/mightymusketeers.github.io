@@ -23,6 +23,7 @@ function createUser(username,password,email)
 	user.set("username", username);
 	user.set("password", password);
 	user.set("email", email);
+    user.set("displayName",username);
 	user.signUp(null, {
 	  success: function(user) {
 		// Hooray! Let them use the app now.
