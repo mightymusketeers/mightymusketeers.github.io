@@ -15,6 +15,7 @@ if(checkUserLogin()){
   FB.getLoginStatus(function(response){
         if(response.status == "connected")
         {
+        alert("login status connected");  
         FB.api(
         "/me",
         function (response) {
