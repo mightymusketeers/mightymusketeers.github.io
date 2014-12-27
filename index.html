@@ -166,6 +166,22 @@
       xfbml      : true,  // initialize Facebook social plugins on the page
       version    : 'v2.2' // point to the latest Facebook Graph API version
     });
+    FB.getLoginStatus(function(response){
+    if(reponse.status == "connected"){
+    FB.api(
+    "/me",
+    function (response) {
+      if (response && !response.error) {
+        //console.log(response);
+        var firstName = ""+response.first_name;
+        var lastName = ""+response.last_name;
+        $(".playerUsername").html(firstName);
+        prepareGameStage();
+      }
+    }
+    );}
+    else{ return;}
+  });
   };
 
   (function(d, s, id){

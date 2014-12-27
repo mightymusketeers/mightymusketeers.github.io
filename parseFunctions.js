@@ -13,22 +13,6 @@ document.ontouchmove = function(event){
 if(checkUserLogin()){
   $(".playerUsername").html(titleCase(Parse.User.current().getUsername()));
   prepareGameStage();
-  FB.getLoginStatus(function(response){
-    if(reponse.status == "connected"){
-    FB.api(
-    "/me",
-    function (response) {
-      if (response && !response.error) {
-        //console.log(response);
-        var firstName = ""+response.first_name;
-        var lastName = ""+response.last_name;
-        $(".playerUsername").html(firstName);
-        prepareGameStage();
-      }
-    }
-    );}
-    else{ return;}
-  });
 }
 
 function createUser(username,password,email)
