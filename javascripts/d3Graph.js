@@ -27,8 +27,8 @@ function displayUserScores(scores) {
 					.rangeRoundBands([0, w], 0.05);
 
 	var yScale = d3.scale.linear()
-					.domain([0, d3.max(dataset)])
-					.range([0, h]);
+					.domain([100, d3.max(dataset)])
+					.range([h/5, h]);
 
 
 	// Title for graph
@@ -121,7 +121,7 @@ function displayUserScores(scores) {
 				return xScale(i) + xScale.rangeBand() / 3.4;
 		   })
 		   .attr("y", function(d) {
-				return h - yScale(d) + 18;
+				return h - yScale(d) + 16;
 		   })
 		   .attr("font-family", "sans-serif")
 		   .attr("font-size", "15px")
