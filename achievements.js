@@ -62,7 +62,7 @@ function grantAchievement(id)
     newAchievement.set("UserId", Parse.User.current());
     newAchievement.save(null, {
       success: function(result) {
-          humane.log("<b>Achievement</b>" + "<br/>" + achievements[id].description, { timeout: 5000, clickToClose: true })
+          humane.log("<b>Achievement</b>" + "<br/>" + achievements[id].description, { timeout: 1000, clickToClose: true })
       },
       error: function(gameScore, error) {
       }

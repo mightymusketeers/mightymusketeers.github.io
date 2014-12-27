@@ -47,6 +47,7 @@
           <li><a href="javascript:void(0)" class="button credits">Credits</a></li>
           <li><a href="javascript:void(0)" class="button instructionButton">Instructions</a></li>
           <li><a href="javascript:void(0)" class="button logoutNow">Log Out</a></li>
+          <li><div class="fb-like" data-layout='button' data-share="true" data-width="450" data-show-faces="true"></div></li>
         </ul>
       </div>
       <div id="credits">
@@ -141,6 +142,7 @@
 				<input type="button" id="submit1" value="Submit">		
 				<div id="goSignUp" class="helpful">Need an account?</div>
 				<div id="goLogIn"  class="helpful">Have an account?</div>
+                <div id="fbLogIn" class="helpful">Facebook</div>
 				<h5 id="warning">Incorrect username/password</h5>
 			</div>
 			</div>
@@ -155,5 +157,23 @@
    
 
 </body>
+<script>
+  window.fbAsyncInit = function() {
+    Parse.FacebookUtils.init({ // this line replaces FB.init({
+      appId      : '371799093001765', // Facebook App ID
+      status     : true,  // check Facebook Login status
+      cookie     : true,  // enable cookies to allow Parse to access the session
+      xfbml      : true,  // initialize Facebook social plugins on the page
+      version    : 'v2.2' // point to the latest Facebook Graph API version
+    });
+  };
 
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
 </html>

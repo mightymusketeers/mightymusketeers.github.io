@@ -22,7 +22,7 @@
 }
 
 #submit1 {
-	width: 47%;
+	width: 30%;
 	height: 60px;
 	color: white;
 	font-size:30px;
@@ -31,7 +31,7 @@
 }
 
 #goSignUp {
-	width: 47%;
+	width: 30%;
 	height: 60px;
 	font-size:30px;
 	color: white;
@@ -42,7 +42,7 @@
 }
 
 #goLogIn {
-	width: 47%;
+	width: 30%;
 	height: 60px;
 	font-size:30px;
 	color: white;
@@ -51,6 +51,19 @@
 	padding:8px;
 	float:right;
 	cursor:pointer;
+}
+
+#fbLogIn
+{
+ 	width: 30%;
+	height: 60px;
+	font-size:30px;
+	color: white;
+	background: black;
+	padding:8px;
+	cursor:pointer;
+    float:left;
+    margin-left: 5%;
 }
 
 
