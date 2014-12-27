@@ -17,6 +17,11 @@ if(checkUserLogin()){
   prepareGameStage();
 }
 
+function customAlert(message)
+{
+ humane.log("<b>Alert</b>" + "<br/>" + message, { timeout: 2000, clickToClose: true }); 
+}
+
 function createUser(username,password,email)
 {
 	var user = new Parse.User();
@@ -27,7 +32,7 @@ function createUser(username,password,email)
 	user.signUp(null, {
 	  success: function(user) {
 		// Hooray! Let them use the app now.
-		  alert("Account created. Please Verify Your Email to login.");
+		  customAlert("Account created. Please Verify Your Email to login.");
 		  //window.location.href = "game.html"
 		  checkEmailVerified(Parse.User.current().id);
 	  },
@@ -160,10 +165,10 @@ query.get(userId, {
       Parse.FacebookUtils.logIn(null, {
   success: function(user) {
     if (!user.existed()) {
-      alert("User signed up and logged in through Facebook!");
+      customAlert("User signed up and logged in through Facebook!");
       
     } else {
-      alert("User logged in through Facebook!");
+      customAlert("User logged in through Facebook!");
     }
     FB.api(
     "/me",

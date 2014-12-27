@@ -1460,7 +1460,7 @@ $('.play').click(function() {
 	  startGame();
 	  return;
   }
-  alert("Please Rotate Screen to Landsape to Play");
+  customAlert("Please Rotate Screen to Landsape to Play");
   return;
 });
 $('.restart').click(function() {
