@@ -11,7 +11,7 @@ document.ontouchmove = function(event){
 //event.preventDefault();
 }
 if(checkUserLogin()){
-  $(".playerUsername").html(titleCase(Parse.User.current().getUsername()));
+  //$(".playerUsername").html(titleCase(Parse.User.current().getUsername()));
   prepareGameStage();}
 
 function createUser(username,password,email)
