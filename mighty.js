@@ -1,13 +1,16 @@
 var checkRaceCondition = true;
 var checkRaceCondition2 = true;
+var canRestartGame = false;
 (function ($) {       
 // define variables
 isPaused = false;   
-soundPlaying = false;	
+soundPlaying = false;
+
 detectPortrait();
 IS_INVINCIBLE = false;
 
 ENERGY_LEVEL = 100;
+
 
 var canvas, player, score, stop, ticker;
 var ground = [], water = [], enemies = [], environment = [], fishAttack = 0;
@@ -1100,10 +1103,11 @@ document.onkeydown = function(e) {
   }
   if(KEY_STATUS.space)
   {
-      if(gameIsOver)
+      if(gameIsOver & canRestartGame)
       {
         $('#game-over').hide();
         startGame();
+        canRestartGame = false;
       }
   }
   if(KEY_STATUS.shift)
@@ -1128,10 +1132,11 @@ var myBody = document.body;
 
   function funcTouchStart(e) {
   
-    if(gameIsOver)
+    if(gameIsOver & canRestartGame)
       {
         $('#game-over').hide();
         startGame();
+        canRestartGame = false;
       }
   
   	if(isPaused) { return; }
@@ -1348,6 +1353,7 @@ function startGame() {
  * End the game and restart
  */
 function gameOver() {
+  runTimer();
   stop = true;
   gameIsOver = true;
   $('#score').html(score);
@@ -1463,8 +1469,11 @@ $('.play').click(function() {
   return;
 });
 $('.restart').click(function() {
+  if(gameIsOver & canRestartGame){
   $('#game-over').hide();
   startGame();
+  canRestartGame = false;
+  }
 });
 
 assetLoader.downloadAll();

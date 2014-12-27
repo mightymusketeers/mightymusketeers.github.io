@@ -291,6 +291,23 @@ query.get(userId, {
             }     
     }
     
+    function runTimer()
+    {
+      var sTime = new Date().getTime();
+      var countDown = 3;
+      $("#tapToRetry").hide();
+      $("#gameCounter").show();
+      function UpdateTime() {
+      var cTime = new Date().getTime();
+      var diff = cTime - sTime;
+      var seconds = countDown - Math.floor(diff / 1000);
+      if(seconds == 0){window.clearInterval(counter);canRestartGame = true;$("#gameCounter").hide();$("#tapToRetry").show();}
+      console.log(seconds);
+      $("#gameCounter").html(seconds);
+      }
+      UpdateTime();
+      var counter = setInterval(UpdateTime, 500);
+    }
 
     function saveScore(userScore)
     {
