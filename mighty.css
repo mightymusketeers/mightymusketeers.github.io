@@ -75,7 +75,7 @@ li {
   background-color: grey;
 }
 #menu.main {
-  background: url("imgs/b2.png") no-repeat center center fixed; 
+  background: url("imgs/bg.png") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -83,7 +83,6 @@ li {
 
 }
 #menu.credits {
-  background-image: url('imgs/b2.png');
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
