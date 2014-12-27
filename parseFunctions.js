@@ -10,7 +10,9 @@ FastClick.attach(document.body);
 document.ontouchmove = function(event){
 //event.preventDefault();
 }
-if(checkUserLogin()){prepareGameStage();}
+if(checkUserLogin()){
+  $(".playerUsername").html(titleCase(Parse.User.current().getUsername()));
+  prepareGameStage();}
 
 function createUser(username,password,email)
 {
@@ -96,7 +98,10 @@ var query = new Parse.Query(User);
 query.get(userId, {
   success: function(User) {
 	var isVerified = User._serverData.emailVerified;
-	if(isVerified){ prepareGameStage();}
+    if(isVerified){
+      $(".playerUsername").html(titleCase(Parse.User.current().getUsername()));
+       prepareGameStage();
+                  }
 	else { 
 		var warning = document.getElementById("warning");
 		warning.innerHTML = "Error: " + "Email Not Verfied, please check your email and verify.";
@@ -155,7 +160,19 @@ query.get(userId, {
     } else {
       alert("User logged in through Facebook!");
     }
-    prepareGameStage();
+    FB.api(
+    "/me",
+    function (response) {
+      if (response && !response.error) {
+        //console.log(response);
+        var firstName = ""+response.first_name;
+        var lastName = ""+response.last_name;
+        $(".playerUsername").html(firstName);
+        prepareGameStage();
+      }
+    }
+    );
+    
   },
   error: function(user, error) {
    var warning = document.getElementById("warning");
@@ -175,7 +192,6 @@ query.get(userId, {
 	  $("#wrapper2").hide();
 	  $("#mainTitle").hide();
 	  $("#gameContainer").show();
-        $(".playerUsername").html(titleCase(Parse.User.current().getUsername()));
 	}
 	   
  	var count = 0;
