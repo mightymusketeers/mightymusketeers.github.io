@@ -412,7 +412,7 @@ function loadUserScores() {
         {
           this.userId = object.get('UserId').id;
           this.score = object.get('score');
-          this.username = object.get('UserId')._serverData.username;
+          this.username = object.get('UserId')._serverData.displayName;
         }
         query.find().then(function(results)
         { 
