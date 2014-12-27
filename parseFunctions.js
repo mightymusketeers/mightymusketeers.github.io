@@ -11,8 +11,29 @@ document.ontouchmove = function(event){
 //event.preventDefault();
 }
 if(checkUserLogin()){
-  //$(".playerUsername").html(titleCase(Parse.User.current().getUsername()));
-  prepareGameStage();}
+  
+  FB.getLoginStatus(function(response){
+        if(response.status == "connected")
+        {
+        FB.api(
+        "/me",
+        function (response) {
+        if (response && !response.error) {
+        //console.log(response);
+        var firstName = ""+response.first_name;
+        var lastName = ""+response.last_name;
+        $(".playerUsername").html(firstName);
+        prepareGameStage();
+        }
+        }
+        );
+        }
+        else{
+        $(".playerUsername").html(titleCase(Parse.User.current().getUsername()));
+        prepareGameStage();}
+        }
+    );
+}
 
 function createUser(username,password,email)
 {
