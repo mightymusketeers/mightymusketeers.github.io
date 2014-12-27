@@ -182,7 +182,7 @@ function bound(num, low, high) {
  */
 var assetLoader = (function() {
   // images dictionary
-      this.imgs        = {
+    this.imgs        = {
     'sky'           : 'imgs/sky.png',
     'backdrop'      : 'imgs/backdrop.png',
     'backdrop2'     : 'imgs/backdrop_ground.png',
