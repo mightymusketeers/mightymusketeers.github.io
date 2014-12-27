@@ -11,7 +11,9 @@ document.ontouchmove = function(event){
 //event.preventDefault();
 }
 if(checkUserLogin()){
-  $(".playerUsername").html(titleCase(Parse.User.current().getUsername()));
+  Parse.User.current().fetch().then(function (user) {
+    $(".playerUsername").html(titleCase(user.get('displayName')));
+});
   prepareGameStage();
 }
 
@@ -158,6 +160,7 @@ query.get(userId, {
   success: function(user) {
     if (!user.existed()) {
       alert("User signed up and logged in through Facebook!");
+      
     } else {
       alert("User logged in through Facebook!");
     }
@@ -168,6 +171,8 @@ query.get(userId, {
         //console.log(response);
         var firstName = ""+response.first_name;
         var lastName = ""+response.last_name;
+        Parse.User.current().set("displayName",firstName);
+        Parse.User.current().save();
         $(".playerUsername").html(firstName);
         prepareGameStage();
       }
