@@ -813,7 +813,7 @@ function updateEnvironment() {
 if(environment[i].type=="cafMug"){      if(isPixelCollision(player.anim.imageData,player.x,player.y,environment[i].imageData,environment[i].x,environment[i].y,false))
       {
           environment.splice(i, 1);
-          console.log("Mug Collected");
+          //console.log("Mug Collected");
           assetLoader.sounds.cafMug.play();
           achievementTracker.mug++;
           mugCounter++;
@@ -1112,7 +1112,7 @@ document.onkeydown = function(e) {
   }
   if(KEY_STATUS.shift)
   {
-    console.log('Shift Pressed');
+    //console.log('Shift Pressed');
   }
 };
 document.onkeyup = function(e) {
@@ -1356,12 +1356,45 @@ function gameOver() {
   runTimer();
   stop = true;
   gameIsOver = true;
-  $('#score').html(score);
+  $(".gameOverScore").html("");
+  tweenScore(score);
   saveScore(score);
   $('#game-over').show();
   assetLoader.sounds.bg.pause();
   assetLoader.sounds.gameOver.currentTime = 0;
   assetLoader.sounds.gameOver.play();
+}
+
+/**
+ * Animates highscore on gameOver
+ */
+function tweenScore(score) {
+	var start_val = 0,
+    duration = 2000,
+    end_val = [score];
+
+	var scoreText = 
+		d3.select("#score")
+		.append("span")
+		.attr("class", "gameOverText")
+
+	scoreText.selectAll(".txt")
+		.data(end_val)
+		.enter()
+		.append("text")
+		.attr("class", "gameOverScore")
+		.text(start_val)
+		.transition()
+		.duration(2000)
+			.tween("text", function(d) {
+				var i = d3.interpolate(this.textContent, d),
+					prec = (d + "").split("."),
+					round = (prec.length > 1) ? Math.pow(10, prec[1].length) : 1;
+
+				return function(t) {
+					this.textContent = Math.round(i(t) * round) / round;
+				};
+			});
 }
 
 /**
