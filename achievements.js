@@ -22,6 +22,18 @@ var achievements = [
   new Achievement("distance6000","6000 seconds"),//15
   new Achievement("distance7000","7000 seconds"),//16
   new Achievement("distance8000","8000 seconds")//17
+  new Achievement("distance9000","9000 seconds")//18
+  new Achievement("distance10000","10000 seconds")//19
+  new Achievement("distance11000","11000 seconds")//20
+  new Achievement("distance12000","12000 seconds")//21
+  new Achievement("distance13000","13000 seconds")//22
+  new Achievement("distance14000","14000 seconds")//23
+  new Achievement("distance15000","15000 seconds")//24
+  new Achievement("distance16000","16000 seconds")//25
+  new Achievement("distance1700","17000 seconds")//26
+  new Achievement("distance1800","18000 seconds")//27
+  new Achievement("distance19000","19000 seconds")//28
+  new Achievement("distance20000","20000 seconds")//29
 
 ];
 /*
@@ -107,6 +119,42 @@ function checkAchievements()
         break;
       case 8000:
         grantAchievement(17);
+        break;
+      case 9000:
+        grantAchievement(18);
+        break;
+      case 10000:
+        grantAchievement(19);
+        break;
+      case 11000:
+        grantAchievement(20);
+        break;
+      case 12000:
+        grantAchievement(21);
+        break;
+      case 13000:
+        grantAchievement(22);
+        break;
+      case 14000:
+        grantAchievement(23);
+        break;
+      case 15000:
+        grantAchievement(24);
+        break;
+      case 16000:
+        grantAchievement(25);
+        break;
+      case 17000:
+        grantAchievement(26);
+        break;
+      case 18000:
+        grantAchievement(27);
+        break;
+      case 19000:
+        grantAchievement(28);
+        break;
+      case 20000:
+        grantAchievement(29);
         break;
   }
 }
