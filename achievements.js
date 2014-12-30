@@ -13,7 +13,7 @@ function getAchievement(index)
 	else
 	{
 		var mult = index - 12;
-		var ans = (mult * 1000) + 4000;//Cause that is where we started
+		var ans = (mult * 1000) + 3000;//Cause that is where we started
 		var message = ans + "seconds";
 		return new Achievement("distance"+ans,message);
 	}
@@ -32,7 +32,7 @@ var achievements = [
   new Achievement("mug100","Collected 100 Mugs"),//9
   new Achievement("mug150","Collected 150 Mugs"),//10
   new Achievement("mug250","Collected 250 Mugs"),//11
-  new Achievement("distracted","Spent over 30 Seconds on menu screen")
+  new Achievement("distracted","Spent over 30 Seconds on menu screen")//12
 ];
 /*
 achievments[idFromParse].title;
@@ -90,7 +90,7 @@ function assignAchievement()
 	if(!achievementTracker.distance % 1000 == 0){ return;}
 	else
 	{
-		var index = (achievementTracker.distance - 4000)/1000 + 12;
+		var index = (achievementTracker.distance - 3000)/1000 + 12;
 		grantAchievement(index);
 	}
 }
