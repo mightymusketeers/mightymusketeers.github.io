@@ -255,7 +255,7 @@ query.get(userId, {
 
     function checkLocalAchievement(localMug,localSquirrel)
    {
-       console.log(localMug, localSquirrel);
+       //console.log(localMug, localSquirrel);
          switch(localSquirrel)
         {
             case 25:

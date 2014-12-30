@@ -899,8 +899,7 @@ function updateEnemies() {
 function updatePlayer() {
   player.update();
   player.draw();
-  if(checkRaceCondition){ checkAchievements(); }
-  //console.log("food");
+  if(checkRaceCondition){ checkAchievements();}
   
     
   // game over
