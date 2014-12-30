@@ -21,18 +21,18 @@ var achievements = [
   new Achievement("distance5000","5000 seconds"),//14
   new Achievement("distance6000","6000 seconds"),//15
   new Achievement("distance7000","7000 seconds"),//16
-  new Achievement("distance8000","8000 seconds")//17
-  new Achievement("distance9000","9000 seconds")//18
-  new Achievement("distance10000","10000 seconds")//19
-  new Achievement("distance11000","11000 seconds")//20
-  new Achievement("distance12000","12000 seconds")//21
-  new Achievement("distance13000","13000 seconds")//22
-  new Achievement("distance14000","14000 seconds")//23
-  new Achievement("distance15000","15000 seconds")//24
-  new Achievement("distance16000","16000 seconds")//25
-  new Achievement("distance1700","17000 seconds")//26
-  new Achievement("distance1800","18000 seconds")//27
-  new Achievement("distance19000","19000 seconds")//28
+  new Achievement("distance8000","8000 seconds"),//17
+  new Achievement("distance9000","9000 seconds"),//18
+  new Achievement("distance10000","10000 seconds"),//19
+  new Achievement("distance11000","11000 seconds"),//20
+  new Achievement("distance12000","12000 seconds"),//21
+  new Achievement("distance13000","13000 seconds"),//22
+  new Achievement("distance14000","14000 seconds"),//23
+  new Achievement("distance15000","15000 seconds"),//24
+  new Achievement("distance16000","16000 seconds"),//25
+  new Achievement("distance17000","17000 seconds"),//26
+  new Achievement("distance18000","18000 seconds"),//27
+  new Achievement("distance19000","19000 seconds"),//28
   new Achievement("distance20000","20000 seconds")//29
 
 ];
