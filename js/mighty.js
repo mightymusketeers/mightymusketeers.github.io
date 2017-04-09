@@ -921,8 +921,6 @@ function updatePlayer() {
  * Spawn new sprites off screen
  */
 function spawnSprites() {
-  // increase score
-  score++;
   achievementTracker.distance++;
 
   // first create a gap
@@ -1326,12 +1324,26 @@ $('#inGameButton4').click(function() {
 	unpauseActions();
 });
 
+window.scoreTimer;
+
+function startScoreTimer(){
+  score = 0;
+  window.scoreTimer = setInterval(function(){
+    score++;
+  }, 1000);
+}
+
+function endScoreTimer(){
+  clearInterval(window.scoreTimer);
+  //score = 0;
+}
 
 /**
  * Start the game - reset all variables and entities, spawn ground and water.
  */
 function startGame() {
   loadHighScoreMugsAndSquirrels(function(){
+    startScoreTimer();
     document.getElementById('game-over').style.display = 'none';
     document.getElementById('userGraph').innerHTML = '';
     achievementTracker.mug = 0;
@@ -1340,7 +1352,6 @@ function startGame() {
     achievementTracker.squirrel = 0;
     ENERGY_LEVEL = 0;
     loadUserScores();
-    // loadItemsScore();
     ground = [];
     water = [];
     environment = [];
@@ -1383,6 +1394,7 @@ function startGame() {
  * End the game and restart
  */
 function gameOver() {
+  endScoreTimer();
   runTimer();
   stop = true;
   gameIsOver = true;
