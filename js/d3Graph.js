@@ -1,10 +1,13 @@
-	
+
 function displayUserScores(scores) {
-	
+	console.log(scores);
+	if(scores.length <= 0){
+		return;
+	}
    /**
 	* Variables
-	*/ 
-	
+	*/
+
 	// Width and height
 	var w = window.innerWidth;
 	var h = window.innerHeight;
@@ -21,7 +24,7 @@ function displayUserScores(scores) {
 
 
 	var dataset = userScores;
-					
+
 	var xScale = d3.scale.ordinal()
 					.domain(d3.range(dataset.length))
 					.rangeRoundBands([0, w], 0.05);
@@ -33,12 +36,12 @@ function displayUserScores(scores) {
 
 	// Title for graph
 	d3.select("#userGraph").append("text")
-        .attr("x", (w / 2))             
+        .attr("x", (w / 2))
         .attr("y", (h / 10))
-        .attr("text-anchor", "middle")  
-        .style("font-size", "24px") 
+        .attr("text-anchor", "middle")
+        .style("font-size", "24px")
         .style("font-family", "futura")
-        .style("color", "white") 
+        .style("color", "white")
         .text("High Scores");
 
 	// Create SVG element
@@ -46,17 +49,17 @@ function displayUserScores(scores) {
 				.append("svg")
 				.attr("width", w)
 				.attr("height", h);
-				
-						
+
+
 	// Create bars
 	svg.selectAll("rect")
 	   .data(dataset)
 	   .enter()
 	   .append("rect")
-	   
+
 	   /**
 	    * Attributes
-	    */ 
+	    */
 	   .attr("x", function(d, i) {
 			return xScale(i);
 	   })
@@ -70,10 +73,10 @@ function displayUserScores(scores) {
 	   .attr("fill", function(d) {
 			return "rgb(0, 0, " + (d * 10) + ")";
 	   })
-	   
+
 	   /**
 	    * Functions
-	    */ 
+	    */
 	   .on("mouseover", function(d, i) {
 			//Get this bar's x/y values, then augment for the tooltip
 			var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand() / 500;
@@ -82,32 +85,32 @@ function displayUserScores(scores) {
 			//Update the tooltip position and value
 			d3.select("#tooltip")
 				.style("left", xPosition + "px")
-				.style("top", yPosition + "px")		
+				.style("top", yPosition + "px")
 				.select("#scoreTip")
 				.html("<b>" + userNames[i] + "</b>" +    // username
 					  "<br/>" +  						 // line break
 					   d); 								 // score
-   
+
 			// Show the tooltip
 			d3.select("#tooltip").classed("hidden", false);
 	   })
-	   
+
 	   .on("mouseout", function() {
-   
+
 			// Hide the tooltip
 			d3.select("#tooltip").classed("hidden", true);
-		
+
 	   })
-	   
+
 	   .on("click", function() {
 			//maybe a function here?
 	   });
-	   
-	   
+
+
 		/**
 		 * Bar labels
 		 */
-		 
+
 		// scores
 		svg.selectAll("text")
 		   .data(dataset)
@@ -127,8 +130,8 @@ function displayUserScores(scores) {
 		   .attr("font-size", "15px")
 		   .attr("font-weight", "bold")
 		   .attr("fill", "white");
-		   
-		   
+
+
 		  svg.selectAll("text.values")
 			 .data(dataset)
 			 .enter()

@@ -1,9 +1,9 @@
 var checkRaceCondition = true;
 var checkRaceCondition2 = true;
 var canRestartGame = false;
-(function ($) {       
+(function ($) {
 // define variables
-isPaused = false;   
+isPaused = false;
 soundPlaying = false;
 
 detectPortrait();
@@ -11,45 +11,44 @@ IS_INVINCIBLE = false;
 
 ENERGY_LEVEL = 100;
 
-
 var canvas, player, score, stop, ticker;
 var ground = [], water = [], enemies = [], environment = [], fishAttack = 0;
 var platformHeight, platformLength, gapLength;
 var canvasCounter = 0;
 //setUpCanvas();
 
-		
 function setUpCanvas()
 {
+  var gameWidth = window.innerWidth;
+  var gameHeight = window.innerHeight;
+
+  if ( gameWidth > 1000) { gameWidth = 1000;}
+  if ( gameHeight > 560) { gameHeight = 560;}
 	canvasCounter++;
 	canvas = document.getElementById('canvas');
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
+	canvas.width = gameWidth;
+	canvas.height = gameHeight;
 	ctx = canvas.getContext('2d');
-	
+
 	// platform variables
-	
+
 	platformWidth = 32;
 	platformBase = canvas.height - platformWidth;  // bottom row of the game
 	platformSpacer = 64;
-	
-}	
+
+}
 
 var canUseLocalStorage = 'localStorage' in window && window.localStorage !== null;
-var playSound;
+var playSound = true;
 var showMenu;
 var gameIsOver;
 
 // set the sound preference
 if (canUseLocalStorage) {
+  if(localStorage.getItem('mighty.playSound') === null){
+    localStorage.setItem('mighty.playSound', 'true');
+  }
   playSound = (localStorage.getItem('mighty.playSound') === "true")
-
-  if (playSound) {
-    $('.sound').addClass('sound-on').removeClass('sound-off');
-  }
-  else {
-    $('.sound').addClass('sound-off').removeClass('sound-on');
-  }
 }
 
 masterImageData = {};
@@ -157,10 +156,10 @@ function isPixelCollision( first, x, y, other, x2, y2, isCentered )
 
     return false;
 }
- 
- 
- 
- 
+
+
+
+
 /**
  * Get a random number between range
  * @param {integer}
@@ -205,7 +204,9 @@ var assetLoader = (function() {
     'fish'       : 'imgs/fish.png',
     'squirrel'      : 'imgs/squirrel.png',
     'pause'         : 'imgs/pause.png',
-    'play'          : 'imgs/play.png'
+    'play'          : 'imgs/play.png',
+    'soundon'       : 'imgs/soundOn.png',
+    'soundoff'      : 'imgs/soundOff.png'
   };
 
   // sounds dictionary
@@ -352,13 +353,21 @@ function drawPlayPause(type)
     ctx.save();
     ctx.translate(1.5,1.5);
     ctx.drawImage(assetLoader.imgs[type],120,(window.innerHeight/50),50,50);
-    ctx.restore();  
+    ctx.restore();
+}
+
+function drawSoundOnOff(type)
+{
+    ctx.save();
+    ctx.translate(1.5,1.5);
+    ctx.drawImage(assetLoader.imgs[type],50,(window.innerHeight/50),50,50);
+    ctx.restore();
 }
 
 
-    
-    
-    
+
+
+
 /**
  * Creates an animation from a spritesheet.
  * @param {SpriteSheet} - The spritesheet used to create the animation.
@@ -412,7 +421,7 @@ function Animation(spriteType, spritesheet, frameSpeed, startFrame, endFrame) {
       }
       this.imageData = masterImageData[spriteType];
   };
-    
+
 }
 
 /**
@@ -440,21 +449,21 @@ var background = (function() {
    */
   //Creating Magical Snow
   this.draw = function() {
-    
-  
+
+
     // Pan background
     sky.x -= sky.speed;
     backdrop.x -= backdrop.speed;
     backdrop2.x -= backdrop2.speed;
-    
+
 
 
     // draw images side by side to loop
     //ctx.drawImage(assetLoader.imgs.sky, sky.x, sky.y);
     //ctx.drawImage(assetLoader.imgs.sky, sky.x + canvas.width, sky.y);
-    
 
-      
+
+
 		ctx.beginPath();
 		for(var i = 0; i < mp; i++)
 		{
@@ -467,10 +476,10 @@ var background = (function() {
   	    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
   	    ctx.fill();
         self.update();
-       
-    
+
+
   };
-    
+
  this.update = function()
 	{
 		angle += 0.01;
@@ -483,7 +492,7 @@ var background = (function() {
 			//Lets make it more random by adding in the radius
 			p.y += Math.cos(angle+p.d) + 1 + p.r/2;
 			p.x += Math.sin(angle) * 2;
-			
+
 			//Sending flakes back from the top when it exits
 			//Lets make it a bit more organic and let flakes enter from the left and right also.
 			if(p.x > window.innerWidth+5 || p.x < -5 || p.y > window.innerHeight)
@@ -622,7 +631,7 @@ var player = (function(player) {
 
     // jump if not currently jumping or falling
     if ((TOUCHING_RIGHT || KEY_STATUS.space) && player.dy === 0 && !player.isJumping) {
-      
+
       player.isJumping = true;
       player.dy = player.jumpDy;
       jumpCounter = 12;
@@ -635,7 +644,7 @@ var player = (function(player) {
       player.dy = player.jumpDy;
       player.dy -= 3.0;
       player.anim = player.glideAnim;
-    } 
+    }
 
     jumpCounter = Math.max(jumpCounter-1, 0);
 
@@ -683,7 +692,7 @@ var player = (function(player) {
   return player;
 })(Object.create(Vector.prototype));
 
-  
+
 
 /**
  * Sprites are anything drawn to the screen (ground, enemies, etc.)
@@ -809,7 +818,7 @@ function updateEnvironment() {
   for (var i = 0; i < environment.length; i++) {
     environment[i].update();
     environment[i].draw();
-   
+
 if(environment[i].type=="cafMug"){      if(isPixelCollision(player.anim.imageData,player.x,player.y,environment[i].imageData,environment[i].x,environment[i].y,false))
       {
           environment.splice(i, 1);
@@ -824,7 +833,7 @@ if(environment[i].type=="cafMug"){      if(isPixelCollision(player.anim.imageDat
           }
       }
   }
-  
+
   }//End of Environment update for loop
 
   // remove environment that have gone off screen
@@ -838,14 +847,14 @@ function updateAttackFish()
     var velocity = player.speed*1.8;
     //var angle = (Math.PI/1.5);
     fishAttack.update();
-    fishAttack.draw();      
+    fishAttack.draw();
     fishAttack.x = player.x;
     fishAttack.y = player.y;
     //fishAttack.y += Math.sin(angle) * velocity/12;
 
   }
-  
-  
+
+
 /**
  * Update all enemies position and draw. Also check for collision against the player.
 Collision Detection :)
@@ -856,12 +865,12 @@ function updateEnemies() {
   for (var i = 0; i < enemies.length; i++) {
     enemies[i].update();
     enemies[i].draw();
-    
+
     // Squirrel can move (but not off platform)
   	if (enemies[i].type == "squirrel") {
 		enemies[i].x -= 3;
   	}
-    
+
     //Player Collided With Squirrel
       if(isPixelCollision(player.anim.imageData,player.x,player.y,enemies[i].imageData,enemies[i].x,enemies[i].y,false))
       {
@@ -869,12 +878,12 @@ function updateEnemies() {
             enemies.splice(i, 1);
             achievementTracker.squirrel++;
             if(checkRaceCondition2) {  saveItems(); }
-            fishAttack = 0; } 
+            fishAttack = 0; }
            else {gameOver();}
       }
       /*if(fishAttack != 0){
         if(isPixelCollision(fishAttack.imageData,fishAttack.x,fishAttack.y,enemies[i].imageData,enemies[i].x,enemies[i].y,false))
-        { 
+        {
  		  //assetLoader.sounds.hit.play();  sound after hitting the enemy
           enemies.splice(i, 1);
 
@@ -883,7 +892,7 @@ function updateEnemies() {
           cafMugAttack = 0;
         }
       }*/
-    
+
   }//End of update enemies for loop
 
   // remove enemies that have gone off screen
@@ -892,7 +901,7 @@ function updateEnemies() {
   }
 }
 
-  
+
 /**
  * Update the players position and draw
  */
@@ -900,8 +909,8 @@ function updatePlayer() {
   player.update();
   player.draw();
   if(checkRaceCondition){ checkAchievements();}
-  
-    
+
+
   // game over
   if (player.y + player.height >= canvas.height) {
     gameOver();
@@ -952,8 +961,8 @@ function spawnSprites() {
  */
 function spawnEnvironmentSprites() {
   if (score > 40 && rand(0, 20) === 0 && platformHeight < 3) {
-    
-    
+
+
     if (Math.random() > 0.5) {
       environment.push(new Sprite(
         canvas.width + platformWidth % player.speed,
@@ -1014,6 +1023,11 @@ function animate() {
     ctx.strokeRect(220,canvas.height/14,(100/110)*140,15);
     /*ctx.fillStyle="#000000";
     ctx.fillRect(200,canvas.height/14,(ENERGY_LEVEL/100)*120,14);*/
+    if(playSound){
+      drawSoundOnOff("soundon");
+    } else{
+      drawSoundOnOff("soundoff");
+    }
     if(!isPaused){drawPlayPause("pause");}
     // update entities
     updateWater();
@@ -1025,7 +1039,7 @@ function animate() {
     IS_INVINCIBLE = false;
     if ((KEY_STATUS.shift || TOUCHING_LEFT) && (ENERGY_LEVEL >= 0.3))
     {
-		fishAttack = new Sprite(       
+		fishAttack = new Sprite(
 		player.x + (player.width/4),
 		player.y,'fish'
     );
@@ -1036,19 +1050,19 @@ function animate() {
     }
     updatePlayer();
     updateGround();
-    updateEnemies();    
+    updateEnemies();
 
     // draw the score
     ctx.font      = "bold 28px futura";
     ctx.fillStyle = "#000000";
     ctx.fillText('Time: ' + score + 's', canvas.width-(canvas.width/4.5), canvas.height/11);
     ctx.fillText('Best: '+ highScore + 's',canvas.width/2.7,canvas.height/11);
-    ctx.fillText('Mugs: '+ mugCounter,canvas.width/1.6,canvas.height/11);  
+    ctx.fillText('Mugs: '+ mugCounter,canvas.width/1.6,canvas.height/11);
     //Draw Play
-    
-    
+
+
     if(player.speed > 16){ player.speed = window.innerWidth/10.0 };
-   
+
 
     // spawn a new Sprite
     if (ticker % Math.floor(platformWidth / player.speed) === 0) {
@@ -1130,23 +1144,23 @@ var myBody = document.body;
   myBody.addEventListener("touchmove", funcTouchMove, false);
 
   function funcTouchStart(e) {
-  
+
     if(gameIsOver & canRestartGame)
       {
         $('#game-over').hide();
         startGame();
         canRestartGame = false;
       }
-  
+
   	if(isPaused) { return; }
-  	
+
     var touchlist = e.touches
-    for (var i=0; i<touchlist.length; i++){ 
+    for (var i=0; i<touchlist.length; i++){
         var touchPoint = touchlist[i];
         //console.log(touchPoint.clientY);
-        
+
         // Dividing our screen in half: power-up vs jumping
-        
+
         // Left
         if(touchPoint.clientX < (canvas.width / 2)) {
         	TOUCHING_LEFT = true;
@@ -1155,23 +1169,32 @@ var myBody = document.body;
         else {
         	TOUCHING_RIGHT = true;
         }
-        
+
         // Detecting if the "pause" button is pushed (cords between ranges)
         if(touchPoint.clientX >=111.0 && touchPoint.clientX <=182.0)
         {
             if(touchPoint.clientY >=9.0 && touchPoint.clientY <=66.0)
-            { 
+            {
                 if (stop == false ) {
                 pauseActions();
-                } 
+                }
                 // Play: command pressed and we are currently paused
                 else if (stop == true && gameIsOver == false ) {
                 unpauseActions();
                 }
             }
         }
+
+
+        if(touchPoint.clientX >=49.0 && touchPoint.clientX <=100.0)
+        {
+            if(touchPoint.clientY >=9.0 && touchPoint.clientY <=66.0)
+            {
+              console.log("SOUND BUTTON CLICKED");
+            }
+        }
      }
-      
+
 
     //code to do what you want like set variables and check where on screen touch happened
     var touches = e.changedTouches; //gets array of touch points, to get position
@@ -1185,31 +1208,41 @@ var myBody = document.body;
   function funcTouchMove(e) {
     //code
   }
-  
-  
+
+
   // checking clicks on the body element
   $('body').click(function(event){
 		var xPos = event.offsetX;
 		var yPos = event.offsetY;
-		
+    // console.log(xPos,yPos);
 		if(!isPaused) {
 			if(xPos >=111.0 && xPos <=182.0)
 			{
 				if(yPos>=9.0 && yPos <=66.0)
-				{ 
+				{
 					if (stop == false ) {
 					pauseActions();
-					} 
+					}
 					// Play: command pressed and we are currently paused
 					else if (stop == true && gameIsOver == false ) {
 					unpauseActions();
 					}
 				}
 			}
-		}	
+		}
+    //Trigger Sound Events
+    if(xPos >=50.0 && xPos <=100.0)
+    {
+      if(yPos>=9.0 && yPos <=66.0)
+      {
+        console.log("CLICKED SOUND");
+        toggleSounds();
+      }
+    }
+
   });
-    
-    
+
+
 /**
  * Request Animation Polyfill
  */
@@ -1242,16 +1275,15 @@ function mainMenu() {
 }
 
 function showInGameMenu() {
-    loadAchievements();
-	$('#inGameMenu').show();
-	$('#statistics').show();
-	$('#inGameButton1').css("background","orange");
-	$('#inGameButton2').css("background","#E0E0E0");
-	$('#inGameButton3').css("background","#E0E0E0");
-    
-    
+  loadAchievements(function(){
+    $('#inGameMenu').show();
+    $('#statistics').show();
+    $('#inGameButton1').css("background","orange");
+    $('#inGameButton2').css("background","#E0E0E0");
+    $('#inGameButton3').css("background","#E0E0E0");
     // Reward the user for spending time on the menu
     var timeout = setTimeout(function(){ grantAchievement(12); }, 30000);
+  });
 }
 
 function hideInGameMenu() {
@@ -1263,7 +1295,7 @@ $('#inGameButton1').click(function() {
 	$('#inGameButton1').css("background","orange");
 	$('#inGameButton2').css("background","#E0E0E0");
 	$('#inGameButton3').css("background","#E0E0E0");
-	
+
 	$('#statistics').show();
 	$('#achievements').hide();
 	$('#store').hide();
@@ -1274,7 +1306,7 @@ $('#inGameButton2').click(function() {
 	$('#inGameButton1').css("background","#E0E0E0");
 	$('#inGameButton2').css("background","orange");
 	$('#inGameButton3').css("background","#E0E0E0");
-	
+
 	$('#statistics').hide();
 	$('#achievements').show();
 	$('#store').hide();
@@ -1284,7 +1316,7 @@ $('#inGameButton3').click(function() {
 	$('#inGameButton1').css("background","#E0E0E0");
 	$('#inGameButton2').css("background","#E0E0E0");
 	$('#inGameButton3').css("background","orange");
-	
+
 	$('#statistics').hide();
 	$('#achievements').hide();
 	$('#store').show();
@@ -1299,53 +1331,52 @@ $('#inGameButton4').click(function() {
  * Start the game - reset all variables and entities, spawn ground and water.
  */
 function startGame() {
-  document.getElementById('game-over').style.display = 'none';
-  document.getElementById('userGraph').innerHTML = '';
-  achievementTracker.mug = 0;
-  mugCounter = 0;
-  achievementTracker.distance = 0;
-  achievementTracker.squirrel = 0;
-  ENERGY_LEVEL = 0;
-  loadHighScore();  
-  loadUserScores();
-  loadItemsScore();
-  ground = [];
-  water = [];
-  environment = [];
-  fishAttack = 0;
-  enemies = [];
-  achievementTracker.squirrel = 0;
-  player.reset();
-  ticker = 0;
-  stop = false;
-  gameIsOver = false;
-  showMenu = false;
-  score = 0;
-  platformHeight = 2;
-  platformLength = 15;
-  gapLength = 0;
-  
-  ctx.font = '16px arial, sans-serif';
-  
+  loadHighScoreMugsAndSquirrels(function(){
+    document.getElementById('game-over').style.display = 'none';
+    document.getElementById('userGraph').innerHTML = '';
+    achievementTracker.mug = 0;
+    mugCounter = 0;
+    achievementTracker.distance = 0;
+    achievementTracker.squirrel = 0;
+    ENERGY_LEVEL = 0;
+    loadUserScores();
+    // loadItemsScore();
+    ground = [];
+    water = [];
+    environment = [];
+    fishAttack = 0;
+    enemies = [];
+    player.reset();
+    ticker = 0;
+    stop = false;
+    gameIsOver = false;
+    showMenu = false;
+    score = 0;
+    platformHeight = 2;
+    platformLength = 15;
+    gapLength = 0;
 
-  for (var i = 0; i < 30; i++) {
-    ground.push(new Sprite(i * (platformWidth-3), platformBase - platformHeight * platformSpacer, 'grass'));
-  }
+    ctx.font = '16px arial, sans-serif';
 
-  for (i = 0; i < canvas.width / 32 + 2; i++) {
-    water.push(new Sprite(i * platformWidth, platformBase, 'water'));
-  }
+    for (var i = 0; i < 30; i++) {
+      ground.push(new Sprite(i * (platformWidth-3), platformBase - platformHeight * platformSpacer, 'grass'));
+    }
 
-  
-    
-  background.reset();
+    for (i = 0; i < canvas.width / 32 + 2; i++) {
+      water.push(new Sprite(i * platformWidth, platformBase, 'water'));
+    }
 
-  animate();
 
-  assetLoader.sounds.gameOver.pause();
-  assetLoader.sounds.bg.currentTime = 0;
-  assetLoader.sounds.bg.loop = true;
-  assetLoader.sounds.bg.play();
+
+    background.reset();
+
+    animate();
+
+    assetLoader.sounds.gameOver.pause();
+    assetLoader.sounds.bg.currentTime = 0;
+    assetLoader.sounds.bg.loop = true;
+    assetLoader.sounds.bg.play();
+  });
 }
 
 /**
@@ -1372,7 +1403,7 @@ function tweenScore(score) {
     duration = 2000,
     end_val = [score];
 
-	var scoreText = 
+	var scoreText =
 		d3.select("#score")
 		.append("span")
 		.attr("class", "gameOverText")
@@ -1432,13 +1463,13 @@ $( window ).keydown( function ( e ){
 	// Pause: control pressed and we are not currently paused
     if ( e.keyCode == 17 && stop == false ) {
         pauseActions();
-    } 
+    }
 	// Play: control pressed and we are currently paused
     else if ( e.keyCode == 17 && stop == true && gameIsOver == false ) {
         unpauseActions();
     }
 });
-    
+
 function pauseActions()
 {
         isPaused = true;
@@ -1447,40 +1478,51 @@ function pauseActions()
         showInGameMenu();
     	stop = true;
 }
-    
+
 function unpauseActions()
 {
         isPaused = false;
     	stop = false;
     	hideInGameMenu();
-    	animate();    
+    	animate();
 }
-    
-$('.sound').click(function() {
-  var $this = $(this);
-  // sound off
-  if ($this.hasClass('sound-on')) {
-    $this.removeClass('sound-on').addClass('sound-off');
-    playSound = false;
-  }
-  // sound on
-  else {
-    $this.removeClass('sound-off').addClass('sound-on');
-    playSound = true;
-  }
 
+// $('.sound').click(function() {
+//   var $this = $(this);
+//   // sound off
+//   if ($this.hasClass('sound-on')) {
+//     $this.removeClass('sound-on').addClass('sound-off');
+//     playSound = false;
+//   }
+//   // sound on
+//   else {
+//     $this.removeClass('sound-off').addClass('sound-on');
+//     playSound = true;
+//   }
+//
+//   if (canUseLocalStorage) {
+//     localStorage.setItem('mighty.playSound', playSound);
+//   }
+//
+//   // mute or unmute all sounds
+//   for (var sound in assetLoader.sounds) {
+//     if (assetLoader.sounds.hasOwnProperty(sound)) {
+//       assetLoader.sounds[sound].muted = !playSound;
+//     }
+//   }
+// });
+
+function toggleSounds(){
+  playSound = !playSound;
   if (canUseLocalStorage) {
-    localStorage.setItem('mighty.playSound', playSound);
+    localStorage.setItem('mighty.playSound', playSound.toString());
   }
-
-  // mute or unmute all sounds
   for (var sound in assetLoader.sounds) {
     if (assetLoader.sounds.hasOwnProperty(sound)) {
       assetLoader.sounds[sound].muted = !playSound;
     }
   }
-});
-
+}
 
 function detectPortrait() {
     if (window.innerWidth < window.innerHeight) {
@@ -1500,6 +1542,7 @@ $('.play').click(function() {
   customAlert("Please Rotate Screen to Landsape to Play");
   return;
 });
+
 $('.restart').click(function() {
   if(gameIsOver & canRestartGame){
   $('#game-over').hide();

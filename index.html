@@ -5,33 +5,46 @@
   <meta name="description" content="Mighty Ole 2D Platformer">
   <meta name="viewport" content="user-scalable = no">
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  
+
   <link rel="apple-touch-icon" href="touch-icon-iphone.png">
   <link rel="apple-touch-icon" sizes="76x76" href="touch-icon-ipad.png">
   <link rel="apple-touch-icon" sizes="120x120" href="touch-icon-iphone-retina.png">
   <link rel="apple-touch-icon" sizes="152x152" href="touch-icon-ipad-retina.png">
-    
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/bigbox.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/themes/bigbox.min.css">
   <link rel="stylesheet" href="css/loginRegister.css" media="screen" />
-  <link rel="stylesheet" href="mighty.css" type="text/css" media="screen">
-  
+  <link rel="stylesheet" href="css/mighty.css" type="text/css" media="screen">
+
   <script type="text/javascript" src="jquery.2.1.1.min.js"></script>
-  <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.3.2.min.js"></script>
-  <script type='application/javascript' src='javascripts/fastclick.js'></script>
-  <script type='application/javascript' src='javascripts/jquery.touchSwipe.min.js'></script>
-  <script type='application/javascript' src='javascripts/hammer.min.js'></script>
-  <script type='application/javascript' src='javascripts/humane.min.js'></script>
-  <script type='application/javascript' src='achievements.js'></script>
-  <script type='application/javascript' src='javascripts/screenfull.js'>
+  <!-- <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.3.2.min.js"></script> -->
+  <script type='application/javascript' src='js/fastclick.js'></script>
+  <script type='application/javascript' src='js/jquery.touchSwipe.min.js'></script>
+  <script type='application/javascript' src='js/hammer.min.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/humane.min.js"></script>
+  <script>
+  var bigbox = humane.create({baseCls: 'humane-bigbox', timeout: 1000, clickToClose: true});
   </script>
-  
+  <script type='application/javascript' src='js/screenfull.js'></script>
+  <script src="https://www.gstatic.com/firebasejs/3.7.5/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyBNzWJ1e72dT52Tjcfc8dsEwgGtqSGCcEo",
+      authDomain: "mightyole-61926.firebaseapp.com",
+      databaseURL: "https://mightyole-61926.firebaseio.com",
+      projectId: "mightyole-61926",
+      storageBucket: "mightyole-61926.appspot.com",
+      messagingSenderId: "745654366363"
+    };
+    firebase.initializeApp(config);
+  </script>
+
 </head>
 
 <body>
    <div class="wrapper">
    <div id="gameContainer" style="display:none;">
-   <div class="sound sound-off"></div>
+   <!-- <div class="sound sound-off"></div> -->
     <div id="menu">
       <div id="progress">
         <div id="percent">Loading: <span id="p"></span></div>
@@ -55,9 +68,9 @@
       </div>
       <div id="instructions">
         <ul>
-          <li class="instruction">Tap on the right half of the screen to jump</li>
+          <li class="instruction">Press space to jump</li>
           <li class="instruction">Collect mugs to please Randy and collect energy while you are at it</li>
-          <li class="instruction">Tap and hold the left half of the screen to use the energy and evade the evil squirrels</li>
+          <li class="instruction">Press and hold shift to use the energy and evade the evil squirrels</li>
           <li class="instruction">To impress your friends rack up as many achievemnts as you can</li>
           <li class="instruction">Enjoy Playing</li>
           <li class="instruction"> -The Mighty Musketeers</li>
@@ -65,19 +78,21 @@
         <a href="javascript:void(0)" class="button back">Back</a>
       </div>
     </div>
-    <canvas id="canvas">
-      <p>Your browser does not support the required functionality to play this game.</p>
-      <p>Please update to a modern browser such as <a href="www.google.com/chrome/‎">Google Chrome</a> to play.</p>
-    </canvas>
+
+    <div id="gameDiv">
+      <canvas id="canvas">
+        <p>Your browser does not support the required functionality to play this game.</p>
+        <p>Please update to a modern browser such as <a href="www.google.com/chrome/‎">Google Chrome</a> to play.</p>
+      </canvas>
+    </div>
     <div id="game-over">
-      <h2><span class="playerUsername"></span>, you survived for <span id="score"></span> seconds!</h2>
-      <!--<a href="javascript:void(0)" class="button restart">Try again?</a>-->
-      <h2 id="tapToRetry">Tap to try again!</h2>
+      <h2 id="gameOverMessage"><span class="playerUsername"></span>, you survived for <span id="score"></span> seconds!</h2>
+      <h2 id="tapToRetry">Press Space to try again!</h2>
       <h2 id="gameCounter"></h2>
     </div>
-    
+
     <!-- In-game menu -->
-    <div id="inGameMenu"> 
+    <div id="inGameMenu">
     	<button class="inGameMenuButton" id="inGameButton1">Statistics</button>
     	<button class="inGameMenuButton" id="inGameButton2">Achievements</button>
 		<!-- Close button for in-game menu -->
@@ -87,91 +102,48 @@
 
     	<!-- Stats -->
     	<div class="inGameMenuDiv" id="statistics">
-    		<br>	
+    		<br>
 			<div id="tooltip" class="hidden">
 				<p><span id="scoreTip"></span></p>
 			</div>
 			<div id="userGraph">
 			</div>
     	</div>
-    	
+
     	<!-- Achievements -->
     	<div class="inGameMenuDiv" id="achievements">
     		<br>
             <div id="achievementsHolder">
             <table class="achievementsTable">
-            </table> 
-            </div>   
-    	</div>    	
+            </table>
+            </div>
+    	</div>
     </div>
   </div>
-  
-  
-  	<div id="mainTitle">
-  		<span id="loginTitle">Login</span>
-  	    <span id="registerTitle">Register</span>
-  	</div>
-  	<div id="wrapper2">
+
+  	<div id="mainTitle">Login</div>
+  	<div id="loginContainer">
 		<div id="wrappertop"></div>
-		<div id="wrappermiddle">			
-			<div id="username_input">
-				<div id="username_inputleft"></div>
-				<div id="username_inputmiddle">
-					<input name="link" placeholder="Username" class="credentials" id="username" autofocus autocorrect="off" autocapitalize="off">
-				</div>
-				<div id="username_inputright"></div>
-			</div>
-			<div id="emailDiv">
-				<div id="username_inputleft"></div>
-				<div id="username_inputmiddle">
-					<input name="link" type="email" autofocus placeholder="Email" class="email" id="email">
-				</div>
-				<div id="username_inputright"></div>
-			</div>
-			<div id="password_input">
-				<div id="password_inputleft"></div>
-				<div id="password_inputmiddle">
-					<input type="password" placeholder="Password" class="credentials" id="passwd">
-				</div>
-				<div id="password_inputright"></div>
-			</div>
-			<br />
-			<div id="submit">
-				<input type="button" id="submit1" value="Submit">		
+		<div id="wrappermiddle">
+      <input type="text" autofocus placeholder="Name" class="credentials" id="name">
+      <input type="email" autofocus placeholder="Email" class="credentials" id="email">
+      <input type="password" placeholder="Password" class="credentials" id="passwd">
+			<div>
+				<input class="button" type="button" id="submit1" value="Submit">
+        <button id="fbLogIn" class="button">Use facebook</button>
+        <br>
 				<div id="goSignUp" class="helpful">Need an account?</div>
 				<div id="goLogIn"  class="helpful">Have an account?</div>
-                <div id="fbLogIn" class="helpful">Facebook</div>
 				<h5 id="warning">Incorrect username/password</h5>
 			</div>
 			</div>
 		</div>
 		<div id="wrapperbottom"></div>
 	</div>
-   <script src="javascripts/d3Graph.js"></script>
-   <script type="text/javascript" src="parseFunctions.js">
-   </script>
-   <script type="text/javascript" src="mighty.js"></script>
+   <script src="js/d3Graph.js"></script>
+   <script type="text/javascript" src="js/firebaseFunctions.js"></script>
+   <script type='application/javascript' src='achievements.js'></script>
+   <script type="text/javascript" src="js/mighty.js"></script>
    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-   
-
 </body>
-<script>
-  window.fbAsyncInit = function() {
-    Parse.FacebookUtils.init({ // this line replaces FB.init({
-      appId      : '371799093001765', // Facebook App ID
-      status     : false,  // check Facebook Login status
-      cookie     : true,  // enable cookies to allow Parse to access the session
-      xfbml      : true,  // initialize Facebook social plugins on the page
-      version    : 'v2.2' // point to the latest Facebook Graph API version
-    });
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/all.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
 </html>

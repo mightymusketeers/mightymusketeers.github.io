@@ -1,71 +1,38 @@
-#username {
-	width: 100%;
-	height: 60px;
-	padding-left: 40px;
-	margin-top: 5px;
-	font-size:30px;
-}
 
-#passwd {
+
+.credentials {
 	width: 100%;
 	height: 60px;
 	padding-left: 40px;
 	font-size:30px;
+	margin-bottom: 10px;
 }
 
-#email {
-	width: 100%;
-	height: 60px;
-	padding-left: 40px;
-	display: none;
-	font-size:30px;
-}
-
-#submit1 {
-	width: 30%;
-	height: 60px;
-	color: white;
-	font-size:30px;
-	background: black;
-	float:left;
-}
-
-#goSignUp {
-	width: 30%;
-	height: 60px;
-	font-size:30px;
+#goSignUp,#goLogIn  {
 	color: white;
 	background: black;
 	padding:8px;
-	float:right;
 	cursor:pointer;
+	font-size: 22px;
+	margin-top: 10px;
 }
 
-#goLogIn {
-	width: 30%;
-	height: 60px;
-	font-size:30px;
-	color: white;
-	background: black;
+#goSignUp{
 	display: none;
-	padding:8px;
-	float:right;
-	cursor:pointer;
 }
 
 #fbLogIn
 {
- 	width: 30%;
+	margin-top: 20px;
 	height: 60px;
-	font-size:30px;
 	color: white;
-	background: black;
-	padding:8px;
-	cursor:pointer;
-    float:left;
-    margin-left: 5%;
+	background-color: #3b5998 !important;
+	margin-left: 10px;
 }
-
+#submit1{
+	margin-top: 20px;
+	height: 60px;
+}
 
 #loginTitle {
 	margin-bottom: 0px;
@@ -88,10 +55,6 @@ a.helpful:visited {
 	margin-left: auto;
 	margin-right: auto;
 	padding-bottom: 20px;
-}	
-
-#emailDiv {
-  visibility: hidden;
 }
 
 #loginText {
@@ -115,6 +78,43 @@ a.helpful:visited {
   font-size: 22px;
   bottom:10px;
   margin:auto;
-  position:absolute;
   visibility: hidden;
+}
+
+#logIn , .loginScreen {
+    width: 500px;
+    margin: auto;
+    text-align: left;
+    background: white;
+    padding: 0px 0px;
+    border: solid #ddd;
+    border-width: 0 1px 1px 1px;
+}
+
+#logIn h1 {
+    margin-top: 0;
+    font-size: 35px;
+}
+
+#logIn ul {
+    padding-left: 20px;
+}
+
+#logIn .error {
+    border: 1px solid red;
+    background: #FDEFF0;
+    padding: 20px;
+}
+
+#logIn .success {
+    margin-top: 25px;
+}
+
+#logIn .success code {
+    font-size: 12px;
+    color: green;
+    line-height: 13px;
+}
+#name{
+	display: none;
 }
